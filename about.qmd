@@ -1,0 +1,17 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: jolla
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/nicholasjohndorsch/
+    - icon: github
+      text: Github
+      href: https://github.com/dersley
+
+---
+
+Thoughts about science, statistics, and risk from someone who is trying to understand 
+them.

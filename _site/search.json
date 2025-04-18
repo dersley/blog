@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Thoughts about science, statistics, and risk from someone who is trying to understand them."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n\nCode\nsims = np.random.normal(size=10_000)\n\npx.histogram(\n    x=sims,\n    histnorm=\"probability density\",\n    height=350\n)"
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "What is this blog for?",
+    "section": "",
+    "text": "I’m making this blog to better organize my thoughts and developing my writing skills, mostly through technical/programming/science communication. It will probably contain coding tutorials, weird opinion pieces, and maybe the occasional book review.\nI don’t know if what I think is of interest to anybody, so I am beginning this project with the humble goal of writing things that I would enjoy reading."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "blog",
+    "section": "",
+    "text": "Post With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\nApr 19, 2025\n\n\nNick Dorsch\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is this blog for?\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nApr 16, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\nNo matching items"
+  }
+]

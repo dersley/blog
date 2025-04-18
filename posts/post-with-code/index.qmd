@@ -1,0 +1,33 @@
+---
+title: "Post With Code"
+author: "Nick Dorsch"
+date: "2025-04-19"
+categories: [news, code, analysis]
+image: "image.jpg"
+code-fold: true
+code-line-numbers: true
+---
+
+This is a post with executable code.
+
+```{python}
+#| echo: false
+
+import numpy as np
+import seaborn as sns
+import plotly.express as px
+import plotly.io as pio
+
+pio.templates.default = "plotly_white" 
+```
+
+```{python}
+sims = np.random.normal(size=10_000)
+
+px.histogram(
+    x=sims,
+    histnorm="probability density",
+    height=350
+)
+
+```
