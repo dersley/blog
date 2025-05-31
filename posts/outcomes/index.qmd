@@ -1,0 +1,199 @@
+---
+title: "Correlated Outcomes"
+author: "Nicholas Dorsch"
+date: 2025-06-01
+categories: [code, statistics]
+image: thumbnail.png
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import scipy.stats as stats
+import pandas as pd
+import altair as alt
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 400
+```
+
+# Introduction
+
+In the previous post I explained how Copulas can be used to sample distributions with
+correlation. A nice extention of that logic is to simulate *discrete outcomes* with
+correlation as well.
+
+## Independent Events
+
+The modelling of independent and identically distributed trials is easily done with the
+Binomial distribution. For example, we can simulate tossing a coin 50 times like this:
+
+```{python}
+# Simulate 5000 experiments, tossing a coin 50 times
+tosses = 50
+n = 5000
+
+# Assume a fair coin
+p = 0.5
+
+heads = np.random.binomial(tosses, p, n)
+
+df = pd.DataFrame({
+    "Heads": heads
+})
+
+x_domain = [0, tosses]
+def plot_disrete_histogram(df, col: str, color: str = "dodgerblue") -> alt.Chart:
+    tick_values = list(range(0, tosses + 1, tosses // 10))
+
+    return (
+        alt.Chart(df)
+        .mark_bar(color=color, opacity=0.75)
+        .encode(
+            alt.X(
+                f"{col}:Q", 
+                bin=alt.Bin(step=1), 
+                scale=alt.Scale(domain=[0, tosses]),
+                axis=alt.Axis(values=tick_values, format=".0f")
+            ),
+            alt.Y("count():Q")
+        )
+        .properties(
+            height=PLOT_HEIGHT,
+            width=PLOT_WIDTH
+        )
+    )
+
+plot_disrete_histogram(df,"Heads").show()
+```
+
+The above plot shows the number of heads thrown out of `{python} tosses` total tosses,
+repeated `{python} n` times.
+
+This can be made a bit more flexible by generating our own random uniform samples
+instead of directly using numpy's `random.binomial` function:
+
+```{python}
+# Simulate 2D array of 0-1 values with dims (tosses, n)
+uniform_simdata = np.random.uniform(0, 1, size=(tosses, n))
+
+# Convert to a boolean array based on the p value
+outcomes = np.where(
+    uniform_simdata < p,
+    True,
+    False
+)
+
+# Sum along the tosses axis to get total heads per experiment
+heads = np.sum(outcomes, axis=0)
+df = pd.DataFrame({
+    "Heads": heads
+})
+
+plot_disrete_histogram(df, "Heads", color="coral").show()
+```
+
+This might seem a bit inconvenient, but when simulating correlated events it becomes
+an effective way of getting the desired result.
+
+## Correlated Events
+
+Because we are now using uniform samples to create the outcomes, we can just feed
+correlated uniform samples into the process instead. This will correlate the outcomes.
+
+Here is a correlation of $0.25$ shared across all coin tosses:
+
+```{python}
+def create_simple_correlation_matrix(num: int, corr: float) -> np.ndarray:
+    matrix = np.full((num, num), corr)
+    np.fill_diagonal(matrix, 1)
+    return matrix
+
+corr = create_simple_correlation_matrix(num=tosses, corr=0.25)
+
+# Use a copula to generate correlated uniform samples
+samples = stats.norm.cdf(
+    np.random.multivariate_normal(
+        mean=np.zeros(tosses),
+        cov=corr,
+        size=n
+    )
+).T
+
+outcomes = np.where(
+    samples < p,
+    True,
+    False
+)
+
+heads = np.sum(outcomes, axis=0)
+df = pd.DataFrame({
+    "Heads": heads
+})
+
+plot_disrete_histogram(df, "Heads", color="orange").show()
+```
+
+And another with a correlation of 0.75:
+
+```{python}
+corr = create_simple_correlation_matrix(num=tosses, corr=0.75)
+
+# Use a copula to generate correlated uniform samples
+samples = stats.norm.cdf(
+    np.random.multivariate_normal(
+        mean=np.zeros(tosses),
+        cov=corr,
+        size=n
+    )
+).T
+
+outcomes = np.where(
+    samples < p,
+    True,
+    False
+)
+
+heads = np.sum(outcomes, axis=0)
+df = pd.DataFrame({
+    "Heads": heads
+})
+
+plot_disrete_histogram(df, "Heads", color="yellow").show()
+```
+
+The correlation between events has the effect of bifurcating the results, because events
+are firing together more often. A correlation of $1$ using this method would return 0
+heads or 100 heads, with nothing in between.
+
+These examples are using a simple correlation matrix filled with the same value, but
+richer correlation structures can be modelled using [covariance
+functions](https://en.wikipedia.org/wiki/Covariance_function). The correlations might
+vary through time or space (or both), which means trials closer together may be more
+tightly related, for example. This would lead to sampling from a "binomial process"
+rather than the regular binomial distribution.
+
+## Bringing Things Together
+
+The framework outlined in this post and the previous provides a toolkit for numerically
+simulating many 0-dimensional problems (one where the answer is one number, not a higher
+dimensional array like a 2D map or 3D grid). Because these problems in simulation return
+a 1D array of results, I often refer to them as 1D models, but this can be a confusing
+term as the input space may have many dimensions -- 1D refers only to the output space.
+
+Many real world problems boil down to what are called [Zero-inflated
+models](https://en.wikipedia.org/wiki/Zero-inflated_model), where an event occurs with
+some probability $p$, returning a random variable, or else returns zero:
+
+$$
+X \sim 
+\begin{cases}
+0, & \text{with probability } 1 - p \\
+Y \sim \mathcal{D}(\theta), & \text{with probability } p
+\end{cases}
+$$
+
+I'll make things a bit more concrete with an example in my next post.
+
+

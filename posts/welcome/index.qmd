@@ -1,14 +1,12 @@
 ---
 title: "What is this blog for?"
 author: "Nicholas Dorsch"
-date: "2025-04-16"
-categories: [news]
+date: "2025-05-28"
+categories: [updates]
+image: thumbnail.png
 ---
 
-![](thumbnail.png){fig-align="center"}
-
-I'm making this blog to better organize my work portfolio and developing my writing skills, 
-mostly through technical/programming/science communication. It will probably contain 
-writing on statistics, programming and the occasional book review.
-
+I'm making this blog to better organize my thoughts, my work portfolio and to develop my
+writing skills, mostly through technical sharing. It will probably contain writing on
+statistics, programming and the occasional book review.
 

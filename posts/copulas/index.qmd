@@ -1,10 +1,9 @@
 ---
 title: "Correlated Sampling Made Easy"
 author: "Nicholas Dorsch"
-date: today
+date: 2025-05-31
 categories: [code, statistics]
-code-fold: true
-code-line-numbers: false
+image: thumbnail.png
 ---
 
 ```{python}
@@ -267,6 +266,8 @@ The correlated samples show a wider uncertainty range in the result than the
 uncorrelated samples, as is expected. This may be an important detail to capture
 depending on the sensitivity of the analysis. The effect of correlation can also be
 quite unintuitive, so it is always worth checking the effect it has on results.
+
+## Summary of Process 
 
 ```{mermaid}
 graph TD

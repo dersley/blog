@@ -12,10 +12,16 @@ website:
         href: https://www.linkedin.com/in/nicholasjohndorsch/
 format:
   html:
+    toc: true
+    toc-depth: 3
+    toc-location: right
     theme: darkly
     css: styles.css
     fig-align: center
+    code-fold: show
+    code-line-numbers: false
     title=block-banner: false
+    
 
 
 
