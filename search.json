@@ -1,17 +1,24 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Thoughts about science, statistics, and risk from someone who is trying to understand them."
-  },
-  {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "What is this blog for?",
     "section": "",
     "text": "I’m making this blog to better organize my work portfolio and developing my writing skills, mostly through technical/programming/science communication. It will probably contain writing on statistics, programming and the occasional book review."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Posts",
+    "section": "",
+    "text": "Correlated Sampling Made Easy\n\n\n\ncode\n\nstatistics\n\n\n\n\n\n\n\n\n\nMay 31, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is this blog for?\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nApr 16, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Thoughts about science, statistics, and risk from someone who is trying to understand them."
   },
   {
     "objectID": "posts/copulas/index.html",
@@ -47,12 +54,5 @@
     "title": "Correlated Sampling Made Easy",
     "section": "Comparison with Uncorrelated Sampling",
     "text": "Comparison with Uncorrelated Sampling\nIf we skip the Copula and just sample from our distributions, we get this:\n\n\nCode\nunc_dist_df = pd.DataFrame({\n    \"a\": stats.norm(500, 25).rvs(size=n),\n    \"b\": stats.gamma(a=2, scale=5, loc=0).rvs(size=n),\n    \"c\": stats.beta(5, 8).rvs(size=n)\n})\n\ncreate_pairplot(unc_dist_df, color=\"lightblue\")\n\n\n\n\n\n\n\n\n\n\nCode\nunc_dist_df.corr()\n\n\n\n\n\n\n\n\n\na\nb\nc\n\n\n\n\na\n1.000000\n-0.002442\n-0.025745\n\n\nb\n-0.002442\n1.000000\n0.032629\n\n\nc\n-0.025745\n0.032629\n1.000000\n\n\n\n\n\n\n\n\nEffect on Monte Carlo Simulation\nLet’s say that whatever these parameters represent, we want to know the result of this expression:\n\\[\ny = ab^c\n\\]\n\n\nCode\nunc_dist_df[\"y\"] = unc_dist_df[\"a\"] * unc_dist_df[\"b\"] ** unc_dist_df[\"c\"]\ndist_df[\"y\"] = dist_df[\"a\"] * dist_df[\"b\"] ** dist_df[\"c\"]\n\nunc_dist_df[\"Case\"] = \"Uncorrelated\"\ndist_df[\"Case\"] = \"Correlated\"\n\ncombined_df = pd.concat([dist_df, unc_dist_df], ignore_index=True)\n\n# Filter tail\nupper_lim = np.percentile(combined_df[\"y\"], q=99.5)\ncombined_df = combined_df[\n    combined_df[\"y\"] &lt; upper_lim\n]\n\nchart = (\n    alt.Chart(combined_df)\n    .mark_bar(opacity=0.75)\n    .encode(\n        x=alt.X(\"y:Q\", bin=alt.Bin(maxbins=50), axis=alt.Axis(title=\"y\")),\n        y=alt.Y(\n            \"count():Q\", \n            axis=alt.Axis(labels=False, ticks=False, title=None),\n            stack=False\n        ),\n        color=alt.Color(\n            \"Case:N\", \n            scale=alt.Scale(\n                domain=[\"Correlated\", \"Uncorrelated\"], \n                range=[\"orange\", \"lightblue\"]\n            )\n        )\n    )\n    .properties(height=PLOT_HEIGHT, width=PLOT_WIDTH)\n)\n\n\nchart.show()\n\n\n\n\n\n\n\n\n\n\nCode\npercentiles = [10, 50, 90]\n\nresult_df = pd.DataFrame({\n    \"10th\": np.round(np.percentile(dist_df[\"y\"], q=percentiles), 3),\n    \"50th\": np.round(np.percentile(unc_dist_df[\"y\"], q=percentiles), 3)\n}).T\n\n# Fix column labels\nresult_df.columns = [f\"P{p}\" for p in percentiles]\nresult_df.index = [\"Correlated\", \"Uncorrelated\"]\n\nresult_df\n\n\n\n\n\n\n\n\n\nP10\nP50\nP90\n\n\n\n\nCorrelated\n598.923\n1108.754\n2683.504\n\n\nUncorrelated\n649.510\n1070.868\n1958.886\n\n\n\n\n\n\n\nThe correlated samples show a wider uncertainty range in the result than the uncorrelated samples, as is expected. This may be an important detail to capture depending on the sensitivity of the analysis. The effect of correlation can also be quite unintuitive, so it is always worth checking the effect it has on results.\n\n\n\n\n\ngraph TD\n    corr[\"Correlation Matrix\"]\n    mvn[\"Standard MvNorm(0, corr)\"]\n\n    corr --&gt; mvn --&gt; mvn_samples\n\n    mvn_samples[\"MvNorm Samples [2500, 3]\"]\n    uniform[\"Uniform Samples [2500, 3]\"]\n\n    mvn_samples --&gt;|Normal CDF| uniform\n\n    dist_a[\"a\"]\n    dist_b[\"b\"]\n    dist_c[\"c\"]\n\n    dist_a_samples[\"a Samples [2500]\"]\n    dist_b_samples[\"b Samples [2500]\"]\n    dist_c_samples[\"c Samples [2500]\"]\n\n    dist_a ---&gt;|PPF| dist_a_samples\n    dist_b ---&gt;|PPF| dist_b_samples\n    dist_c ---&gt;|PPF| dist_c_samples\n\n    uniform --&gt; dist_a_samples\n    uniform --&gt; dist_b_samples\n    uniform --&gt; dist_c_samples"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Posts",
-    "section": "",
-    "text": "Correlated Sampling Made Easy\n\n\n\n\n\n\ncode\n\n\nstatistics\n\n\n\n\n\n\n\n\n\nMay 31, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is this blog for?\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nApr 16, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\nNo matching items"
   }
 ]
