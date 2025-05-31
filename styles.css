@@ -2,7 +2,7 @@
 
 /* Set gray background for entire page */
 body {
-  background-color: #2e2e2e;
+  background-color: #333333;
   color: #ffffff;
   font-family: Georgia, "Times New Roman", serif;
 }
@@ -17,5 +17,16 @@ a {
 }
 
 .quarto-title-banner {
-  background-color: #1f1e1e !important;
+  background-image: url("media/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-color: transparent !important; */
+  color: white;
+  z-index: 0;
+}
+
+/* Change Mermaid diagram font color */
+.mermaid text {
+  fill: #ffffff !important;
 }

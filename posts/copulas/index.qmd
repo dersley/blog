@@ -21,10 +21,10 @@ PLOT_HEIGHT = 400
 
 # Introduction
 
-A common "gotcha" with creating simple monte carlo scripts in Python or Excel is the
+A common "gotcha" with creating simple Monte Carlo scripts in Python or Excel is the
 request to add correlation to the distributions being sampled. This is a difficult thing
 to do in Excel without using plugins like AtRisk, but in Python, correlated sampling can
-be made convenient with the use of
+be performed conveniently with the use of
 [Copulas](https://en.wikipedia.org/wiki/Copula_(statistics)).
 
 The fundamental intuition to build when working with copulas is that all continuous
@@ -265,4 +265,34 @@ result_df
 
 The correlated samples show a wider uncertainty range in the result than the
 uncorrelated samples, as is expected. This may be an important detail to capture
-depending on the sensitivity of the analysis.
+depending on the sensitivity of the analysis. The effect of correlation can also be
+quite unintuitive, so it is always worth checking the effect it has on results.
+
+```{mermaid}
+graph TD
+    corr["Correlation Matrix"]
+    mvn["Standard MvNorm(0, corr)"]
+
+    corr --> mvn --> mvn_samples
+
+    mvn_samples["MvNorm Samples [2500, 3]"]
+    uniform["Uniform Samples [2500, 3]"]
+
+    mvn_samples -->|Normal CDF| uniform
+
+    dist_a["a"]
+    dist_b["b"]
+    dist_c["c"]
+
+    dist_a_samples["a Samples [2500]"]
+    dist_b_samples["b Samples [2500]"]
+    dist_c_samples["c Samples [2500]"]
+
+    dist_a --->|PPF| dist_a_samples
+    dist_b --->|PPF| dist_b_samples
+    dist_c --->|PPF| dist_c_samples
+
+    uniform --> dist_a_samples
+    uniform --> dist_b_samples
+    uniform --> dist_c_samples
+```
