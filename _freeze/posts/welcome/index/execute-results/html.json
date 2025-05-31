@@ -1,0 +1,12 @@
+{
+  "hash": "bc85bf7ba71bb018d68183228a5f67bb",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"What is this blog for?\"\nauthor: \"Nicholas Dorsch\"\ndate: \"2025-04-16\"\ncategories: [news]\n---\n\n\n![](thumbnail.png){fig-align=\"center\"}\n\nI'm making this blog to better organize my thoughts and developing my writing skills,\nmostly through technical/programming/science communication. It will probably contain \ncoding tutorials, weird opinion pieces, and maybe the occasional book review.\n\nI don't know if what I think is of interest to anybody, so I am beginning this project\nwith the humble goal of writing things that I would enjoy reading.\n\n::: {#abe067d4 .cell execution_count=1}\n``` {.python .cell-code}\nimport numpy as np\n```\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

@@ -1,5 +1,6 @@
 ---
-title: "blog"
+title: "Riesgo"
+image: media/header.jpg
 listing:
   contents: posts
   sort: "date desc"

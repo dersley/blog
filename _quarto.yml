@@ -12,9 +12,10 @@ website:
         href: https://www.linkedin.com/in/nicholasjohndorsch/
 format:
   html:
-    theme: litera
+    theme: darkly
     css: styles.css
     fig-align: center
+
 
 
 

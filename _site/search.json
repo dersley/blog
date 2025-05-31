@@ -11,20 +11,55 @@
     "href": "posts/post-with-code/index.html",
     "title": "Post With Code",
     "section": "",
-    "text": "This is a post with executable code.\n\n\nCode\nsims = np.random.normal(size=10_000)\n\npx.histogram(\n    x=sims,\n    histnorm=\"probability density\",\n    height=350\n)"
+    "text": "This is a post with executable code.\n\n\nCode\nsims = 1000\n\ndf = pd.DataFrame({\n    \"x\": np.random.normal(loc=10, scale=2, size=sims),\n    \"y\": np.random.normal(loc=10, scale=2, size=sims),\n})\n\nalt.Chart(df).mark_point().encode(\n    x=alt.X(\"x:Q\"),\n    y=alt.Y(\"y:Q\")\n)"
   },
   {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
     "title": "What is this blog for?",
     "section": "",
-    "text": "I’m making this blog to better organize my thoughts and developing my writing skills, mostly through technical/programming/science communication. It will probably contain coding tutorials, weird opinion pieces, and maybe the occasional book review.\nI don’t know if what I think is of interest to anybody, so I am beginning this project with the humble goal of writing things that I would enjoy reading."
+    "text": "I’m making this blog to better organize my work portfolio and developing my writing skills, mostly through technical/programming/science communication. It will probably contain writing on statistics, programming and the occasional book review."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "blog",
+    "title": "Riesgo",
     "section": "",
-    "text": "Post With Code\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\nApr 19, 2025\n\n\nNick Dorsch\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is this blog for?\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nApr 16, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\nNo matching items"
+    "text": "Correlated Sampling Made Easy\n\n\n\n\n\n\ncode\n\n\nstatistics\n\n\n\n\n\n\n\n\n\nMay 31, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\n\n\n\n\n\n\nWhat is this blog for?\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nApr 16, 2025\n\n\nNicholas Dorsch\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/copulas/index.html",
+    "href": "posts/copulas/index.html",
+    "title": "Correlated Sampling Made Easy",
+    "section": "",
+    "text": "A common “gotcha” with creating simple monte carlo scripts in Python or Excel is the request to add correlation to the distributions being sampled. This is a difficult thing to do in Excel without using plugins like AtRisk, but in Python, correlated sampling can be made convenient with the use of Copulas.\nThe fundamental intuition to build when working with copulas is that all continuous distributions can be remapped to a \\(\\text{Uniform}[0, 1]\\) distribution with their Cumulative Distribution Function (CDF), and transformed back with the inverse CDF, also called the Percent Point Function (PPF). Furthermore, sampling from any distribution can be done by running uniform samples through its PPF (that is how random variate sampling is done in general).\nWith that trick in mind, we can make use of the multivariate Gaussian distribution and its CDF to easily generate correlated samples of any distributions we want, which is very useful when creating numerical simulation models."
+  },
+  {
+    "objectID": "posts/copulas/index.html#generate-correlated-samples",
+    "href": "posts/copulas/index.html#generate-correlated-samples",
+    "title": "Correlated Sampling Made Easy",
+    "section": "Generate Correlated Samples",
+    "text": "Generate Correlated Samples\nLet’s say we have three parameters \\(a\\), \\(b\\) and \\(c\\) that we want to sample with some correlation coefficient \\(\\rho\\). Before we worry about the specifics of those distributions, we can sample from a multivariate Gaussian with that correlation structure.\n\n\nCode\n# Number of samples\nn = 2500\n\n# Correlation matrix\nrho = 0.80\ncorr = np.array([\n    [1.0, rho, rho],\n    [rho, 1.0, rho],\n    [rho, rho, 1.0],\n])\n\n# Mean vector (zeros with standard mv normal)\nmu = [0.0, 0.0, 0.0]\n\n# Generate samples with dims (n, parameter)\nsamples = np.random.multivariate_normal(\n    mean=mu,\n    cov=corr,\n    size=n\n)\n\n\nThis generates 2500 samples from the standard multivariate Gaussian distribution with correlation \\(\\rho = 0.8\\).\n\n\nCode\ndf = pd.DataFrame({\n    \"a\": samples[:, 0],\n    \"b\": samples[:, 1],\n    \"c\": samples[:, 2],\n})\n\ndef create_pairplot(df: pd.DataFrame, color: str = \"dodgerblue\") -&gt; alt.RepeatChart:\n    return (\n        alt.Chart(df)\n        .mark_circle(\n            color=color,\n            opacity=0.25\n        )\n        .encode(\n            alt.X(\n                alt.repeat(\"column\"), \n                type=\"quantitative\", \n                scale=alt.Scale(zero=False)\n            ),\n            alt.Y(\n                alt.repeat(\"row\"), \n                type=\"quantitative\", \n                scale=alt.Scale(zero=False)\n            )\n        )\n        .properties(\n            height=PLOT_HEIGHT / 3,\n            width=180,\n        )\n        .repeat(\n            row=list(df.columns),\n            column=list(df.columns)\n        )\n    )\n\ncreate_pairplot(df, color=\"lightcoral\")\n\n\n\n\n\n\n\n\n\n\nCode\ndf.corr()\n\n\n\n\n\n\n\n\n\na\nb\nc\n\n\n\n\na\n1.000000\n0.805849\n0.800389\n\n\nb\n0.805849\n1.000000\n0.809774\n\n\nc\n0.800389\n0.809774\n1.000000"
+  },
+  {
+    "objectID": "posts/copulas/index.html#transform-to-uniform",
+    "href": "posts/copulas/index.html#transform-to-uniform",
+    "title": "Correlated Sampling Made Easy",
+    "section": "Transform to Uniform",
+    "text": "Transform to Uniform\nWe can transform those samples to \\(\\text{Uniform} [0, 1]\\) by simply passing them through the standard normal CDF.\n\n\nCode\nuniform_samples = stats.norm.cdf(df.values)\nuniform_df = pd.DataFrame({\n    \"a\": uniform_samples[:, 0],\n    \"b\": uniform_samples[:, 1],\n    \"c\": uniform_samples[:, 2],\n})\n\ncreate_pairplot(uniform_df, color=\"pink\")\n\n\n\n\n\n\n\n\nNow the sample are transformed to the uniform domain, but importantly their correlation structure has been preserved.\n\n\nCode\nuniform_df.corr()\n\n\n\n\n\n\n\n\n\na\nb\nc\n\n\n\n\na\n1.000000\n0.788412\n0.783163\n\n\nb\n0.788412\n1.000000\n0.796763\n\n\nc\n0.783163\n0.796763\n1.000000"
+  },
+  {
+    "objectID": "posts/copulas/index.html#transform-to-distributions",
+    "href": "posts/copulas/index.html#transform-to-distributions",
+    "title": "Correlated Sampling Made Easy",
+    "section": "Transform to Distributions",
+    "text": "Transform to Distributions\nNow we have a bunch of uniformly distributed random samples that have our desired correlation structure. All that is left is to map the samples to our desired distributions using their respective PPFs.\nLet’s define our distributions as:\n\\[\n\\begin{align}\nA &\\sim \\text{Normal}(500, 50) \\\\\nB &\\sim \\text{Gamma}(2, 5) \\\\\nC &\\sim \\text{Beta}(5, 8)\n\\end{align}\n\\]\nNotice I’m not using normal distribtions exclusively, I can use the copula to map to whatever distributions I want. Note only that that the more skewed and kurtotic the distributions, the more warping will occur in their correlations out the other end. There are other types of Copula that can handle this better than the Gaussian Copula used here.\n\n\nCode\ndist_df = pd.DataFrame({\n    \"a\": stats.norm(500, 25).ppf(uniform_df[\"a\"]),\n    \"b\": stats.gamma(a=2, scale=5, loc=0).ppf(uniform_df[\"b\"]),\n    \"c\": stats.beta(5, 8).ppf(uniform_df[\"c\"])\n})\n\ncreate_pairplot(dist_df, color=\"orange\")\n\n\n\n\n\n\n\n\n\n\nCode\ndist_df.corr()\n\n\n\n\n\n\n\n\n\na\nb\nc\n\n\n\n\na\n1.000000\n0.769498\n0.797337\n\n\nb\n0.769498\n1.000000\n0.776328\n\n\nc\n0.797337\n0.776328\n1.000000"
+  },
+  {
+    "objectID": "posts/copulas/index.html#comparison-with-uncorrelated-sampling",
+    "href": "posts/copulas/index.html#comparison-with-uncorrelated-sampling",
+    "title": "Correlated Sampling Made Easy",
+    "section": "Comparison with Uncorrelated Sampling",
+    "text": "Comparison with Uncorrelated Sampling\nIf we skip the Copula and just sample from our distributions, we get this:\n\n\nCode\nunc_dist_df = pd.DataFrame({\n    \"a\": stats.norm(500, 25).rvs(size=n),\n    \"b\": stats.gamma(a=2, scale=5, loc=0).rvs(size=n),\n    \"c\": stats.beta(5, 8).rvs(size=n)\n})\n\ncreate_pairplot(unc_dist_df, color=\"lightblue\")\n\n\n\n\n\n\n\n\n\n\nCode\nunc_dist_df.corr()\n\n\n\n\n\n\n\n\n\na\nb\nc\n\n\n\n\na\n1.000000\n0.053633\n-0.030804\n\n\nb\n0.053633\n1.000000\n-0.035754\n\n\nc\n-0.030804\n-0.035754\n1.000000\n\n\n\n\n\n\n\n\nEffect on Monte Carlo Simulation\nLet’s say that whatever these parameters represent, we want to know the result of this expression:\n\\[\ny = ab^c\n\\]\n\n\nCode\nunc_dist_df[\"y\"] = unc_dist_df[\"a\"] * unc_dist_df[\"b\"] ** unc_dist_df[\"c\"]\ndist_df[\"y\"] = dist_df[\"a\"] * dist_df[\"b\"] ** dist_df[\"c\"]\n\nunc_dist_df[\"Case\"] = \"Uncorrelated\"\ndist_df[\"Case\"] = \"Correlated\"\n\ncombined_df = pd.concat([dist_df, unc_dist_df], ignore_index=True)\n\n# Filter tail\nupper_lim = np.percentile(combined_df[\"y\"], q=99.5)\ncombined_df = combined_df[\n    combined_df[\"y\"] &lt; upper_lim\n]\n\nchart = (\n    alt.Chart(combined_df)\n    .mark_bar(opacity=0.75)\n    .encode(\n        x=alt.X(\"y:Q\", bin=alt.Bin(maxbins=50), axis=alt.Axis(title=\"y\")),\n        y=alt.Y(\n            \"count():Q\", \n            axis=alt.Axis(labels=False, ticks=False, title=None),\n            stack=False\n        ),\n        color=alt.Color(\n            \"Case:N\", \n            scale=alt.Scale(\n                domain=[\"Correlated\", \"Uncorrelated\"], \n                range=[\"orange\", \"lightblue\"]\n            )\n        )\n    )\n    .properties(height=PLOT_HEIGHT, width=PLOT_WIDTH)\n)\n\n\nchart.show()\n\n\n\n\n\n\n\n\n\n\nCode\npercentiles = [10, 50, 90]\n\nresult_df = pd.DataFrame({\n    \"10th\": np.round(np.percentile(dist_df[\"y\"], q=percentiles), 3),\n    \"50th\": np.round(np.percentile(unc_dist_df[\"y\"], q=percentiles), 3)\n}).T\n\n# Fix column labels\nresult_df.columns = [f\"P{p}\" for p in percentiles]\nresult_df.index = [\"Correlated\", \"Uncorrelated\"]\n\nresult_df\n\n\n\n\n\n\n\n\n\nP10\nP50\nP90\n\n\n\n\nCorrelated\n597.829\n1132.292\n2639.701\n\n\nUncorrelated\n663.663\n1056.038\n1909.828\n\n\n\n\n\n\n\nThe correlated samples show a wider uncertainty range in the result than the uncorrelated samples, as is expected. This may be an important detail to capture depending on the sensitivity of the analysis."
   }
 ]

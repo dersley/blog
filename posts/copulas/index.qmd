@@ -1,0 +1,268 @@
+---
+title: "Correlated Sampling Made Easy"
+author: "Nicholas Dorsch"
+date: today
+categories: [code, statistics]
+code-fold: true
+code-line-numbers: false
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import scipy.stats as stats
+import pandas as pd
+import altair as alt
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 400
+```
+
+# Introduction
+
+A common "gotcha" with creating simple monte carlo scripts in Python or Excel is the
+request to add correlation to the distributions being sampled. This is a difficult thing
+to do in Excel without using plugins like AtRisk, but in Python, correlated sampling can
+be made convenient with the use of
+[Copulas](https://en.wikipedia.org/wiki/Copula_(statistics)).
+
+The fundamental intuition to build when working with copulas is that all continuous
+distributions can be remapped to a $\text{Uniform}[0, 1]$ distribution with their
+[Cumulative Distribution
+Function](https://en.wikipedia.org/wiki/Cumulative_distribution_function) (CDF), and
+transformed back with the inverse CDF, also called the Percent Point Function (PPF).
+Furthermore, sampling from *any* distribution can be done by running uniform samples
+through its PPF (that is how random variate sampling is done in general).
+
+With that trick in mind, we can make use of the multivariate Gaussian distribution and
+its CDF to easily generate correlated samples of any distributions we want, which is
+*very* useful when creating numerical simulation models.
+
+
+# Example
+
+## Generate Correlated Samples
+
+Let's say we have three parameters $a$, $b$ and $c$ that we want to sample with some
+correlation coefficient $\rho$. Before we worry about the specifics of those
+distributions, we can sample from a multivariate Gaussian with that correlation
+structure.
+
+```{python}
+# Number of samples
+n = 2500
+
+# Correlation matrix
+rho = 0.80
+corr = np.array([
+    [1.0, rho, rho],
+    [rho, 1.0, rho],
+    [rho, rho, 1.0],
+])
+
+# Mean vector (zeros with standard mv normal)
+mu = [0.0, 0.0, 0.0]
+
+# Generate samples with dims (n, parameter)
+samples = np.random.multivariate_normal(
+    mean=mu,
+    cov=corr,
+    size=n
+)
+```
+
+This generates `{python} n` samples from the standard multivariate Gaussian distribution
+with correlation $\rho = `{python} rho`$.
+
+
+```{python}
+df = pd.DataFrame({
+    "a": samples[:, 0],
+    "b": samples[:, 1],
+    "c": samples[:, 2],
+})
+
+def create_pairplot(df: pd.DataFrame, color: str = "dodgerblue") -> alt.RepeatChart:
+    return (
+        alt.Chart(df)
+        .mark_circle(
+            color=color,
+            opacity=0.25
+        )
+        .encode(
+            alt.X(
+                alt.repeat("column"), 
+                type="quantitative", 
+                scale=alt.Scale(zero=False)
+            ),
+            alt.Y(
+                alt.repeat("row"), 
+                type="quantitative", 
+                scale=alt.Scale(zero=False)
+            )
+        )
+        .properties(
+            height=PLOT_HEIGHT / 3,
+            width=180,
+        )
+        .repeat(
+            row=list(df.columns),
+            column=list(df.columns)
+        )
+    )
+
+create_pairplot(df, color="lightcoral")
+```
+
+```{python}
+df.corr()
+```
+
+## Transform to Uniform
+
+We can transform those samples to $\text{Uniform} [0, 1]$ by simply passing them
+through the standard normal CDF.
+
+
+```{python}
+uniform_samples = stats.norm.cdf(df.values)
+uniform_df = pd.DataFrame({
+    "a": uniform_samples[:, 0],
+    "b": uniform_samples[:, 1],
+    "c": uniform_samples[:, 2],
+})
+
+create_pairplot(uniform_df, color="pink")
+```
+
+Now the sample are transformed to the uniform domain, but importantly their correlation
+structure has been preserved.
+
+```{python}
+uniform_df.corr()
+```
+
+## Transform to Distributions
+
+Now we have a bunch of uniformly distributed random samples that have our desired
+correlation structure. All that is left is to map the samples to our desired
+distributions using their respective PPFs.
+
+Let's define our distributions as:
+
+$$
+\begin{align}
+A &\sim \text{Normal}(500, 50) \\
+B &\sim \text{Gamma}(2, 5) \\
+C &\sim \text{Beta}(5, 8)
+\end{align}
+$$
+
+Notice I'm not using normal distribtions exclusively, I can use the copula to map to
+whatever distributions I want. Note only that that the more skewed and kurtotic the
+distributions, the more warping will occur in their correlations out the other end.
+There are other types of Copula that can handle this better than the Gaussian Copula
+used here.
+
+```{python}
+dist_df = pd.DataFrame({
+    "a": stats.norm(500, 25).ppf(uniform_df["a"]),
+    "b": stats.gamma(a=2, scale=5, loc=0).ppf(uniform_df["b"]),
+    "c": stats.beta(5, 8).ppf(uniform_df["c"])
+})
+
+create_pairplot(dist_df, color="orange")
+```
+
+```{python}
+dist_df.corr()
+```
+
+## Comparison with Uncorrelated Sampling
+
+If we skip the Copula and just sample from our distributions, we get this:
+
+```{python}
+unc_dist_df = pd.DataFrame({
+    "a": stats.norm(500, 25).rvs(size=n),
+    "b": stats.gamma(a=2, scale=5, loc=0).rvs(size=n),
+    "c": stats.beta(5, 8).rvs(size=n)
+})
+
+create_pairplot(unc_dist_df, color="lightblue")
+```
+
+```{python}
+unc_dist_df.corr()
+```
+
+### Effect on Monte Carlo Simulation
+
+Let's say that whatever these parameters represent, we want to know the result of this
+expression:
+
+$$
+y = ab^c
+$$
+
+
+```{python}
+unc_dist_df["y"] = unc_dist_df["a"] * unc_dist_df["b"] ** unc_dist_df["c"]
+dist_df["y"] = dist_df["a"] * dist_df["b"] ** dist_df["c"]
+
+unc_dist_df["Case"] = "Uncorrelated"
+dist_df["Case"] = "Correlated"
+
+combined_df = pd.concat([dist_df, unc_dist_df], ignore_index=True)
+
+# Filter tail
+upper_lim = np.percentile(combined_df["y"], q=99.5)
+combined_df = combined_df[
+    combined_df["y"] < upper_lim
+]
+
+chart = (
+    alt.Chart(combined_df)
+    .mark_bar(opacity=0.75)
+    .encode(
+        x=alt.X("y:Q", bin=alt.Bin(maxbins=50), axis=alt.Axis(title="y")),
+        y=alt.Y(
+            "count():Q", 
+            axis=alt.Axis(labels=False, ticks=False, title=None),
+            stack=False
+        ),
+        color=alt.Color(
+            "Case:N", 
+            scale=alt.Scale(
+                domain=["Correlated", "Uncorrelated"], 
+                range=["orange", "lightblue"]
+            )
+        )
+    )
+    .properties(height=PLOT_HEIGHT, width=PLOT_WIDTH)
+)
+
+
+chart.show()
+```
+
+
+```{python}
+percentiles = [10, 50, 90]
+
+result_df = pd.DataFrame({
+    "10th": np.round(np.percentile(dist_df["y"], q=percentiles), 3),
+    "50th": np.round(np.percentile(unc_dist_df["y"], q=percentiles), 3)
+}).T
+
+# Fix column labels
+result_df.columns = [f"P{p}" for p in percentiles]
+result_df.index = ["Correlated", "Uncorrelated"]
+
+result_df
+```
+
+The correlated samples show a wider uncertainty range in the result than the
+uncorrelated samples, as is expected. This may be an important detail to capture
+depending on the sensitivity of the analysis.

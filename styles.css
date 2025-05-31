@@ -1,1 +1,21 @@
 /* css styles */
+
+/* Set gray background for entire page */
+body {
+  background-color: #2e2e2e;
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Optional: override other elements for better visibility */
+a {
+  color: #add8e6; /* light blue links */
+}
+
+.navbar {
+  background-color: #1f1e1e !important;
+}
+
+.quarto-title-banner {
+  background-color: #1f1e1e !important;
+}

@@ -7,9 +7,8 @@ categories: [news]
 
 ![](thumbnail.png){fig-align="center"}
 
-I'm making this blog to better organize my thoughts and developing my writing skills,
+I'm making this blog to better organize my work portfolio and developing my writing skills, 
 mostly through technical/programming/science communication. It will probably contain 
-coding tutorials, weird opinion pieces, and maybe the occasional book review.
+writing on statistics, programming and the occasional book review.
 
-I don't know if what I think is of interest to anybody, so I am beginning this project
-with the humble goal of writing things that I would enjoy reading.
+
