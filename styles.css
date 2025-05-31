@@ -1,0 +1,32 @@
+/* css styles */
+
+/* Set gray background for entire page */
+body {
+  background-color: #333333;
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+/* Optional: override other elements for better visibility */
+a {
+  color: #add8e6; /* light blue links */
+}
+
+.navbar {
+  background-color: #1f1e1e !important;
+}
+
+.quarto-title-banner {
+  background-image: url("media/banner.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-color: transparent !important; */
+  color: white;
+  z-index: 0;
+}
+
+/* Change Mermaid diagram font color */
+.mermaid text {
+  fill: #ffffff !important;
+}
