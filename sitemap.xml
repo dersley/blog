@@ -2,18 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dersley.github.io/blog/posts/welcome/index.html</loc>
-    <lastmod>2025-05-31T07:16:34.776Z</lastmod>
+    <lastmod>2025-05-31T23:59:08.572Z</lastmod>
   </url>
   <url>
-    <loc>https://dersley.github.io/blog/index.html</loc>
-    <lastmod>2025-05-31T07:16:34.768Z</lastmod>
+    <loc>https://dersley.github.io/blog/posts/outcomes/index.html</loc>
+    <lastmod>2025-05-31T23:59:08.572Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/about.html</loc>
-    <lastmod>2025-05-31T07:16:34.768Z</lastmod>
+    <lastmod>2025-05-31T23:59:08.563Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/index.html</loc>
+    <lastmod>2025-05-31T23:59:08.563Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/copulas/index.html</loc>
-    <lastmod>2025-05-31T07:16:34.776Z</lastmod>
+    <lastmod>2025-05-31T23:59:08.571Z</lastmod>
   </url>
 </urlset>
