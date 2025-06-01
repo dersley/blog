@@ -10,7 +10,6 @@ about:
     - icon: github
       text: Github
       href: https://github.com/dersley
-
 ---
 
 ### Nicholas Dorsch - Geoscientist/Data Analyist
@@ -21,7 +20,7 @@ more general purpose statistical modelling. The intersection of these things has
 me to work on fairly unique projects during my career. 
 
 I strongly believe that bayesian statistical models offer the most robust and flexible
-framework for uncertainty quantification, as well as decisions making under uncertainty.
+framework for uncertainty quantification, as well as decision making under uncertainty.
 For that reason they have become my career focus.
 
 More recently I have developed more data engineering skills, working with database

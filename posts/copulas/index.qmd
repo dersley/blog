@@ -236,7 +236,8 @@ chart = (
             scale=alt.Scale(
                 domain=["Correlated", "Uncorrelated"], 
                 range=["orange", "lightblue"]
-            )
+            ),
+            legend=alt.Legend(orient="top-right", title="")
         )
     )
     .properties(height=PLOT_HEIGHT, width=PLOT_WIDTH)
@@ -267,7 +268,7 @@ uncorrelated samples, as is expected. This may be an important detail to capture
 depending on the sensitivity of the analysis. The effect of correlation can also be
 quite unintuitive, so it is always worth checking the effect it has on results.
 
-## Summary of Process 
+# Summary of Process 
 
 ```{mermaid}
 graph TD

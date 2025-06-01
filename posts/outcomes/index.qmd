@@ -43,7 +43,6 @@ df = pd.DataFrame({
     "Heads": heads
 })
 
-x_domain = [0, tosses]
 def plot_disrete_histogram(df, col: str, color: str = "dodgerblue") -> alt.Chart:
     tick_values = list(range(0, tosses + 1, tosses // 10))
 

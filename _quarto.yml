@@ -18,7 +18,7 @@ format:
     theme: darkly
     css: styles.css
     fig-align: center
-    code-fold: show
+    code-fold: true
     code-line-numbers: false
     title=block-banner: false
     

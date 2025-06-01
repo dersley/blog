@@ -1,0 +1,518 @@
+---
+title: "Amy, Brett and the Cost of Living Crisis"
+subtitle: "A Zero-Inflated Model of Household Spending"
+author: "Nicholas Dorsch"
+date: "2025-06-02"
+categories: [code, statistics]
+image: thumbnail.png
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import scipy.stats as stats
+import pandas as pd
+import altair as alt
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 400
+```
+
+To make the processes outlined in the previous two posts more concrete, the following is
+the story of a young couple trying to manage a household budget. I'll use an aggregated
+zero-inflated model of spending to simulate monthly expenses.
+
+# Introduction
+
+Consider the household of Amy and Brett, a young couple who want to better plan their
+monthly budget.
+
+Amy and Brett have a pattern of discretionary spending outlined as follows:
+
+## Amy
+- Amy is a freelancer and goes to work on 85% of days, where she spends no money
+- On days she is not working, she spends anywhere between $20 and $150
+
+$$
+A \sim 
+\begin{cases}
+0, & \text{with probability } 0.15 \\
+C_A \sim \text{PERT}(20, 50, 150), & \text{with probability } 0.85
+\end{cases}
+$$
+
+## Brett
+- Brett is unemployed, and on a given day has a 70% chance of spending
+- When he spends, usually gambling, he makes a real impact, spending anywhere between
+$20 on a cheeky bet to $1500 when *"we're on here..."*
+- On days Amy is home, Brett tends not to gamble, but will still place bets while on
+the loo, out of Amy's sight
+- The amount Brett bets depends on Amy's spending... if she is leaving money on the
+table, he tends to use it, but if she's making big purchases he keeps his bets smaller.
+
+$$
+B \sim 
+\begin{cases}
+0, & \text{with probability } 0.3 \\
+C_B \sim \text{PERT}(20, 20, 1500), & \text{with probability } 0.7
+\end{cases}
+$$
+
+The cost of household essentials is $\$7500$ a month. So the total monthly expenses
+$C_{\text{total}}$ can be given by:
+
+$$
+C_{\text{total}} = 7500 + (30(A + B))
+$$
+
+# The Model
+
+Broadly speaking the model has two parts -- days that Amy and Brett spend, and on
+those days, how much each of them spend.
+
+## Spending Days
+
+First I'll simulate whether or not Amy and Brett spend money on a given day, and by
+extension their spending days in each month:
+
+```{python}
+# Simulate a month of spending days (True or False) for Amy and Brett
+days = 30
+n = 2500
+
+p_a = 0.15
+p_b = 0.7
+
+# Negative correlation between Amy and Brett spending days
+rho = -0.95
+spend_corr_matrix = np.array([
+    [1.0, rho],
+    [rho, 1.0],
+])
+
+# Use a Copula to generate correlated spending days for the month
+uniform_simdata = stats.norm.cdf(
+    np.random.multivariate_normal(
+        mean=[0, 0],
+        cov=spend_corr_matrix,
+        size=(n, days)
+    )
+)
+
+# Map to binary outcomes (True = spend, False = no spend)
+spending_days = np.where(
+    uniform_simdata < [p_a, p_b],
+    True,
+    False
+)
+
+df = pd.DataFrame({
+    "Amy": np.sum(spending_days[:, :, 0], axis=1),
+    "Brett": np.sum(spending_days[:, :, 1], axis=1),
+})
+flat_df = df.melt(var_name="Person", value_name="Spending Days")
+
+def plot_disrete_histogram(df, col: str, color: str = "dodgerblue") -> alt.Chart:
+    tick_values = list(range(0, days + 1))
+    return (
+        alt.Chart(df)
+        .mark_bar(color=color, opacity=0.5)
+        .encode(
+            alt.X(
+                f"{col}:Q", 
+                bin=alt.Bin(step=1), 
+                scale=alt.Scale(domain=[0, days]),
+                axis=alt.Axis(values=tick_values, format=".0f"),
+            ),
+            alt.Y(
+                "count():Q", 
+                stack=None,
+                title='',
+                axis=alt.Axis(
+                    labels=False, 
+                    ticks=False, 
+                    grid=False, 
+                    domain=False
+                )
+            ),
+            alt.Color(
+                "Person:N",
+                legend=alt.Legend(orient="top-right", title="")
+            ),
+        )
+        .properties(
+            title="Number of Days Money Spent in Month",
+            height=PLOT_HEIGHT,
+            width=PLOT_WIDTH
+        )
+    )
+
+plot_disrete_histogram(flat_df, "Spending Days").show()
+```
+
+Since Amy is often at work, she spends money on less days during the month. Brett, on
+the other hand is at home, in his element, making legendary bets.
+
+It's not obvious from the plot above, but Brett is less likely to gamble on days that
+Amy is at home. A 2D plot can show this better:
+
+
+```{python}
+
+tick_values = list(range(0, days + 1, 2))
+chart = (
+    alt.Chart(df)
+    .mark_rect()
+    .encode(
+        alt.X(
+            "Amy:Q", 
+            bin=alt.Bin(maxbins=days // 2),
+            scale=alt.Scale(domain=[0, days]),
+            axis=alt.Axis(values=tick_values)
+        ),
+        alt.Y(
+            "Brett:Q", 
+            bin=alt.Bin(maxbins=days // 2),
+            scale=alt.Scale(domain=[0, days]),
+            axis=alt.Axis(values=tick_values)
+        ),
+        alt.Color(
+            "count():Q",
+            scale=alt.Scale(scheme="oranges"),
+            legend=None
+
+        )
+    )
+    .properties(
+        title="Amy vs Brett Spending Days in Month",
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH
+    )
+)
+
+chart.show()
+```
+
+There is a negative trend between Amy's days at home and Brett's spending. This is
+because on months where Amy isn't getting as much work, she is at home and Brett has
+less opportunities to gamble. However, on months where she is working a lot, Brett is at
+home alone, turning the place into his personal casino.
+
+## Amount Spent
+
+Next, I'll simulate how much Amy and Brett each spend on a given day. I'll use the
+[PERT](https://en.wikipedia.org/wiki/PERT_distribution) distribution, as it is a
+convenient and flexible choice for subjective models like this.
+
+
+```{python}
+class PERT:
+    def __init__(self, minimum: float, mode: float, maximum: float):
+        self.minimum = minimum
+        self.mode = mode
+        self.maximum = maximum
+
+        self.alpha = (
+            (4 * (self.mode - self.minimum) / (self.maximum - self.minimum)) + 1
+        )
+        self.beta = (
+            (4 * (self.maximum - self.mode) / (self.maximum - self.minimum)) + 1
+        )
+
+        # Beta distribution on [0,1]
+        self.beta_dist = stats.beta(self.alpha, self.beta)
+
+    def pdf(self, x):
+        """
+        Calculate the PDF of the PERT distribution at x.
+        """
+        if x < self.minimum or x > self.maximum:
+            return 0.0
+
+        # Scale x to [0,1]
+        x_scaled = (x - self.minimum) / (self.maximum - self.minimum)
+        return self.beta_dist.pdf(x_scaled) / (self.maximum - self.minimum)
+
+    def rvs(self, shape: int | tuple[int] = 1) -> np.ndarray:
+        """
+        Generate random variates of given size from the PERT distribution.
+        """
+        samples_scaled = self.beta_dist.rvs(size=shape)
+        # Scale samples back to [minimum, maximum]
+        return self.minimum + samples_scaled * (self.maximum - self.minimum)
+
+    def ppf(self, q):
+        """
+        Percent-point function (inverse CDF) at q of the PERT distribution.
+        """
+        x_scaled = self.beta_dist.ppf(q)
+        return self.minimum + x_scaled * (self.maximum - self.minimum)
+
+    def plot(
+        self, 
+        color: str = "dodgerblue", 
+        title: str = "PERT PDF",
+        height=PLOT_HEIGHT, 
+        width=PLOT_WIDTH
+    ) -> alt.Chart:
+        x_vals = np.linspace(self.minimum, self.maximum, 200)
+        pdf_vals = [self.pdf(x) for x in x_vals]
+
+        df = pd.DataFrame({
+            'x': x_vals,
+            'pdf': pdf_vals
+        })
+
+        chart = (
+            alt.Chart(df)
+            .mark_area(line={"color": color}, color=color, opacity=0.5)
+            .encode(
+                x=alt.X('x', title='$'),
+                y=alt.Y(
+                    'pdf', 
+                    title='',
+                    axis=alt.Axis(
+                        labels=False, 
+                        ticks=False, 
+                        grid=False, 
+                        domain=False
+                    )
+                )
+            )
+            .properties(
+                width=width,
+                height=height,
+                title=title
+            )
+        )
+        return chart
+```
+
+### Amy
+
+$$
+C_A \sim \text{PERT}(20, 50, 150)
+$$
+
+Amy is not a big spender. She is usually at work, but when she has a day off she
+never spends more than $150 during the day, and usually hovers around the $50 mark.
+
+
+```{python}
+spend_a = PERT(20, 50, 150)
+spend_a.plot(title="Amy's Daily Spending").show()
+```
+
+### Brett
+
+$$
+C_B \sim \text{PERT}(20, 20, 1500)
+$$
+
+Brett's habits are a lot more volatile. He is always at home, and overall much more
+likely to spend. When he does spend, it is anything between a small $20 bet to
+significant $1500 wagers.
+
+```{python}
+spend_b = PERT(20, 20, 1500)
+spend_b.plot(title="Brett's Daily Spending", color="orange").show()
+```
+
+## Month of Spending
+
+Using the spending day simulation in combination with correlated sampling of the two
+spending distributions, I can estimate the monthly spending of each member of the
+household: 
+
+```{python}
+# Negative correlation between Amy and Brett spending
+rho = -0.95
+spend_corr_matrix = np.array([
+    [1.0, rho],
+    [rho, 1.0],
+])
+
+# Use a Copula to generate correlated spending days for the month
+uniform_simdata = stats.norm.cdf(
+    np.random.multivariate_normal(
+        mean=[0, 0],
+        cov=spend_corr_matrix,
+        size=(n, days)
+    )
+)
+
+simdata_a = spend_a.ppf(uniform_simdata[:, :, 0])
+simdata_b = spend_b.ppf(uniform_simdata[:, :, 1])
+
+# Mask with array of spending days
+simdata_a = np.where(
+    spending_days[:, :, 0],
+    simdata_a,
+    0
+)
+simdata_b = np.where(
+    spending_days[:, :, 1],
+    simdata_b,
+    0
+)
+
+df = pd.DataFrame({
+    "Amy": np.sum(simdata_a, axis=1),
+    "Brett": np.sum(simdata_b, axis=1),
+})
+
+flat_df = df.melt(var_name="Person", value_name="Spending")
+df["TOTAL"] = df["Amy"] + df["Brett"]
+```
+
+Plotting to show Amy and Brett's spending separately paints a pretty clear picture:
+
+```{python}
+chart = (
+    alt.Chart(flat_df)
+    .mark_bar(opacity=0.5)
+    .encode(
+        alt.X(
+            "Spending:Q", 
+            bin=alt.Bin(maxbins=100)
+        ),
+        alt.Y("count():Q", stack=None),
+        alt.Color(
+            "Person:N",
+            legend=alt.Legend(orient="top-right", title="")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT,
+        title="Household Monthly Spending"
+    )
+)
+
+chart.show()
+```
+
+Brett has a problem.
+
+The negative correlation between Amy and Brett's spending is in the model, though it
+doesn't show up very strongly in the aggregated monthly spending:
+
+```{python}
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("Amy:Q"),
+        alt.Y("Brett:Q"),
+        alt.Color(
+            "TOTAL:Q",
+            legend=alt.Legend(orient="top-right")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT,
+        title="Amy vs Brett Monthly Spending"
+    )
+)
+
+chart.show()
+```
+
+## Overall Budget
+
+Now I can plug the above simulated numbers into the formula:
+
+$$
+C_{\text{total}} = 7500 + (30(A + B))
+$$
+
+to arrive at the final monthly total.
+
+Assuming Amy makes $550 per day worked after tax, I can also compute a monthly net income.
+
+```{python}
+def calculate_total_monthly_expenses(
+    audrey_spend, 
+    brett_spend, 
+    base_expense: float = 7500
+) -> np.ndarray:
+    audrey_total_spend = np.sum(audrey_spend, axis=1)
+    brett_total_spend = np.sum(brett_spend, axis=1)
+
+    return base_expense + audrey_total_spend + brett_total_spend
+
+total_expenses = calculate_total_monthly_expenses(
+    audrey_spend=simdata_a,
+    brett_spend=simdata_b,
+    base_expense=7500
+)
+
+income_per_day = 550
+income = np.sum(
+    np.where(
+        ~spending_days[:, :, 0],
+        income_per_day, 
+        0
+    ),
+    axis=1
+)
+
+df = pd.DataFrame({
+    "Expenses": total_expenses,
+    "Income": income,
+    "Net Income": income - total_expenses
+})
+flat_df = df.melt(var_name="Total", value_name="Amount")
+flat_df = flat_df.sample(5000)
+
+chart = (
+    alt.Chart(flat_df)
+    .mark_bar(opacity=0.5)
+    .encode(
+        alt.X("Amount:Q", bin=alt.Bin(maxbins=50)),
+        alt.Y(
+            "count():Q", 
+            stack=None,
+            title='',
+            axis=alt.Axis(
+                labels=False, 
+                ticks=False, 
+                grid=False, 
+                domain=False
+            ),
+        ),
+        alt.Color(
+            "Total:N",
+            legend=alt.Legend(orient="top-left", title="")
+        ),
+        alt.Order("Total:N")
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT,
+        title="Monthly Budget"
+    )
+)
+
+chart.show()
+```
+
+Using the Net Income result, I can estimate the probability that the household will lose
+money in a given month:
+
+
+```{python}
+p_lose_money = float(np.round(np.mean(df["Net Income"] <= 0) * 100, 2))
+```
+
+This tells us that the household has a `{python} p_lose_money`% chance of losing
+money each month, and that Amy should probably get a divorce.
+
+# Summary
+
+This is a silly example, but hopefully it shows that with a fairly basic toolkit you can
+learn to simulate a wide range of problems. Statistics and probability are domain
+agnostic, so they are very useful "glue" skills to develop, compared to narrower
+skillsets.
