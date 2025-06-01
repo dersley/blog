@@ -243,7 +243,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="independent-events">Independent Events</h2>
 <p>The modelling of independent and identically distributed trials is easily done with the Binomial distribution. For example, we can simulate tossing a coin 50 times like this:</p>
 <div id="3f40435a" class="cell" data-execution_count="2">
-<details open="" class="code-fold">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate 5000 experiments, tossing a coin 50 times</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>tosses <span class="op">=</span> <span class="dv">50</span></span>
@@ -356,7 +356,7 @@ window.Quarto = {
 <p>The above plot shows the number of heads thrown out of 50 total tosses, repeated 5000 times.</p>
 <p>This can be made a bit more flexible by generating our own random uniform samples instead of directly using numpy’s <code>random.binomial</code> function:</p>
 <div id="f5bbbaf4" class="cell" data-execution_count="3">
-<details open="" class="code-fold">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate 2D array of 0-1 values with dims (tosses, n)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>uniform_simdata <span class="op">=</span> np.random.uniform(<span class="dv">0</span>, <span class="dv">1</span>, size<span class="op">=</span>(tosses, n))</span>
@@ -454,7 +454,7 @@ window.Quarto = {
 <p>Because we are now using uniform samples to create the outcomes, we can just feed correlated uniform samples into the process instead. This will correlate the outcomes.</p>
 <p>Here is a correlation of <span class="math inline">\(0.25\)</span> shared across all coin tosses:</p>
 <div id="28f5fbea" class="cell" data-execution_count="4">
-<details open="" class="code-fold">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_simple_correlation_matrix(num: <span class="bu">int</span>, corr: <span class="bu">float</span>) <span class="op">-&gt;</span> np.ndarray:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    matrix <span class="op">=</span> np.full((num, num), corr)</span>
@@ -558,7 +558,7 @@ window.Quarto = {
 </div>
 <p>And another with a correlation of 0.75:</p>
 <div id="02188e92" class="cell" data-execution_count="5">
-<details open="" class="code-fold">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> create_simple_correlation_matrix(num<span class="op">=</span>tosses, corr<span class="op">=</span><span class="fl">0.75</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>

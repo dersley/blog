@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/spending/index.html",
       "/posts/outcomes/index.html",
       "/posts/copulas/index.html",
       "/posts/welcome/index.html"
