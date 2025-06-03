@@ -1,0 +1,457 @@
+---
+title: Interpreting Depositional Environments with Bayes
+subtitle: Modelling depositional environments with a Stepped Dirichlet Process
+author: "Nicholas Dorsch"
+date: today
+categories: [code, statistics]
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import altair as alt
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 250
+```
+
+![](media/outcrop.png)
+
+# Introduction
+
+My favourite aspect of studying Geology was field work. I found it amazing how much
+information about a depositional system could be derived from outcrop and core scale
+observations. It is a peculiar thing to make such strong inferences about systems that
+existed millions of years in the past, that we can never verify, and its inevitable that
+arguments over particular interpretations will occur. 
+
+Coming at this from a bayesian perspective, it seems like there should be a framework
+for creating a distribution over geological interpretations. Speaking about sedimentary
+sequences specifically, it seems like there are tools on the table in bayesian
+statistics to use. 
+
+## The Dirichlet Distribution
+
+The [Dirichet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) can be
+used to model the probability of a set of categories, which in this context would be
+depositional environments. The Dirichlet distribution samples from a simplex (a vector
+of numbers that add to 1), which makes it perfect for modelling our uncertainty over
+interpretations.
+
+It also has the convenient property of conjugacy, which essentially means its very easy
+to go from prior to posterior, which will be an important part of this process.
+
+## Applied to a Simple Example
+
+Let's say we are considering three depositional environments when looking at part of an
+outcrop:
+
+1. Delta 
+2. Deepwater turbidite fan 
+3. Lake
+
+The $\alpha$ parameter of the distribution can be thought of as a list of weights, one
+for each option.
+
+In this case let's say we assign our weights as:
+
+$$
+\alpha = [50, 25, 1]
+$$
+
+This equates to us saying that we think the Delta interpretation is most
+plausible, although the Turbidite interpretation is a possibility, while the Lake
+interpretation is implausible.
+
+That results in the following distribution:
+
+```{python}
+sims = 1000
+alpha = [50, 25, 1]
+
+simdata = np.random.dirichlet(alpha, size=sims)
+
+df = pd.DataFrame({
+    "P(Delta)": simdata[:, 0],
+    "P(Turbidite)": simdata[:, 1],
+    "P(Lake)": simdata[:, 2],
+}).melt(var_name="Interpretation", value_name="Probability")
+
+def plot_dirichlet_histogram(df: pd.DataFrame, title: str) -> alt.Chart:
+    tick_values = [round(i * 0.1, 1) for i in range(11)]
+    return (
+        alt.Chart(df)
+        .mark_bar(opacity=0.5)
+        .encode(
+            alt.X(
+                "Probability:Q", 
+                bin=alt.Bin(maxbins=100),
+                scale=alt.Scale(domain=[0, 1]),
+                axis=alt.Axis(values=tick_values)
+            ),
+            alt.Y(
+                "count():Q", 
+                stack=None,
+                title='',
+                axis=alt.Axis(
+                    labels=False, 
+                    ticks=False, 
+                    grid=False, 
+                    domain=False
+                )
+            ),
+
+            alt.Color(
+                "Interpretation:N",
+                legend=alt.Legend(orient="top-right")
+            ),
+            alt.Order("Interpretation:N")
+        )
+        .properties(
+            title=title,
+            height=PLOT_HEIGHT,
+            width=PLOT_WIDTH
+        )
+    )
+
+chart = plot_dirichlet_histogram(df, title="Interpretation Probabilities")
+chart.show()
+```
+
+This is the distribution over the probabilities of each of the interpretations. Maybe it
+seems weird to have a probability distribution over probabilities, but this is actually
+very common in bayesian statistics. I will write a post on that at some point.
+
+## Incorporating Prior Information
+
+Let's say despite our observations at this outcrop, we have *very strong* indications
+nearby that we are standing in the middle of a lake deposit. Maybe the outcrop is an
+anomaly in an otherwise fairly confident interpretation.
+
+If we encode that prior as $\alpha_{\text{prior}} = [1, 1, 100]$, it looks like this:
+
+```{python}
+prior_alpha = np.array([1, 1, 100])
+simdata = np.random.dirichlet(prior_alpha, size=sims)
+
+df = pd.DataFrame({
+    "P(Delta)": simdata[:, 0],
+    "P(Turbidite)": simdata[:, 1],
+    "P(Lake)": simdata[:, 2],
+}).melt(var_name="Interpretation", value_name="Probability")
+
+chart = plot_dirichlet_histogram(df, title="Prior Interpretation Probabilities")
+chart.show()
+```
+
+We can incorporate this *prior* information very easily in our $\alpha$ parameter by
+just... adding it! It seems like a dumb trick, but this is an analytical result for
+updating Dirichlet distributions in what's called a Dirichlet Multinomial conjugate
+model.
+
+$$
+\begin{align}
+\alpha_{\text{prior}} &= [1, 1, 200] \\
+\alpha_{\text{posterior}} &= \alpha_{\text{prior}} + \alpha \\
+\alpha_{\text{posterior}} &= [51, 26, 201]
+\end{align}
+$$
+
+```{python}
+prior_alpha = np.array([1, 1, 200])
+alpha = np.array([50, 25, 1])
+posterior_alpha = prior_alpha + alpha
+
+simdata = np.random.dirichlet(posterior_alpha, size=sims)
+
+df = pd.DataFrame({
+    "P(Delta)": simdata[:, 0],
+    "P(Turbidite)": simdata[:, 1],
+    "P(Lake)": simdata[:, 2],
+}).melt(var_name="Interpretation", value_name="Probability")
+
+chart = plot_dirichlet_histogram(df, title="Posterior Interpretation Probabilities")
+chart.show()
+```
+
+Now, the strong prior on the Lake interpretation pushes it ahead, but notice the other
+interpretations are still on the table as possibilities given the evidence observed at
+the outcrop.
+
+In my view this provides a pretty strong baseline. We have 3 important things:
+
+1. The ability to encode prior beliefs
+2. The ability to "score" interpretations based on their likelihoods
+3. The ability to update probabilities objectively
+
+This all hinges on a point-scoring system that makes logical sense, but it seems like a
+good start.
+
+# Point Scoring
+
+The way I'm conceptualizing the points involved in this process is that each field
+observation has an associated $\alpha$ score which indicates the support it provides to
+each interpretation in the vector.
+
+To get started I asked Claude for a list of observations and their associated $\alpha$
+scores under the 3 interpretations:
+
+```{python}
+# Create dataframe of sedimentological observations with alpha values
+# Alpha values represent strength of evidence for each depositional environment
+# Higher alpha = stronger evidence for that environment
+
+observations_data = {
+    'observation': [
+        'trough_cross_stratification',
+        'planar_cross_stratification', 
+        'ripple_lamination',
+        'massive_sandstone',
+        'mud_drapes',
+        'climbing_ripples',
+        'convolute_bedding',
+        'flame_structures',
+        'load_casts',
+        'graded_bedding',
+        'flute_casts',
+        'groove_casts',
+        'mudstone_clasts',
+        'plant_debris',
+        'bioturbation',
+        'varved_lamination',
+        'dropstones',
+        'shell_fragments',
+        'coal_seams',
+        'root_traces',
+        'channel_lag_deposits',
+        'fining_upward_sequences',
+        'coarsening_upward_sequences',
+        'hummocky_cross_stratification',
+        'parallel_lamination'
+    ],
+    
+    # Alpha values for Delta environment
+    'Delta': [
+        15,  # trough_cross_stratification - very common in distributary channels
+        12,  # planar_cross_stratification - common in delta front
+        8,   # ripple_lamination - moderate evidence
+        6,   # massive_sandstone - can occur but not diagnostic
+        10,  # mud_drapes - good evidence for tidal influence
+        5,   # climbing_ripples - possible but not typical
+        3,   # convolute_bedding - rare
+        4,   # flame_structures - uncommon
+        4,   # load_casts - uncommon
+        2,   # graded_bedding - rare in delta
+        1,   # flute_casts - very rare
+        2,   # groove_casts - rare
+        8,   # mudstone_clasts - common in channels
+        12,  # plant_debris - very common
+        6,   # bioturbation - moderate
+        3,   # varved_lamination - uncommon
+        1,   # dropstones - very rare
+        7,   # shell_fragments - moderate evidence
+        15,  # coal_seams - very strong evidence
+        14,  # root_traces - very strong evidence
+        18,  # channel_lag_deposits - extremely strong
+        16,  # fining_upward_sequences - very strong
+        13,  # coarsening_upward_sequences - strong
+        4,   # hummocky_cross_stratification - rare
+        8    # parallel_lamination - moderate
+    ],
+    
+    # Alpha values for Turbidite environment  
+    'Turbidite': [
+        3,   # trough_cross_stratification - uncommon
+        4,   # planar_cross_stratification - uncommon
+        6,   # ripple_lamination - moderate in Tc division
+        8,   # massive_sandstone - common in Ta division
+        2,   # mud_drapes - rare
+        7,   # climbing_ripples - moderate evidence
+        12,  # convolute_bedding - very common
+        15,  # flame_structures - very strong evidence
+        14,  # load_casts - very strong evidence
+        18,  # graded_bedding - extremely diagnostic
+        16,  # flute_casts - very strong evidence
+        13,  # groove_casts - strong evidence
+        11,  # mudstone_clasts - common at base
+        3,   # plant_debris - uncommon
+        2,   # bioturbation - rare due to rapid deposition
+        1,   # varved_lamination - very rare
+        1,   # dropstones - very rare
+        4,   # shell_fragments - uncommon
+        1,   # coal_seams - very rare
+        1,   # root_traces - very rare
+        5,   # channel_lag_deposits - uncommon
+        2,   # fining_upward_sequences - rare
+        1,   # coarsening_upward_sequences - very rare
+        2,   # hummocky_cross_stratification - rare
+        12   # parallel_lamination - very common in Ta
+    ],
+    
+    # Alpha values for Lake environment
+    'Lake': [
+        2,   # trough_cross_stratification - rare
+        3,   # planar_cross_stratification - uncommon
+        8,   # ripple_lamination - moderate evidence
+        5,   # massive_sandstone - uncommon
+        4,   # mud_drapes - uncommon
+        3,   # climbing_ripples - uncommon
+        5,   # convolute_bedding - moderate
+        3,   # flame_structures - uncommon
+        4,   # load_casts - uncommon
+        7,   # graded_bedding - moderate for storm deposits
+        1,   # flute_casts - very rare
+        2,   # groove_casts - rare
+        3,   # mudstone_clasts - uncommon
+        8,   # plant_debris - moderate evidence
+        9,   # bioturbation - good evidence
+        16,  # varved_lamination - very strong evidence
+        14,  # dropstones - very strong for glacial lakes
+        6,   # shell_fragments - moderate
+        4,   # coal_seams - uncommon
+        5,   # root_traces - uncommon in lacustrine
+        2,   # channel_lag_deposits - rare
+        3,   # fining_upward_sequences - uncommon
+        6,   # coarsening_upward_sequences - moderate
+        8,   # hummocky_cross_stratification - moderate for storms
+        11   # parallel_lamination - strong evidence
+    ]
+}
+
+# Create DataFrame
+obs_df = pd.DataFrame(observations_data)
+
+obs_df
+```
+
+It looks like a great list to me, but I'm not much of a geologist anymore. In the real
+world these $\alpha$ scores would have to be calibrated somehow, whether its through
+expert option or with some kind of data model.
+
+## In Action
+
+I don't have real examples to use, but let's consider a diligent field geologist's notes
+about an outcrop we are considering. For now let's consider one section of the outcrop
+that the geo has annotated.
+
+Since Claude is cooking, I'll use it to dream up this scenario:
+
+>FIELD NOTES - Station 15, Muddy Creek Section
+Date: June 15, 2024
+Weather: Overcast, good exposure
+Geologist: Dr. Sarah Mitchell
+
+>INTERVAL: 45.2 - 52.8m (Sandstone Unit C)
+
+>DETAILED OBSERVATIONS:
+    Trough cross-stratification: Observed in 7 separate beds, sets 0.3-1.2m thick.
+    Parallel lamination: Very common, counted 12 distinct intervals.
+    Massive sandstone: 3 thick beds (0.8-1.5m), clean, well-sorted.
+    Plant debris: Abundant! Counted 15 fragments/coalified pieces on bedding planes.
+    Ripple lamination: Present in 4 beds, mostly at tops of fining-up sequences.
+    Fining upward sequences: Clear in 5 complete cycles, 2-3m thick each.
+    Channel lag deposits: 2 clear examples at sequence bases, pebble lags.
+    Mud drapes: Rare, only 1 thin example on ripple surface.
+    Bioturbation: Moderate, 6 intervals with Skolithos-type traces.
+
+>INTERPRETATION NOTES:
+This interval screams fluvial-deltaic to me. The trough cross-beds in thick sets,
+abundant plant material, and those beautiful fining-upward cycles. The channel
+lags are textbook. Probably distributary channel fill transitioning upward
+to delta front. Very little marine influence based on lack of mud drapes
+and bioturbation style.
+
+>CONFIDENCE: High - excellent exposure, clear diagnostic features
+
+Claude is... quite good at this.
+
+
+Wrapping this up into data, we can calculate the posterior $\alpha$ values using the
+previous table.
+
+
+```{python}
+field_observations = {
+    'trough_cross_stratification': 7,
+    'parallel_lamination': 12,
+    'massive_sandstone': 3,
+    'plant_debris': 15,
+    'ripple_lamination': 4,
+    'fining_upward_sequences': 5,
+    'channel_lag_deposits': 2,
+    'mud_drapes': 1,
+    'bioturbation': 6
+}
+
+
+def calculate_posterior_alphas(
+    obs_df: pd.DataFrame, 
+    field_observations: dict[str, int]
+):
+    alpha_counts = {k: 0 for k in obs_df.columns if k != "observation"}
+
+    for obs, count in field_observations.items():
+        obs_row = obs_df[obs_df['observation'] == obs]
+
+        for alpha in alpha_counts.keys():
+            a = obs_row[alpha].values[0]
+            alpha_counts[alpha] += (a * count)
+
+    return alpha_counts
+
+alpha_dict = calculate_posterior_alphas(obs_df, field_observations)
+
+alpha_obs = np.array(list(alpha_dict.values()))
+```
+
+And then plot it:
+
+
+```{python}
+simdata = np.random.dirichlet(alpha_obs, size=sims)
+
+df = pd.DataFrame({
+    "P(Delta)": simdata[:, 0],
+    "P(Turbidite)": simdata[:, 1],
+    "P(Lake)": simdata[:, 2],
+}).melt(var_name="Interpretation", value_name="Probability")
+
+chart = plot_dirichlet_histogram(df, title="Field Observations: Probabilities")
+chart.show()
+```
+
+Dr. Mitchell's remarks were broadly correct, then, though the model only gives about 50%
+probability to the Delta interpretation.
+
+## Incorporating Other Information
+
+In the same way we incorporated priors before, we can use the same procedure to
+incorporate other information. For example, the geophysicist working on this dataset
+may have a strong conviction that this is a turbidite deposit based on interpretation of
+seismic data nearby that connects to this outcrop stratigraphically:
+
+$$
+\begin{align}
+\alpha_{\text{geophysics}} = [1, 500, 1]
+\end{align}
+$$
+
+```{python}
+new_alpha = np.array(alpha_obs) + np.array([1, 500, 1])
+simdata = np.random.dirichlet(new_alpha, size=sims)
+
+df = pd.DataFrame({
+    "P(Delta)": simdata[:, 0],
+    "P(Turbidite)": simdata[:, 1],
+    "P(Lake)": simdata[:, 2],
+}).melt(var_name="Interpretation", value_name="Probability")
+
+chart = plot_dirichlet_histogram(
+    df, 
+    title="Field Observations + Geophysics: Probabilities"
+)
+chart.show()
+```
+
