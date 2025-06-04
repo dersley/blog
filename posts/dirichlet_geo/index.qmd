@@ -1,9 +1,9 @@
 ---
 title: Interpreting Depositional Environments with Bayes
-subtitle: Modelling depositional environments with a Stepped Dirichlet Process
+subtitle: Modelling interpretation uncertainty with the Dirichlet distribution
 author: "Nicholas Dorsch"
 date: today
-categories: [code, statistics]
+categories: [code, statistics, geology]
 ---
 
 ```{python}
@@ -17,43 +17,55 @@ PLOT_WIDTH = "container"
 PLOT_HEIGHT = 250
 ```
 
-![](media/outcrop.png)
+![A well preserved Bouma sequence from Tabernas Basin, Spain. [reddit
+link](https://www.reddit.com/r/geology/comments/b2yv4w/thought_you_guys_would_appreciate_this_almost/)](media/bouma_sequence.jpg){height="600px"}
 
 # Introduction
 
-My favourite aspect of studying Geology was field work. I found it amazing how much
+The layered mud in the image above depicts a Bouma sequence, which to the untrained eye,
+is... whatever man, it's mud. To the trained eye however, it is a dead giveaway that the
+sediment was deposited by a series of dramatic submarine landslides, on the steep
+continental shelf of a convergent tectonic margin. 
+
+It is *not* a river, says the trained eye, it is *not* a delta, it is *not* a lake. It
+is a [turbidite](https://en.wikipedia.org/wiki/Turbidite).
+
+My favourite aspect of studying Geology was field work. I found it exciting that so much
 information about a depositional system could be derived from outcrop and core scale
 observations. It is a peculiar thing to make such strong inferences about systems that
 existed millions of years in the past, that we can never verify, and its inevitable that
 arguments over particular interpretations will occur. 
 
-Coming at this from a bayesian perspective, it seems like there should be a framework
-for creating a distribution over geological interpretations. Speaking about sedimentary
-sequences specifically, it seems like there are tools on the table in bayesian
+Bayesians don't argue about the truth though---they just agree to share it around to the
+best candidates.
+
+Coming at this from a bayesian perspective then, it seems like there should be a
+framework for creating a distribution over geological interpretations. Speaking about
+sedimentary sequences specifically, I think there are tools on the table of bayesian
 statistics to use. 
 
 ## The Dirichlet Distribution
 
 The [Dirichet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) can be
-used to model the probability of a set of categories, which in this context would be
-depositional environments. The Dirichlet distribution samples from a simplex (a vector
-of numbers that add to 1), which makes it perfect for modelling our uncertainty over
-interpretations.
+used to model the probability of a set of discrete possibilities---depositional
+environments, in this context. The Dirichlet distribution samples from a simplex (a
+vector of numbers that add to 1), which makes it perfect for modelling our uncertainty
+over interpretations, where we assign some probability to each.
 
-It also has the convenient property of conjugacy, which essentially means its very easy
-to go from prior to posterior, which will be an important part of this process.
+It also has the convenient property of conjugacy, which essentially means it is very
+easy to go from prior to posterior, which will be an important part of this process.
 
 ## Applied to a Simple Example
 
-Let's say we are considering three depositional environments when looking at part of an
+Say we are considering three depositional environments when looking at part of an
 outcrop:
 
 1. Delta 
-2. Deepwater turbidite fan 
+2. Turbidite 
 3. Lake
 
-The $\alpha$ parameter of the distribution can be thought of as a list of weights, one
-for each option.
+The $\alpha$ parameter of the distribution can be thought of as a list of weights or
+"pseudocounts", one for each possibility.
 
 In this case let's say we assign our weights as:
 
@@ -122,7 +134,8 @@ chart.show()
 
 This is the distribution over the probabilities of each of the interpretations. Maybe it
 seems weird to have a probability distribution over probabilities, but this is actually
-very common in bayesian statistics. I will write a post on that at some point.
+very common in bayesian statistics. I will write a post on that at some point, but see
+the **Aleatoric and epistemic** section of [this](https://en.wikipedia.org/wiki/Uncertainty_quantification) wiki page for a primer.
 
 ## Incorporating Prior Information
 
@@ -149,7 +162,8 @@ chart.show()
 We can incorporate this *prior* information very easily in our $\alpha$ parameter by
 just... adding it! It seems like a dumb trick, but this is an analytical result for
 updating Dirichlet distributions in what's called a Dirichlet Multinomial conjugate
-model.
+model. If we are comfortable treating our vector of $\alpha$ values as "pseudocounts",
+then the math checks out here.
 
 $$
 \begin{align}
@@ -177,14 +191,15 @@ chart.show()
 ```
 
 Now, the strong prior on the Lake interpretation pushes it ahead, but notice the other
-interpretations are still on the table as possibilities given the evidence observed at
+interpretations are still on the table as possibilities, given the evidence observed at
 the outcrop.
 
 In my view this provides a pretty strong baseline. We have 3 important things:
 
-1. The ability to encode prior beliefs
-2. The ability to "score" interpretations based on their likelihoods
-3. The ability to update probabilities objectively
+1. The ability to encode prior beliefs over interpretations,
+2. The ability to "score" interpretations based on their likelihoods under those
+   interpretations, and
+3. The ability to update probabilities objectively.
 
 This all hinges on a point-scoring system that makes logical sense, but it seems like a
 good start.
@@ -195,8 +210,27 @@ The way I'm conceptualizing the points involved in this process is that each fie
 observation has an associated $\alpha$ score which indicates the support it provides to
 each interpretation in the vector.
 
-To get started I asked Claude for a list of observations and their associated $\alpha$
-scores under the 3 interpretations:
+For example, observing a perfect [Bouma
+sequence](https://en.wikipedia.org/wiki/Bouma_sequence)---like that shown in the first
+image---is extremely strong evidence that a deposit is turbiditic. That might lead one
+to associate it with an $\alpha$ vector of $[1, 100, 1]$ in favour of the Turbidite
+interpretation. 
+
+I mean look at it! Don't even argue! It's so obvious!
+
+Other observations would be more ambiguous and open to argument---but that's why we're
+assigning probabilities, not certainties---to the possible observations on the table.
+
+The Bouma sequence example actually points to a big problem in this simple
+points-scoring approach---it misses the
+[*gestalt*](https://en.wikipedia.org/wiki/Gestalt_psychology) of combined observations.
+The Bouma sequence is strongly diagnostic because it is the *sequence of multiple
+ordered observations*, which on their own would not be nearly as powerful. I'll have to
+think about how to deal with this better, but for now will proceed with the simple point
+scoring method.
+
+To get started with scoring, I asked Claude for a list of observations and their
+associated $\alpha$ scores under the 3 interpretations:
 
 ```{python}
 # Create dataframe of sedimentological observations with alpha values
@@ -333,10 +367,9 @@ expert option or with some kind of data model.
 ## In Action
 
 I don't have real examples to use, but let's consider a diligent field geologist's notes
-about an outcrop we are considering. For now let's consider one section of the outcrop
-that the geo has annotated.
+about an outcrop.
 
-Since Claude is cooking, I'll use it to dream up this scenario:
+Since Claude is already cooking, I've used it to dream up the details:
 
 >FIELD NOTES - Station 15, Muddy Creek Section
 Date: June 15, 2024
@@ -428,13 +461,13 @@ probability to the Delta interpretation.
 ## Incorporating Other Information
 
 In the same way we incorporated priors before, we can use the same procedure to
-incorporate other information. For example, the geophysicist working on this dataset
-may have a strong conviction that this is a turbidite deposit based on interpretation of
-seismic data nearby that connects to this outcrop stratigraphically:
+incorporate external sources of information. For example, the geophysicist working on
+this dataset may have a strong conviction that this is a turbidite deposit based on
+interpretation of seismic data nearby that connects to this outcrop stratigraphically:
 
 $$
 \begin{align}
-\alpha_{\text{geophysics}} = [1, 500, 1]
+\alpha_{\text{geophysics}} = [1, 250, 1]
 \end{align}
 $$
 
@@ -454,4 +487,86 @@ chart = plot_dirichlet_histogram(
 )
 chart.show()
 ```
+
+Again, it wouldn't be easy to calibrate these $\alpha$ values as they are encoding
+subjective beliefs about strength of evidence under different interpretations.
+
+# Problems
+
+The biggest problems I see with this approach are:
+
+1. The subjectivity of the $\alpha$ parameter, in priors and point scoring
+2. The treating of observations in isolation, instead of considering how they interact
+3. The bloody huge table of depositional environments, observations and $\alpha$ scores
+   that would be required to actually use it.
+
+On point 3, it might be practical to generate these tables "ad hoc" based on a limited
+number of possibilities and observations, rather than have one terrifying master table
+of $\alpha$ scores.
+
+On point 2... I think a graph (as in [graph
+theory](https://en.wikipedia.org/wiki/Graph_theory)) of observations and interpretations
+might work here. It would allow observations to "interact" and add up to more of the sum
+of their parts, just as observations would in a geologist's brain.
+
+```{mermaid}
+graph TD
+
+    %% Interpretation nodes
+    Turbidite[Turbidite]
+    Delta[Delta]
+
+    %% Turbidite interpretation features
+    graded_bedding((graded_bedding))
+    parallel_lamination((parallel_lamination))
+    flute_casts((flute_casts))
+    load_casts((load_casts))
+    bioturbation((bioturbation))
+    ripple_lamination((ripple_lamination))
+    convolute_bedding((convolute_bedding))
+
+    %% Delta interpretation features
+    trough_cross_stratification((trough_cross_stratification))
+    fining_upward_sequences((fining_upward_sequences))
+    plant_debris((plant_debris))
+    mud_drapes((mud_drapes))
+
+    %% Interpretation → Feature connections
+    Turbidite --> graded_bedding
+    Turbidite --> parallel_lamination
+    Turbidite --> flute_casts
+    Turbidite --> load_casts
+    Turbidite --> bioturbation
+    Turbidite --> ripple_lamination
+    Turbidite --> convolute_bedding
+
+    Delta --> trough_cross_stratification
+    Delta --> fining_upward_sequences
+    Delta --> plant_debris
+    Delta --> mud_drapes
+    Delta --> graded_bedding
+
+    %% Turbidite edges with weights
+    graded_bedding -->|3.5| parallel_lamination
+    graded_bedding -->|2.8| flute_casts
+    graded_bedding -->|2.2| load_casts
+    graded_bedding -->|-1.5| bioturbation
+
+    parallel_lamination -->|2.1| ripple_lamination
+    parallel_lamination -->|1.8| convolute_bedding
+
+    %% Delta edges with weights
+    trough_cross_stratification -->|4.2| fining_upward_sequences
+    trough_cross_stratification -->|3.1| plant_debris
+    trough_cross_stratification -->|2.3| mud_drapes
+    trough_cross_stratification -->|-0.8| graded_bedding
+```
+
+With something like this, the total $\alpha$ would be calculated using an algorithm that
+takes into account both the observation node scores as well as the connection strength
+between them.
+
+So you see... it's just a simple matter of setting all those alpha scores, all the
+connections between observations, and all the edge weights of those connections! Why
+aren't people doing this already?
 
