@@ -11,6 +11,7 @@ categories: [code, statistics, geology]
 import numpy as np
 import pandas as pd
 import altair as alt
+from scipy.stats import beta
 
 alt.theme.enable("dark")
 PLOT_WIDTH = "container"
@@ -22,10 +23,11 @@ link](https://www.reddit.com/r/geology/comments/b2yv4w/thought_you_guys_would_ap
 
 # Introduction
 
-The layered mud in the image above depicts a Bouma sequence, which to the untrained eye,
-is... whatever man, it's mud. To the trained eye however, it is a dead giveaway that the
-sediment was deposited by a series of dramatic submarine landslides, on the steep
-continental shelf of a convergent tectonic margin. 
+The layered mud in the image above depicts a [Bouma
+sequence](https://en.wikipedia.org/wiki/Bouma_sequence), which to the untrained
+eye, is... whatever man, it's mud. To the trained eye however, it is a dead giveaway
+that the sediment was deposited by a series of dramatic submarine landslides, on the
+steep continental shelf of a convergent tectonic margin. 
 
 It is *not* a river, says the trained eye, it is *not* a delta, it is *not* a lake. It
 is a [turbidite](https://en.wikipedia.org/wiki/Turbidite).
@@ -53,7 +55,7 @@ vector of numbers that add to 1), which makes it perfect for modelling our uncer
 over interpretations, where we assign some probability to each.
 
 It also has the convenient property of conjugacy, which essentially means it is very
-easy to go from prior to posterior, which will be an important part of this process.
+easy to update with new evidence.
 
 ## Applied to a Simple Example
 
@@ -70,7 +72,7 @@ The $\alpha$ parameter of the distribution can be thought of as a list of weight
 In this case let's say we assign our weights as:
 
 $$
-\alpha = [50, 25, 1]
+\alpha = [20, 10, 2]
 $$
 
 This equates to us saying that we think the Delta interpretation is most
@@ -80,31 +82,43 @@ interpretation is implausible.
 That results in the following distribution:
 
 ```{python}
-sims = 1000
-alpha = [50, 25, 1]
 
-simdata = np.random.dirichlet(alpha, size=sims)
+def create_marginal_dirichlet_pdf_df(
+    alpha: list[int], 
+    labels: list[str]
+) -> pd.DataFrame:
 
-df = pd.DataFrame({
-    "P(Delta)": simdata[:, 0],
-    "P(Turbidite)": simdata[:, 1],
-    "P(Lake)": simdata[:, 2],
-}).melt(var_name="Interpretation", value_name="Probability")
+    x = np.linspace(0, 1, 250)
+    total = np.array(alpha).sum()
 
-def plot_dirichlet_histogram(df: pd.DataFrame, title: str) -> alt.Chart:
+    dfs = []
+    for l, a in zip(labels, alpha):
+        marginal_pdf = beta(a=a, b=(total - a)).pdf(x)
+
+        dfs.append(
+            pd.DataFrame({
+                "Interpretation": l,
+                "Probability": x,
+                "PDF": marginal_pdf
+            })
+        )
+
+    return pd.concat(dfs, ignore_index=True)
+
+
+def plot_dirichlet_pdf(df: pd.DataFrame, title: str) -> alt.Chart:
     tick_values = [round(i * 0.1, 1) for i in range(11)]
     return (
         alt.Chart(df)
-        .mark_bar(opacity=0.5)
+        .mark_area(opacity=0.5)
         .encode(
             alt.X(
                 "Probability:Q", 
-                bin=alt.Bin(maxbins=100),
                 scale=alt.Scale(domain=[0, 1]),
                 axis=alt.Axis(values=tick_values)
             ),
             alt.Y(
-                "count():Q", 
+                "PDF:Q",
                 stack=None,
                 title='',
                 axis=alt.Axis(
@@ -112,9 +126,8 @@ def plot_dirichlet_histogram(df: pd.DataFrame, title: str) -> alt.Chart:
                     ticks=False, 
                     grid=False, 
                     domain=False
-                )
+                ),
             ),
-
             alt.Color(
                 "Interpretation:N",
                 legend=alt.Legend(orient="top-right")
@@ -128,7 +141,16 @@ def plot_dirichlet_histogram(df: pd.DataFrame, title: str) -> alt.Chart:
         )
     )
 
-chart = plot_dirichlet_histogram(df, title="Interpretation Probabilities")
+alpha = [20, 10, 2]
+labels = [
+    "P(Delta)",
+    "P(Turbidite)",
+    "P(Lake)",
+]
+
+df = create_marginal_dirichlet_pdf_df(alpha, labels)
+
+chart = plot_dirichlet_pdf(df, title="Interpretation Probabilities")
 chart.show()
 ```
 
@@ -147,15 +169,9 @@ If we encode that prior as $\alpha_{\text{prior}} = [1, 1, 100]$, it looks like 
 
 ```{python}
 prior_alpha = np.array([1, 1, 100])
-simdata = np.random.dirichlet(prior_alpha, size=sims)
+df = create_marginal_dirichlet_pdf_df(prior_alpha, labels)
 
-df = pd.DataFrame({
-    "P(Delta)": simdata[:, 0],
-    "P(Turbidite)": simdata[:, 1],
-    "P(Lake)": simdata[:, 2],
-}).melt(var_name="Interpretation", value_name="Probability")
-
-chart = plot_dirichlet_histogram(df, title="Prior Interpretation Probabilities")
+chart = plot_dirichlet_pdf(df, title="Prior Interpretation Probabilities")
 chart.show()
 ```
 
@@ -175,18 +191,11 @@ $$
 
 ```{python}
 prior_alpha = np.array([1, 1, 200])
-alpha = np.array([50, 25, 1])
 posterior_alpha = prior_alpha + alpha
 
-simdata = np.random.dirichlet(posterior_alpha, size=sims)
+df = create_marginal_dirichlet_pdf_df(posterior_alpha, labels)
 
-df = pd.DataFrame({
-    "P(Delta)": simdata[:, 0],
-    "P(Turbidite)": simdata[:, 1],
-    "P(Lake)": simdata[:, 2],
-}).melt(var_name="Interpretation", value_name="Probability")
-
-chart = plot_dirichlet_histogram(df, title="Posterior Interpretation Probabilities")
+chart = plot_dirichlet_pdf(df, title="Posterior Interpretation Probabilities")
 chart.show()
 ```
 
@@ -210,8 +219,7 @@ The way I'm conceptualizing the points involved in this process is that each fie
 observation has an associated $\alpha$ score which indicates the support it provides to
 each interpretation in the vector.
 
-For example, observing a perfect [Bouma
-sequence](https://en.wikipedia.org/wiki/Bouma_sequence)---like that shown in the first
+For example, observing a perfect Bouma sequence---like that shown in the first
 image---is extremely strong evidence that a deposit is turbiditic. That might lead one
 to associate it with an $\alpha$ vector of $[1, 100, 1]$ in favour of the Turbidite
 interpretation. 
@@ -443,15 +451,9 @@ And then plot it:
 
 
 ```{python}
-simdata = np.random.dirichlet(alpha_obs, size=sims)
+df = create_marginal_dirichlet_pdf_df(alpha_obs, labels)
 
-df = pd.DataFrame({
-    "P(Delta)": simdata[:, 0],
-    "P(Turbidite)": simdata[:, 1],
-    "P(Lake)": simdata[:, 2],
-}).melt(var_name="Interpretation", value_name="Probability")
-
-chart = plot_dirichlet_histogram(df, title="Field Observations: Probabilities")
+chart = plot_dirichlet_pdf(df, title="Field Observations: Probabilities")
 chart.show()
 ```
 
@@ -473,15 +475,9 @@ $$
 
 ```{python}
 new_alpha = np.array(alpha_obs) + np.array([1, 500, 1])
-simdata = np.random.dirichlet(new_alpha, size=sims)
+df = create_marginal_dirichlet_pdf_df(new_alpha, labels)
 
-df = pd.DataFrame({
-    "P(Delta)": simdata[:, 0],
-    "P(Turbidite)": simdata[:, 1],
-    "P(Lake)": simdata[:, 2],
-}).melt(var_name="Interpretation", value_name="Probability")
-
-chart = plot_dirichlet_histogram(
+chart = plot_dirichlet_pdf(
     df, 
     title="Field Observations + Geophysics: Probabilities"
 )
@@ -566,7 +562,15 @@ With something like this, the total $\alpha$ would be calculated using an algori
 takes into account both the observation node scores as well as the connection strength
 between them.
 
-So you see... it's just a simple matter of setting all those alpha scores, all the
-connections between observations, and all the edge weights of those connections! Why
-aren't people doing this already?
+So you see... it's a simple matter of setting all those alpha scores for every
+depositional environment, all the connections between observations, and all the edge
+weights of those connections! Why aren't people doing this already?
+
+# Conclusion
+
+Regardless of some big problems with implementing this approach, I think it shows enough
+promise that, if I was working on these sorts of problems in my day-to-day, I would try
+to flesh it out in more detail. 
+
+
 
