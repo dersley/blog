@@ -383,7 +383,7 @@ scoring method.
 I don't have real examples to use, but let's consider a diligent field geologist's notes
 about an outcrop.
 
-Since Claude is already cooking, I've used it to dream up example:
+Since Claude is already cooking, I've used it to dream up an example:
 
 >FIELD NOTES - Station 15, Muddy Creek Section
 Date: June 15, 2024
