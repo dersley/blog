@@ -2,26 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dersley.github.io/blog/posts/welcome/index.html</loc>
-    <lastmod>2025-06-01T05:39:41.794Z</lastmod>
+    <lastmod>2025-06-07T01:04:07.857Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/outcomes/index.html</loc>
-    <lastmod>2025-06-01T05:39:41.792Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/index.html</loc>
-    <lastmod>2025-06-01T05:39:41.785Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/about.html</loc>
-    <lastmod>2025-06-01T05:39:41.785Z</lastmod>
+    <lastmod>2025-06-07T01:04:07.855Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/spending/index.html</loc>
-    <lastmod>2025-06-01T05:39:41.792Z</lastmod>
+    <lastmod>2025-06-07T01:04:07.855Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/about.html</loc>
+    <lastmod>2025-06-07T01:04:07.842Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/index.html</loc>
+    <lastmod>2025-06-07T01:04:07.842Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/posts/dirichlet_geo/index.html</loc>
+    <lastmod>2025-06-07T01:04:07.849Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/copulas/index.html</loc>
-    <lastmod>2025-06-01T05:39:41.792Z</lastmod>
+    <lastmod>2025-06-07T01:04:07.849Z</lastmod>
   </url>
 </urlset>
