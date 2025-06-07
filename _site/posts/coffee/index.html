@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Nicholas Dorsch">
+<meta name="dcterms.date" content="2025-06-07">
+
+<title>How Much is a Coffee Worth to Me? – dorschblog</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-8cd7fb5638ff5aef6f194cfb78a49ea2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">dorschblog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/dersley"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/nicholasjohndorsch/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">How Much is a Coffee Worth to Me?</h1>
+            <p class="subtitle lead">A masochistic exploration of personal finance</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">finance</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Nicholas Dorsch </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 7, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#opportunity-cost-and-futures-lost" id="toc-opportunity-cost-and-futures-lost" class="nav-link active" data-scroll-target="#opportunity-cost-and-futures-lost">Opportunity Cost, and Futures Lost…</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>I moved to Melbourne last year, which, along with being a questionable career choice, turned an already troubling dependence on caffeine into a behavioural disorder.</p>
+<p>I bought a Nespresso machine, telling myself I would save money on coffee. Now, with the help of my Nespresso machine I have more than doubled my coffee consumption. The coffee pod coffee doesn’t count, you see. Yes I’ll come down for a coffee, I haven’t had mine yet.</p>
+<p>This leads me to wonder how much of my family’s future I am eroding to bean-dust, every time I head downstairs for another <em>medium latte, thanks</em>—an absent droning sound I make every morning between the hours of 9 and 10 am. Each <em>milky-upper</em> is costing me $6. So assuming I work 250 days in a year… let’s see now:</p>
+<div id="8cd41208" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>COFFEE_COST <span class="op">=</span> <span class="fl">6.0</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>WORKING_DAYS <span class="op">=</span> <span class="dv">250</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>annual_cost <span class="op">=</span> COFFEE_COST <span class="op">*</span> WORKING_DAYS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It’s $1500.0. You can check the code if you want to make sure I got that.</p>
+<p>I’m not <em>devastated</em> by that number—it’s not a small amount, but neither is it enough to send my first born to school—and perhaps a less masochstic person would leave the matter there… but it does beg the question of what I might be doing with that $1500 a year if I wasn’t spending it on <em>morning browns for morning frowns</em>.</p>
+<section id="opportunity-cost-and-futures-lost" class="level1">
+<h1>Opportunity Cost, and Futures Lost…</h1>
+<p>So I know what you’re thinking, the obvious thing to do here is run a forecasted investment strategy using a geometric brownian motion stochastic model of returns based on the past 20 years of ASX market data. Instead of $6 a day for <em>cofvefe</em>, the model will invest into the Vanguard ETF instead. Then, after 20 years, we can see how Nick the <em>coffee dribbler</em> is doing, compared to Nick the <em>slightly more financially responsible</em> adult.</p>
+<p>Before we get all trigger happy with a stochastic model, let’s have a look at how this strategy performs assuming a 6% annual return on the market.</p>
+<p>Because it’s not far off from the truth, I’ll just assume I buy one coffee a day for simplicity.</p>
+<div id="38f5a7b6" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_date_array(start_date: datetime, num_months: <span class="bu">int</span>):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    start <span class="op">=</span> np.datetime64(start_date.replace(day<span class="op">=</span><span class="dv">1</span>), <span class="st">'M'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    month_array <span class="op">=</span> start <span class="op">+</span> np.arange(num_months)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> month_array.astype(<span class="st">"datetime64[D]"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> annual_to_monthly_rate(annual_rate: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (<span class="dv">1</span> <span class="op">+</span> annual_rate) <span class="op">**</span> (<span class="dv">1</span> <span class="op">/</span> <span class="dv">12</span>) <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>YEARS <span class="op">=</span> <span class="dv">18</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>ANNUAL_RETURN <span class="op">=</span> <span class="fl">0.06</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>num_months <span class="op">=</span> YEARS <span class="op">*</span> <span class="dv">12</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>months <span class="op">=</span> np.arange(num_months)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>dates <span class="op">=</span> create_date_array(datetime.today(), num_months<span class="op">=</span>num_months)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>investing <span class="op">=</span> np.full_like(dates, COFFEE_COST <span class="op">*</span> <span class="dv">30</span>).astype(<span class="bu">float</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>spending <span class="op">=</span> <span class="op">-</span><span class="dv">1</span> <span class="op">*</span> investing</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>monthly_return <span class="op">=</span> annual_to_monthly_rate(ANNUAL_RETURN)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>returns <span class="op">=</span> investing <span class="op">*</span> np.exp(monthly_return <span class="op">*</span> months)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date"</span>: dates,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Spending"</span>: np.cumsum(spending),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Investing"</span>: np.cumsum(investing),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Returns"</span>: np.cumsum(returns)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>flat_df <span class="op">=</span> df.melt(</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>[<span class="st">"Date"</span>], </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    var_name<span class="op">=</span><span class="st">"Case"</span>, </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">"Balance ($)"</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="2bbb0348" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>chart <span class="op">=</span> (</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    alt.Chart(flat_df)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    .mark_area(opacity<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    .encode(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        alt.X(<span class="st">"Date:T"</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        alt.Y(<span class="st">"Balance ($):Q"</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        alt.Color(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Case:N"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            legend<span class="op">=</span>alt.Legend(orient<span class="op">=</span><span class="st">"top-left"</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    .properties(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        height<span class="op">=</span>PLOT_HEIGHT,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        width<span class="op">=</span>PLOT_WIDTH</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>chart.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+
+<style>
+  #altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54.vega-embed details,
+  #altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54") {
+      outputDiv = document.getElementById("altair-viz-4eeff66ee6ba47b4ac2d7f09ecb4ff54");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@5?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@5.20.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@6?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "5")
+        .then(() => maybeLoadScript("vega-lite", "5.20.1"))
+        .then(() => maybeLoadScript("vega-embed", "6"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"usermeta": {"embedOptions": {"theme": "dark"}}, "config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-a44b822c45bd0b77b282f6045675f9d9"}, "mark": {"type": "area", "opacity": 0.8}, "encoding": {"color": {"field": "Case", "legend": {"orient": "top-left"}, "type": "nominal"}, "x": {"field": "Date", "type": "temporal"}, "y": {"field": "Balance ($)", "type": "quantitative"}}, "height": 250, "width": "container", "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-a44b822c45bd0b77b282f6045675f9d9": [{"Date": "2025-06-01T00:00:00", "Case": "Spending", "Balance ($)": -180.0}, {"Date": "2025-07-01T00:00:00", "Case": "Spending", "Balance ($)": -360.0}, {"Date": "2025-08-01T00:00:00", "Case": "Spending", "Balance ($)": -540.0}, {"Date": "2025-09-01T00:00:00", "Case": "Spending", "Balance ($)": -720.0}, {"Date": "2025-10-01T00:00:00", "Case": "Spending", "Balance ($)": -900.0}, {"Date": "2025-11-01T00:00:00", "Case": "Spending", "Balance ($)": -1080.0}, {"Date": "2025-12-01T00:00:00", "Case": "Spending", "Balance ($)": -1260.0}, {"Date": "2026-01-01T00:00:00", "Case": "Spending", "Balance ($)": -1440.0}, {"Date": "2026-02-01T00:00:00", "Case": "Spending", "Balance ($)": -1620.0}, {"Date": "2026-03-01T00:00:00", "Case": "Spending", "Balance ($)": -1800.0}, {"Date": "2026-04-01T00:00:00", "Case": "Spending", "Balance ($)": -1980.0}, {"Date": "2026-05-01T00:00:00", "Case": "Spending", "Balance ($)": -2160.0}, {"Date": "2026-06-01T00:00:00", "Case": "Spending", "Balance ($)": -2340.0}, {"Date": "2026-07-01T00:00:00", "Case": "Spending", "Balance ($)": -2520.0}, {"Date": "2026-08-01T00:00:00", "Case": "Spending", "Balance ($)": -2700.0}, {"Date": "2026-09-01T00:00:00", "Case": "Spending", "Balance ($)": -2880.0}, {"Date": "2026-10-01T00:00:00", "Case": "Spending", "Balance ($)": -3060.0}, {"Date": "2026-11-01T00:00:00", "Case": "Spending", "Balance ($)": -3240.0}, {"Date": "2026-12-01T00:00:00", "Case": "Spending", "Balance ($)": -3420.0}, {"Date": "2027-01-01T00:00:00", "Case": "Spending", "Balance ($)": -3600.0}, {"Date": "2027-02-01T00:00:00", "Case": "Spending", "Balance ($)": -3780.0}, {"Date": "2027-03-01T00:00:00", "Case": "Spending", "Balance ($)": -3960.0}, {"Date": "2027-04-01T00:00:00", "Case": "Spending", "Balance ($)": -4140.0}, {"Date": "2027-05-01T00:00:00", "Case": "Spending", "Balance ($)": -4320.0}, {"Date": "2027-06-01T00:00:00", "Case": "Spending", "Balance ($)": -4500.0}, {"Date": "2027-07-01T00:00:00", "Case": "Spending", "Balance ($)": -4680.0}, {"Date": "2027-08-01T00:00:00", "Case": "Spending", "Balance ($)": -4860.0}, {"Date": "2027-09-01T00:00:00", "Case": "Spending", "Balance ($)": -5040.0}, {"Date": "2027-10-01T00:00:00", "Case": "Spending", "Balance ($)": -5220.0}, {"Date": "2027-11-01T00:00:00", "Case": "Spending", "Balance ($)": -5400.0}, {"Date": "2027-12-01T00:00:00", "Case": "Spending", "Balance ($)": -5580.0}, {"Date": "2028-01-01T00:00:00", "Case": "Spending", "Balance ($)": -5760.0}, {"Date": "2028-02-01T00:00:00", "Case": "Spending", "Balance ($)": -5940.0}, {"Date": "2028-03-01T00:00:00", "Case": "Spending", "Balance ($)": -6120.0}, {"Date": "2028-04-01T00:00:00", "Case": "Spending", "Balance ($)": -6300.0}, {"Date": "2028-05-01T00:00:00", "Case": "Spending", "Balance ($)": -6480.0}, {"Date": "2028-06-01T00:00:00", "Case": "Spending", "Balance ($)": -6660.0}, {"Date": "2028-07-01T00:00:00", "Case": "Spending", "Balance ($)": -6840.0}, {"Date": "2028-08-01T00:00:00", "Case": "Spending", "Balance ($)": -7020.0}, {"Date": "2028-09-01T00:00:00", "Case": "Spending", "Balance ($)": -7200.0}, {"Date": "2028-10-01T00:00:00", "Case": "Spending", "Balance ($)": -7380.0}, {"Date": "2028-11-01T00:00:00", "Case": "Spending", "Balance ($)": -7560.0}, {"Date": "2028-12-01T00:00:00", "Case": "Spending", "Balance ($)": -7740.0}, {"Date": "2029-01-01T00:00:00", "Case": "Spending", "Balance ($)": -7920.0}, {"Date": "2029-02-01T00:00:00", "Case": "Spending", "Balance ($)": -8100.0}, {"Date": "2029-03-01T00:00:00", "Case": "Spending", "Balance ($)": -8280.0}, {"Date": "2029-04-01T00:00:00", "Case": "Spending", "Balance ($)": -8460.0}, {"Date": "2029-05-01T00:00:00", "Case": "Spending", "Balance ($)": -8640.0}, {"Date": "2029-06-01T00:00:00", "Case": "Spending", "Balance ($)": -8820.0}, {"Date": "2029-07-01T00:00:00", "Case": "Spending", "Balance ($)": -9000.0}, {"Date": "2029-08-01T00:00:00", "Case": "Spending", "Balance ($)": -9180.0}, {"Date": "2029-09-01T00:00:00", "Case": "Spending", "Balance ($)": -9360.0}, {"Date": "2029-10-01T00:00:00", "Case": "Spending", "Balance ($)": -9540.0}, {"Date": "2029-11-01T00:00:00", "Case": "Spending", "Balance ($)": -9720.0}, {"Date": "2029-12-01T00:00:00", "Case": "Spending", "Balance ($)": -9900.0}, {"Date": "2030-01-01T00:00:00", "Case": "Spending", "Balance ($)": -10080.0}, {"Date": "2030-02-01T00:00:00", "Case": "Spending", "Balance ($)": -10260.0}, {"Date": "2030-03-01T00:00:00", "Case": "Spending", "Balance ($)": -10440.0}, {"Date": "2030-04-01T00:00:00", "Case": "Spending", "Balance ($)": -10620.0}, {"Date": "2030-05-01T00:00:00", "Case": "Spending", "Balance ($)": -10800.0}, {"Date": "2030-06-01T00:00:00", "Case": "Spending", "Balance ($)": -10980.0}, {"Date": "2030-07-01T00:00:00", "Case": "Spending", "Balance ($)": -11160.0}, {"Date": "2030-08-01T00:00:00", "Case": "Spending", "Balance ($)": -11340.0}, {"Date": "2030-09-01T00:00:00", "Case": "Spending", "Balance ($)": -11520.0}, {"Date": "2030-10-01T00:00:00", "Case": "Spending", "Balance ($)": -11700.0}, {"Date": "2030-11-01T00:00:00", "Case": "Spending", "Balance ($)": -11880.0}, {"Date": "2030-12-01T00:00:00", "Case": "Spending", "Balance ($)": -12060.0}, {"Date": "2031-01-01T00:00:00", "Case": "Spending", "Balance ($)": -12240.0}, {"Date": "2031-02-01T00:00:00", "Case": "Spending", "Balance ($)": -12420.0}, {"Date": "2031-03-01T00:00:00", "Case": "Spending", "Balance ($)": -12600.0}, {"Date": "2031-04-01T00:00:00", "Case": "Spending", "Balance ($)": -12780.0}, {"Date": "2031-05-01T00:00:00", "Case": "Spending", "Balance ($)": -12960.0}, {"Date": "2031-06-01T00:00:00", "Case": "Spending", "Balance ($)": -13140.0}, {"Date": "2031-07-01T00:00:00", "Case": "Spending", "Balance ($)": -13320.0}, {"Date": "2031-08-01T00:00:00", "Case": "Spending", "Balance ($)": -13500.0}, {"Date": "2031-09-01T00:00:00", "Case": "Spending", "Balance ($)": -13680.0}, {"Date": "2031-10-01T00:00:00", "Case": "Spending", "Balance ($)": -13860.0}, {"Date": "2031-11-01T00:00:00", "Case": "Spending", "Balance ($)": -14040.0}, {"Date": "2031-12-01T00:00:00", "Case": "Spending", "Balance ($)": -14220.0}, {"Date": "2032-01-01T00:00:00", "Case": "Spending", "Balance ($)": -14400.0}, {"Date": "2032-02-01T00:00:00", "Case": "Spending", "Balance ($)": -14580.0}, {"Date": "2032-03-01T00:00:00", "Case": "Spending", "Balance ($)": -14760.0}, {"Date": "2032-04-01T00:00:00", "Case": "Spending", "Balance ($)": -14940.0}, {"Date": "2032-05-01T00:00:00", "Case": "Spending", "Balance ($)": -15120.0}, {"Date": "2032-06-01T00:00:00", "Case": "Spending", "Balance ($)": -15300.0}, {"Date": "2032-07-01T00:00:00", "Case": "Spending", "Balance ($)": -15480.0}, {"Date": "2032-08-01T00:00:00", "Case": "Spending", "Balance ($)": -15660.0}, {"Date": "2032-09-01T00:00:00", "Case": "Spending", "Balance ($)": -15840.0}, {"Date": "2032-10-01T00:00:00", "Case": "Spending", "Balance ($)": -16020.0}, {"Date": "2032-11-01T00:00:00", "Case": "Spending", "Balance ($)": -16200.0}, {"Date": "2032-12-01T00:00:00", "Case": "Spending", "Balance ($)": -16380.0}, {"Date": "2033-01-01T00:00:00", "Case": "Spending", "Balance ($)": -16560.0}, {"Date": "2033-02-01T00:00:00", "Case": "Spending", "Balance ($)": -16740.0}, {"Date": "2033-03-01T00:00:00", "Case": "Spending", "Balance ($)": -16920.0}, {"Date": "2033-04-01T00:00:00", "Case": "Spending", "Balance ($)": -17100.0}, {"Date": "2033-05-01T00:00:00", "Case": "Spending", "Balance ($)": -17280.0}, {"Date": "2033-06-01T00:00:00", "Case": "Spending", "Balance ($)": -17460.0}, {"Date": "2033-07-01T00:00:00", "Case": "Spending", "Balance ($)": -17640.0}, {"Date": "2033-08-01T00:00:00", "Case": "Spending", "Balance ($)": -17820.0}, {"Date": "2033-09-01T00:00:00", "Case": "Spending", "Balance ($)": -18000.0}, {"Date": "2033-10-01T00:00:00", "Case": "Spending", "Balance ($)": -18180.0}, {"Date": "2033-11-01T00:00:00", "Case": "Spending", "Balance ($)": -18360.0}, {"Date": "2033-12-01T00:00:00", "Case": "Spending", "Balance ($)": -18540.0}, {"Date": "2034-01-01T00:00:00", "Case": "Spending", "Balance ($)": -18720.0}, {"Date": "2034-02-01T00:00:00", "Case": "Spending", "Balance ($)": -18900.0}, {"Date": "2034-03-01T00:00:00", "Case": "Spending", "Balance ($)": -19080.0}, {"Date": "2034-04-01T00:00:00", "Case": "Spending", "Balance ($)": -19260.0}, {"Date": "2034-05-01T00:00:00", "Case": "Spending", "Balance ($)": -19440.0}, {"Date": "2034-06-01T00:00:00", "Case": "Spending", "Balance ($)": -19620.0}, {"Date": "2034-07-01T00:00:00", "Case": "Spending", "Balance ($)": -19800.0}, {"Date": "2034-08-01T00:00:00", "Case": "Spending", "Balance ($)": -19980.0}, {"Date": "2034-09-01T00:00:00", "Case": "Spending", "Balance ($)": -20160.0}, {"Date": "2034-10-01T00:00:00", "Case": "Spending", "Balance ($)": -20340.0}, {"Date": "2034-11-01T00:00:00", "Case": "Spending", "Balance ($)": -20520.0}, {"Date": "2034-12-01T00:00:00", "Case": "Spending", "Balance ($)": -20700.0}, {"Date": "2035-01-01T00:00:00", "Case": "Spending", "Balance ($)": -20880.0}, {"Date": "2035-02-01T00:00:00", "Case": "Spending", "Balance ($)": -21060.0}, {"Date": "2035-03-01T00:00:00", "Case": "Spending", "Balance ($)": -21240.0}, {"Date": "2035-04-01T00:00:00", "Case": "Spending", "Balance ($)": -21420.0}, {"Date": "2035-05-01T00:00:00", "Case": "Spending", "Balance ($)": -21600.0}, {"Date": "2035-06-01T00:00:00", "Case": "Spending", "Balance ($)": -21780.0}, {"Date": "2035-07-01T00:00:00", "Case": "Spending", "Balance ($)": -21960.0}, {"Date": "2035-08-01T00:00:00", "Case": "Spending", "Balance ($)": -22140.0}, {"Date": "2035-09-01T00:00:00", "Case": "Spending", "Balance ($)": -22320.0}, {"Date": "2035-10-01T00:00:00", "Case": "Spending", "Balance ($)": -22500.0}, {"Date": "2035-11-01T00:00:00", "Case": "Spending", "Balance ($)": -22680.0}, {"Date": "2035-12-01T00:00:00", "Case": "Spending", "Balance ($)": -22860.0}, {"Date": "2036-01-01T00:00:00", "Case": "Spending", "Balance ($)": -23040.0}, {"Date": "2036-02-01T00:00:00", "Case": "Spending", "Balance ($)": -23220.0}, {"Date": "2036-03-01T00:00:00", "Case": "Spending", "Balance ($)": -23400.0}, {"Date": "2036-04-01T00:00:00", "Case": "Spending", "Balance ($)": -23580.0}, {"Date": "2036-05-01T00:00:00", "Case": "Spending", "Balance ($)": -23760.0}, {"Date": "2036-06-01T00:00:00", "Case": "Spending", "Balance ($)": -23940.0}, {"Date": "2036-07-01T00:00:00", "Case": "Spending", "Balance ($)": -24120.0}, {"Date": "2036-08-01T00:00:00", "Case": "Spending", "Balance ($)": -24300.0}, {"Date": "2036-09-01T00:00:00", "Case": "Spending", "Balance ($)": -24480.0}, {"Date": "2036-10-01T00:00:00", "Case": "Spending", "Balance ($)": -24660.0}, {"Date": "2036-11-01T00:00:00", "Case": "Spending", "Balance ($)": -24840.0}, {"Date": "2036-12-01T00:00:00", "Case": "Spending", "Balance ($)": -25020.0}, {"Date": "2037-01-01T00:00:00", "Case": "Spending", "Balance ($)": -25200.0}, {"Date": "2037-02-01T00:00:00", "Case": "Spending", "Balance ($)": -25380.0}, {"Date": "2037-03-01T00:00:00", "Case": "Spending", "Balance ($)": -25560.0}, {"Date": "2037-04-01T00:00:00", "Case": "Spending", "Balance ($)": -25740.0}, {"Date": "2037-05-01T00:00:00", "Case": "Spending", "Balance ($)": -25920.0}, {"Date": "2037-06-01T00:00:00", "Case": "Spending", "Balance ($)": -26100.0}, {"Date": "2037-07-01T00:00:00", "Case": "Spending", "Balance ($)": -26280.0}, {"Date": "2037-08-01T00:00:00", "Case": "Spending", "Balance ($)": -26460.0}, {"Date": "2037-09-01T00:00:00", "Case": "Spending", "Balance ($)": -26640.0}, {"Date": "2037-10-01T00:00:00", "Case": "Spending", "Balance ($)": -26820.0}, {"Date": "2037-11-01T00:00:00", "Case": "Spending", "Balance ($)": -27000.0}, {"Date": "2037-12-01T00:00:00", "Case": "Spending", "Balance ($)": -27180.0}, {"Date": "2038-01-01T00:00:00", "Case": "Spending", "Balance ($)": -27360.0}, {"Date": "2038-02-01T00:00:00", "Case": "Spending", "Balance ($)": -27540.0}, {"Date": "2038-03-01T00:00:00", "Case": "Spending", "Balance ($)": -27720.0}, {"Date": "2038-04-01T00:00:00", "Case": "Spending", "Balance ($)": -27900.0}, {"Date": "2038-05-01T00:00:00", "Case": "Spending", "Balance ($)": -28080.0}, {"Date": "2038-06-01T00:00:00", "Case": "Spending", "Balance ($)": -28260.0}, {"Date": "2038-07-01T00:00:00", "Case": "Spending", "Balance ($)": -28440.0}, {"Date": "2038-08-01T00:00:00", "Case": "Spending", "Balance ($)": -28620.0}, {"Date": "2038-09-01T00:00:00", "Case": "Spending", "Balance ($)": -28800.0}, {"Date": "2038-10-01T00:00:00", "Case": "Spending", "Balance ($)": -28980.0}, {"Date": "2038-11-01T00:00:00", "Case": "Spending", "Balance ($)": -29160.0}, {"Date": "2038-12-01T00:00:00", "Case": "Spending", "Balance ($)": -29340.0}, {"Date": "2039-01-01T00:00:00", "Case": "Spending", "Balance ($)": -29520.0}, {"Date": "2039-02-01T00:00:00", "Case": "Spending", "Balance ($)": -29700.0}, {"Date": "2039-03-01T00:00:00", "Case": "Spending", "Balance ($)": -29880.0}, {"Date": "2039-04-01T00:00:00", "Case": "Spending", "Balance ($)": -30060.0}, {"Date": "2039-05-01T00:00:00", "Case": "Spending", "Balance ($)": -30240.0}, {"Date": "2039-06-01T00:00:00", "Case": "Spending", "Balance ($)": -30420.0}, {"Date": "2039-07-01T00:00:00", "Case": "Spending", "Balance ($)": -30600.0}, {"Date": "2039-08-01T00:00:00", "Case": "Spending", "Balance ($)": -30780.0}, {"Date": "2039-09-01T00:00:00", "Case": "Spending", "Balance ($)": -30960.0}, {"Date": "2039-10-01T00:00:00", "Case": "Spending", "Balance ($)": -31140.0}, {"Date": "2039-11-01T00:00:00", "Case": "Spending", "Balance ($)": -31320.0}, {"Date": "2039-12-01T00:00:00", "Case": "Spending", "Balance ($)": -31500.0}, {"Date": "2040-01-01T00:00:00", "Case": "Spending", "Balance ($)": -31680.0}, {"Date": "2040-02-01T00:00:00", "Case": "Spending", "Balance ($)": -31860.0}, {"Date": "2040-03-01T00:00:00", "Case": "Spending", "Balance ($)": -32040.0}, {"Date": "2040-04-01T00:00:00", "Case": "Spending", "Balance ($)": -32220.0}, {"Date": "2040-05-01T00:00:00", "Case": "Spending", "Balance ($)": -32400.0}, {"Date": "2040-06-01T00:00:00", "Case": "Spending", "Balance ($)": -32580.0}, {"Date": "2040-07-01T00:00:00", "Case": "Spending", "Balance ($)": -32760.0}, {"Date": "2040-08-01T00:00:00", "Case": "Spending", "Balance ($)": -32940.0}, {"Date": "2040-09-01T00:00:00", "Case": "Spending", "Balance ($)": -33120.0}, {"Date": "2040-10-01T00:00:00", "Case": "Spending", "Balance ($)": -33300.0}, {"Date": "2040-11-01T00:00:00", "Case": "Spending", "Balance ($)": -33480.0}, {"Date": "2040-12-01T00:00:00", "Case": "Spending", "Balance ($)": -33660.0}, {"Date": "2041-01-01T00:00:00", "Case": "Spending", "Balance ($)": -33840.0}, {"Date": "2041-02-01T00:00:00", "Case": "Spending", "Balance ($)": -34020.0}, {"Date": "2041-03-01T00:00:00", "Case": "Spending", "Balance ($)": -34200.0}, {"Date": "2041-04-01T00:00:00", "Case": "Spending", "Balance ($)": -34380.0}, {"Date": "2041-05-01T00:00:00", "Case": "Spending", "Balance ($)": -34560.0}, {"Date": "2041-06-01T00:00:00", "Case": "Spending", "Balance ($)": -34740.0}, {"Date": "2041-07-01T00:00:00", "Case": "Spending", "Balance ($)": -34920.0}, {"Date": "2041-08-01T00:00:00", "Case": "Spending", "Balance ($)": -35100.0}, {"Date": "2041-09-01T00:00:00", "Case": "Spending", "Balance ($)": -35280.0}, {"Date": "2041-10-01T00:00:00", "Case": "Spending", "Balance ($)": -35460.0}, {"Date": "2041-11-01T00:00:00", "Case": "Spending", "Balance ($)": -35640.0}, {"Date": "2041-12-01T00:00:00", "Case": "Spending", "Balance ($)": -35820.0}, {"Date": "2042-01-01T00:00:00", "Case": "Spending", "Balance ($)": -36000.0}, {"Date": "2042-02-01T00:00:00", "Case": "Spending", "Balance ($)": -36180.0}, {"Date": "2042-03-01T00:00:00", "Case": "Spending", "Balance ($)": -36360.0}, {"Date": "2042-04-01T00:00:00", "Case": "Spending", "Balance ($)": -36540.0}, {"Date": "2042-05-01T00:00:00", "Case": "Spending", "Balance ($)": -36720.0}, {"Date": "2042-06-01T00:00:00", "Case": "Spending", "Balance ($)": -36900.0}, {"Date": "2042-07-01T00:00:00", "Case": "Spending", "Balance ($)": -37080.0}, {"Date": "2042-08-01T00:00:00", "Case": "Spending", "Balance ($)": -37260.0}, {"Date": "2042-09-01T00:00:00", "Case": "Spending", "Balance ($)": -37440.0}, {"Date": "2042-10-01T00:00:00", "Case": "Spending", "Balance ($)": -37620.0}, {"Date": "2042-11-01T00:00:00", "Case": "Spending", "Balance ($)": -37800.0}, {"Date": "2042-12-01T00:00:00", "Case": "Spending", "Balance ($)": -37980.0}, {"Date": "2043-01-01T00:00:00", "Case": "Spending", "Balance ($)": -38160.0}, {"Date": "2043-02-01T00:00:00", "Case": "Spending", "Balance ($)": -38340.0}, {"Date": "2043-03-01T00:00:00", "Case": "Spending", "Balance ($)": -38520.0}, {"Date": "2043-04-01T00:00:00", "Case": "Spending", "Balance ($)": -38700.0}, {"Date": "2043-05-01T00:00:00", "Case": "Spending", "Balance ($)": -38880.0}, {"Date": "2025-06-01T00:00:00", "Case": "Investing", "Balance ($)": 180.0}, {"Date": "2025-07-01T00:00:00", "Case": "Investing", "Balance ($)": 360.0}, {"Date": "2025-08-01T00:00:00", "Case": "Investing", "Balance ($)": 540.0}, {"Date": "2025-09-01T00:00:00", "Case": "Investing", "Balance ($)": 720.0}, {"Date": "2025-10-01T00:00:00", "Case": "Investing", "Balance ($)": 900.0}, {"Date": "2025-11-01T00:00:00", "Case": "Investing", "Balance ($)": 1080.0}, {"Date": "2025-12-01T00:00:00", "Case": "Investing", "Balance ($)": 1260.0}, {"Date": "2026-01-01T00:00:00", "Case": "Investing", "Balance ($)": 1440.0}, {"Date": "2026-02-01T00:00:00", "Case": "Investing", "Balance ($)": 1620.0}, {"Date": "2026-03-01T00:00:00", "Case": "Investing", "Balance ($)": 1800.0}, {"Date": "2026-04-01T00:00:00", "Case": "Investing", "Balance ($)": 1980.0}, {"Date": "2026-05-01T00:00:00", "Case": "Investing", "Balance ($)": 2160.0}, {"Date": "2026-06-01T00:00:00", "Case": "Investing", "Balance ($)": 2340.0}, {"Date": "2026-07-01T00:00:00", "Case": "Investing", "Balance ($)": 2520.0}, {"Date": "2026-08-01T00:00:00", "Case": "Investing", "Balance ($)": 2700.0}, {"Date": "2026-09-01T00:00:00", "Case": "Investing", "Balance ($)": 2880.0}, {"Date": "2026-10-01T00:00:00", "Case": "Investing", "Balance ($)": 3060.0}, {"Date": "2026-11-01T00:00:00", "Case": "Investing", "Balance ($)": 3240.0}, {"Date": "2026-12-01T00:00:00", "Case": "Investing", "Balance ($)": 3420.0}, {"Date": "2027-01-01T00:00:00", "Case": "Investing", "Balance ($)": 3600.0}, {"Date": "2027-02-01T00:00:00", "Case": "Investing", "Balance ($)": 3780.0}, {"Date": "2027-03-01T00:00:00", "Case": "Investing", "Balance ($)": 3960.0}, {"Date": "2027-04-01T00:00:00", "Case": "Investing", "Balance ($)": 4140.0}, {"Date": "2027-05-01T00:00:00", "Case": "Investing", "Balance ($)": 4320.0}, {"Date": "2027-06-01T00:00:00", "Case": "Investing", "Balance ($)": 4500.0}, {"Date": "2027-07-01T00:00:00", "Case": "Investing", "Balance ($)": 4680.0}, {"Date": "2027-08-01T00:00:00", "Case": "Investing", "Balance ($)": 4860.0}, {"Date": "2027-09-01T00:00:00", "Case": "Investing", "Balance ($)": 5040.0}, {"Date": "2027-10-01T00:00:00", "Case": "Investing", "Balance ($)": 5220.0}, {"Date": "2027-11-01T00:00:00", "Case": "Investing", "Balance ($)": 5400.0}, {"Date": "2027-12-01T00:00:00", "Case": "Investing", "Balance ($)": 5580.0}, {"Date": "2028-01-01T00:00:00", "Case": "Investing", "Balance ($)": 5760.0}, {"Date": "2028-02-01T00:00:00", "Case": "Investing", "Balance ($)": 5940.0}, {"Date": "2028-03-01T00:00:00", "Case": "Investing", "Balance ($)": 6120.0}, {"Date": "2028-04-01T00:00:00", "Case": "Investing", "Balance ($)": 6300.0}, {"Date": "2028-05-01T00:00:00", "Case": "Investing", "Balance ($)": 6480.0}, {"Date": "2028-06-01T00:00:00", "Case": "Investing", "Balance ($)": 6660.0}, {"Date": "2028-07-01T00:00:00", "Case": "Investing", "Balance ($)": 6840.0}, {"Date": "2028-08-01T00:00:00", "Case": "Investing", "Balance ($)": 7020.0}, {"Date": "2028-09-01T00:00:00", "Case": "Investing", "Balance ($)": 7200.0}, {"Date": "2028-10-01T00:00:00", "Case": "Investing", "Balance ($)": 7380.0}, {"Date": "2028-11-01T00:00:00", "Case": "Investing", "Balance ($)": 7560.0}, {"Date": "2028-12-01T00:00:00", "Case": "Investing", "Balance ($)": 7740.0}, {"Date": "2029-01-01T00:00:00", "Case": "Investing", "Balance ($)": 7920.0}, {"Date": "2029-02-01T00:00:00", "Case": "Investing", "Balance ($)": 8100.0}, {"Date": "2029-03-01T00:00:00", "Case": "Investing", "Balance ($)": 8280.0}, {"Date": "2029-04-01T00:00:00", "Case": "Investing", "Balance ($)": 8460.0}, {"Date": "2029-05-01T00:00:00", "Case": "Investing", "Balance ($)": 8640.0}, {"Date": "2029-06-01T00:00:00", "Case": "Investing", "Balance ($)": 8820.0}, {"Date": "2029-07-01T00:00:00", "Case": "Investing", "Balance ($)": 9000.0}, {"Date": "2029-08-01T00:00:00", "Case": "Investing", "Balance ($)": 9180.0}, {"Date": "2029-09-01T00:00:00", "Case": "Investing", "Balance ($)": 9360.0}, {"Date": "2029-10-01T00:00:00", "Case": "Investing", "Balance ($)": 9540.0}, {"Date": "2029-11-01T00:00:00", "Case": "Investing", "Balance ($)": 9720.0}, {"Date": "2029-12-01T00:00:00", "Case": "Investing", "Balance ($)": 9900.0}, {"Date": "2030-01-01T00:00:00", "Case": "Investing", "Balance ($)": 10080.0}, {"Date": "2030-02-01T00:00:00", "Case": "Investing", "Balance ($)": 10260.0}, {"Date": "2030-03-01T00:00:00", "Case": "Investing", "Balance ($)": 10440.0}, {"Date": "2030-04-01T00:00:00", "Case": "Investing", "Balance ($)": 10620.0}, {"Date": "2030-05-01T00:00:00", "Case": "Investing", "Balance ($)": 10800.0}, {"Date": "2030-06-01T00:00:00", "Case": "Investing", "Balance ($)": 10980.0}, {"Date": "2030-07-01T00:00:00", "Case": "Investing", "Balance ($)": 11160.0}, {"Date": "2030-08-01T00:00:00", "Case": "Investing", "Balance ($)": 11340.0}, {"Date": "2030-09-01T00:00:00", "Case": "Investing", "Balance ($)": 11520.0}, {"Date": "2030-10-01T00:00:00", "Case": "Investing", "Balance ($)": 11700.0}, {"Date": "2030-11-01T00:00:00", "Case": "Investing", "Balance ($)": 11880.0}, {"Date": "2030-12-01T00:00:00", "Case": "Investing", "Balance ($)": 12060.0}, {"Date": "2031-01-01T00:00:00", "Case": "Investing", "Balance ($)": 12240.0}, {"Date": "2031-02-01T00:00:00", "Case": "Investing", "Balance ($)": 12420.0}, {"Date": "2031-03-01T00:00:00", "Case": "Investing", "Balance ($)": 12600.0}, {"Date": "2031-04-01T00:00:00", "Case": "Investing", "Balance ($)": 12780.0}, {"Date": "2031-05-01T00:00:00", "Case": "Investing", "Balance ($)": 12960.0}, {"Date": "2031-06-01T00:00:00", "Case": "Investing", "Balance ($)": 13140.0}, {"Date": "2031-07-01T00:00:00", "Case": "Investing", "Balance ($)": 13320.0}, {"Date": "2031-08-01T00:00:00", "Case": "Investing", "Balance ($)": 13500.0}, {"Date": "2031-09-01T00:00:00", "Case": "Investing", "Balance ($)": 13680.0}, {"Date": "2031-10-01T00:00:00", "Case": "Investing", "Balance ($)": 13860.0}, {"Date": "2031-11-01T00:00:00", "Case": "Investing", "Balance ($)": 14040.0}, {"Date": "2031-12-01T00:00:00", "Case": "Investing", "Balance ($)": 14220.0}, {"Date": "2032-01-01T00:00:00", "Case": "Investing", "Balance ($)": 14400.0}, {"Date": "2032-02-01T00:00:00", "Case": "Investing", "Balance ($)": 14580.0}, {"Date": "2032-03-01T00:00:00", "Case": "Investing", "Balance ($)": 14760.0}, {"Date": "2032-04-01T00:00:00", "Case": "Investing", "Balance ($)": 14940.0}, {"Date": "2032-05-01T00:00:00", "Case": "Investing", "Balance ($)": 15120.0}, {"Date": "2032-06-01T00:00:00", "Case": "Investing", "Balance ($)": 15300.0}, {"Date": "2032-07-01T00:00:00", "Case": "Investing", "Balance ($)": 15480.0}, {"Date": "2032-08-01T00:00:00", "Case": "Investing", "Balance ($)": 15660.0}, {"Date": "2032-09-01T00:00:00", "Case": "Investing", "Balance ($)": 15840.0}, {"Date": "2032-10-01T00:00:00", "Case": "Investing", "Balance ($)": 16020.0}, {"Date": "2032-11-01T00:00:00", "Case": "Investing", "Balance ($)": 16200.0}, {"Date": "2032-12-01T00:00:00", "Case": "Investing", "Balance ($)": 16380.0}, {"Date": "2033-01-01T00:00:00", "Case": "Investing", "Balance ($)": 16560.0}, {"Date": "2033-02-01T00:00:00", "Case": "Investing", "Balance ($)": 16740.0}, {"Date": "2033-03-01T00:00:00", "Case": "Investing", "Balance ($)": 16920.0}, {"Date": "2033-04-01T00:00:00", "Case": "Investing", "Balance ($)": 17100.0}, {"Date": "2033-05-01T00:00:00", "Case": "Investing", "Balance ($)": 17280.0}, {"Date": "2033-06-01T00:00:00", "Case": "Investing", "Balance ($)": 17460.0}, {"Date": "2033-07-01T00:00:00", "Case": "Investing", "Balance ($)": 17640.0}, {"Date": "2033-08-01T00:00:00", "Case": "Investing", "Balance ($)": 17820.0}, {"Date": "2033-09-01T00:00:00", "Case": "Investing", "Balance ($)": 18000.0}, {"Date": "2033-10-01T00:00:00", "Case": "Investing", "Balance ($)": 18180.0}, {"Date": "2033-11-01T00:00:00", "Case": "Investing", "Balance ($)": 18360.0}, {"Date": "2033-12-01T00:00:00", "Case": "Investing", "Balance ($)": 18540.0}, {"Date": "2034-01-01T00:00:00", "Case": "Investing", "Balance ($)": 18720.0}, {"Date": "2034-02-01T00:00:00", "Case": "Investing", "Balance ($)": 18900.0}, {"Date": "2034-03-01T00:00:00", "Case": "Investing", "Balance ($)": 19080.0}, {"Date": "2034-04-01T00:00:00", "Case": "Investing", "Balance ($)": 19260.0}, {"Date": "2034-05-01T00:00:00", "Case": "Investing", "Balance ($)": 19440.0}, {"Date": "2034-06-01T00:00:00", "Case": "Investing", "Balance ($)": 19620.0}, {"Date": "2034-07-01T00:00:00", "Case": "Investing", "Balance ($)": 19800.0}, {"Date": "2034-08-01T00:00:00", "Case": "Investing", "Balance ($)": 19980.0}, {"Date": "2034-09-01T00:00:00", "Case": "Investing", "Balance ($)": 20160.0}, {"Date": "2034-10-01T00:00:00", "Case": "Investing", "Balance ($)": 20340.0}, {"Date": "2034-11-01T00:00:00", "Case": "Investing", "Balance ($)": 20520.0}, {"Date": "2034-12-01T00:00:00", "Case": "Investing", "Balance ($)": 20700.0}, {"Date": "2035-01-01T00:00:00", "Case": "Investing", "Balance ($)": 20880.0}, {"Date": "2035-02-01T00:00:00", "Case": "Investing", "Balance ($)": 21060.0}, {"Date": "2035-03-01T00:00:00", "Case": "Investing", "Balance ($)": 21240.0}, {"Date": "2035-04-01T00:00:00", "Case": "Investing", "Balance ($)": 21420.0}, {"Date": "2035-05-01T00:00:00", "Case": "Investing", "Balance ($)": 21600.0}, {"Date": "2035-06-01T00:00:00", "Case": "Investing", "Balance ($)": 21780.0}, {"Date": "2035-07-01T00:00:00", "Case": "Investing", "Balance ($)": 21960.0}, {"Date": "2035-08-01T00:00:00", "Case": "Investing", "Balance ($)": 22140.0}, {"Date": "2035-09-01T00:00:00", "Case": "Investing", "Balance ($)": 22320.0}, {"Date": "2035-10-01T00:00:00", "Case": "Investing", "Balance ($)": 22500.0}, {"Date": "2035-11-01T00:00:00", "Case": "Investing", "Balance ($)": 22680.0}, {"Date": "2035-12-01T00:00:00", "Case": "Investing", "Balance ($)": 22860.0}, {"Date": "2036-01-01T00:00:00", "Case": "Investing", "Balance ($)": 23040.0}, {"Date": "2036-02-01T00:00:00", "Case": "Investing", "Balance ($)": 23220.0}, {"Date": "2036-03-01T00:00:00", "Case": "Investing", "Balance ($)": 23400.0}, {"Date": "2036-04-01T00:00:00", "Case": "Investing", "Balance ($)": 23580.0}, {"Date": "2036-05-01T00:00:00", "Case": "Investing", "Balance ($)": 23760.0}, {"Date": "2036-06-01T00:00:00", "Case": "Investing", "Balance ($)": 23940.0}, {"Date": "2036-07-01T00:00:00", "Case": "Investing", "Balance ($)": 24120.0}, {"Date": "2036-08-01T00:00:00", "Case": "Investing", "Balance ($)": 24300.0}, {"Date": "2036-09-01T00:00:00", "Case": "Investing", "Balance ($)": 24480.0}, {"Date": "2036-10-01T00:00:00", "Case": "Investing", "Balance ($)": 24660.0}, {"Date": "2036-11-01T00:00:00", "Case": "Investing", "Balance ($)": 24840.0}, {"Date": "2036-12-01T00:00:00", "Case": "Investing", "Balance ($)": 25020.0}, {"Date": "2037-01-01T00:00:00", "Case": "Investing", "Balance ($)": 25200.0}, {"Date": "2037-02-01T00:00:00", "Case": "Investing", "Balance ($)": 25380.0}, {"Date": "2037-03-01T00:00:00", "Case": "Investing", "Balance ($)": 25560.0}, {"Date": "2037-04-01T00:00:00", "Case": "Investing", "Balance ($)": 25740.0}, {"Date": "2037-05-01T00:00:00", "Case": "Investing", "Balance ($)": 25920.0}, {"Date": "2037-06-01T00:00:00", "Case": "Investing", "Balance ($)": 26100.0}, {"Date": "2037-07-01T00:00:00", "Case": "Investing", "Balance ($)": 26280.0}, {"Date": "2037-08-01T00:00:00", "Case": "Investing", "Balance ($)": 26460.0}, {"Date": "2037-09-01T00:00:00", "Case": "Investing", "Balance ($)": 26640.0}, {"Date": "2037-10-01T00:00:00", "Case": "Investing", "Balance ($)": 26820.0}, {"Date": "2037-11-01T00:00:00", "Case": "Investing", "Balance ($)": 27000.0}, {"Date": "2037-12-01T00:00:00", "Case": "Investing", "Balance ($)": 27180.0}, {"Date": "2038-01-01T00:00:00", "Case": "Investing", "Balance ($)": 27360.0}, {"Date": "2038-02-01T00:00:00", "Case": "Investing", "Balance ($)": 27540.0}, {"Date": "2038-03-01T00:00:00", "Case": "Investing", "Balance ($)": 27720.0}, {"Date": "2038-04-01T00:00:00", "Case": "Investing", "Balance ($)": 27900.0}, {"Date": "2038-05-01T00:00:00", "Case": "Investing", "Balance ($)": 28080.0}, {"Date": "2038-06-01T00:00:00", "Case": "Investing", "Balance ($)": 28260.0}, {"Date": "2038-07-01T00:00:00", "Case": "Investing", "Balance ($)": 28440.0}, {"Date": "2038-08-01T00:00:00", "Case": "Investing", "Balance ($)": 28620.0}, {"Date": "2038-09-01T00:00:00", "Case": "Investing", "Balance ($)": 28800.0}, {"Date": "2038-10-01T00:00:00", "Case": "Investing", "Balance ($)": 28980.0}, {"Date": "2038-11-01T00:00:00", "Case": "Investing", "Balance ($)": 29160.0}, {"Date": "2038-12-01T00:00:00", "Case": "Investing", "Balance ($)": 29340.0}, {"Date": "2039-01-01T00:00:00", "Case": "Investing", "Balance ($)": 29520.0}, {"Date": "2039-02-01T00:00:00", "Case": "Investing", "Balance ($)": 29700.0}, {"Date": "2039-03-01T00:00:00", "Case": "Investing", "Balance ($)": 29880.0}, {"Date": "2039-04-01T00:00:00", "Case": "Investing", "Balance ($)": 30060.0}, {"Date": "2039-05-01T00:00:00", "Case": "Investing", "Balance ($)": 30240.0}, {"Date": "2039-06-01T00:00:00", "Case": "Investing", "Balance ($)": 30420.0}, {"Date": "2039-07-01T00:00:00", "Case": "Investing", "Balance ($)": 30600.0}, {"Date": "2039-08-01T00:00:00", "Case": "Investing", "Balance ($)": 30780.0}, {"Date": "2039-09-01T00:00:00", "Case": "Investing", "Balance ($)": 30960.0}, {"Date": "2039-10-01T00:00:00", "Case": "Investing", "Balance ($)": 31140.0}, {"Date": "2039-11-01T00:00:00", "Case": "Investing", "Balance ($)": 31320.0}, {"Date": "2039-12-01T00:00:00", "Case": "Investing", "Balance ($)": 31500.0}, {"Date": "2040-01-01T00:00:00", "Case": "Investing", "Balance ($)": 31680.0}, {"Date": "2040-02-01T00:00:00", "Case": "Investing", "Balance ($)": 31860.0}, {"Date": "2040-03-01T00:00:00", "Case": "Investing", "Balance ($)": 32040.0}, {"Date": "2040-04-01T00:00:00", "Case": "Investing", "Balance ($)": 32220.0}, {"Date": "2040-05-01T00:00:00", "Case": "Investing", "Balance ($)": 32400.0}, {"Date": "2040-06-01T00:00:00", "Case": "Investing", "Balance ($)": 32580.0}, {"Date": "2040-07-01T00:00:00", "Case": "Investing", "Balance ($)": 32760.0}, {"Date": "2040-08-01T00:00:00", "Case": "Investing", "Balance ($)": 32940.0}, {"Date": "2040-09-01T00:00:00", "Case": "Investing", "Balance ($)": 33120.0}, {"Date": "2040-10-01T00:00:00", "Case": "Investing", "Balance ($)": 33300.0}, {"Date": "2040-11-01T00:00:00", "Case": "Investing", "Balance ($)": 33480.0}, {"Date": "2040-12-01T00:00:00", "Case": "Investing", "Balance ($)": 33660.0}, {"Date": "2041-01-01T00:00:00", "Case": "Investing", "Balance ($)": 33840.0}, {"Date": "2041-02-01T00:00:00", "Case": "Investing", "Balance ($)": 34020.0}, {"Date": "2041-03-01T00:00:00", "Case": "Investing", "Balance ($)": 34200.0}, {"Date": "2041-04-01T00:00:00", "Case": "Investing", "Balance ($)": 34380.0}, {"Date": "2041-05-01T00:00:00", "Case": "Investing", "Balance ($)": 34560.0}, {"Date": "2041-06-01T00:00:00", "Case": "Investing", "Balance ($)": 34740.0}, {"Date": "2041-07-01T00:00:00", "Case": "Investing", "Balance ($)": 34920.0}, {"Date": "2041-08-01T00:00:00", "Case": "Investing", "Balance ($)": 35100.0}, {"Date": "2041-09-01T00:00:00", "Case": "Investing", "Balance ($)": 35280.0}, {"Date": "2041-10-01T00:00:00", "Case": "Investing", "Balance ($)": 35460.0}, {"Date": "2041-11-01T00:00:00", "Case": "Investing", "Balance ($)": 35640.0}, {"Date": "2041-12-01T00:00:00", "Case": "Investing", "Balance ($)": 35820.0}, {"Date": "2042-01-01T00:00:00", "Case": "Investing", "Balance ($)": 36000.0}, {"Date": "2042-02-01T00:00:00", "Case": "Investing", "Balance ($)": 36180.0}, {"Date": "2042-03-01T00:00:00", "Case": "Investing", "Balance ($)": 36360.0}, {"Date": "2042-04-01T00:00:00", "Case": "Investing", "Balance ($)": 36540.0}, {"Date": "2042-05-01T00:00:00", "Case": "Investing", "Balance ($)": 36720.0}, {"Date": "2042-06-01T00:00:00", "Case": "Investing", "Balance ($)": 36900.0}, {"Date": "2042-07-01T00:00:00", "Case": "Investing", "Balance ($)": 37080.0}, {"Date": "2042-08-01T00:00:00", "Case": "Investing", "Balance ($)": 37260.0}, {"Date": "2042-09-01T00:00:00", "Case": "Investing", "Balance ($)": 37440.0}, {"Date": "2042-10-01T00:00:00", "Case": "Investing", "Balance ($)": 37620.0}, {"Date": "2042-11-01T00:00:00", "Case": "Investing", "Balance ($)": 37800.0}, {"Date": "2042-12-01T00:00:00", "Case": "Investing", "Balance ($)": 37980.0}, {"Date": "2043-01-01T00:00:00", "Case": "Investing", "Balance ($)": 38160.0}, {"Date": "2043-02-01T00:00:00", "Case": "Investing", "Balance ($)": 38340.0}, {"Date": "2043-03-01T00:00:00", "Case": "Investing", "Balance ($)": 38520.0}, {"Date": "2043-04-01T00:00:00", "Case": "Investing", "Balance ($)": 38700.0}, {"Date": "2043-05-01T00:00:00", "Case": "Investing", "Balance ($)": 38880.0}, {"Date": "2025-06-01T00:00:00", "Case": "Returns", "Balance ($)": 180.0}, {"Date": "2025-07-01T00:00:00", "Case": "Returns", "Balance ($)": 360.878294940155}, {"Date": "2025-08-01T00:00:00", "Case": "Returns", "Balance ($)": 542.6391703871421}, {"Date": "2025-09-01T00:00:00", "Case": "Returns", "Balance ($)": 725.2869328187028}, {"Date": "2025-10-01T00:00:00", "Case": "Returns", "Balance ($)": 908.825909725676}, {"Date": "2025-11-01T00:00:00", "Case": "Returns", "Balance ($)": 1093.2604497145303}, {"Date": "2025-12-01T00:00:00", "Case": "Returns", "Balance ($)": 1278.5949226103958}, {"Date": "2026-01-01T00:00:00", "Case": "Returns", "Balance ($)": 1464.8337195605986}, {"Date": "2026-02-01T00:00:00", "Case": "Returns", "Balance ($)": 1651.981253138701}, {"Date": "2026-03-01T00:00:00", "Case": "Returns", "Balance ($)": 1840.0419574490486}, {"Date": "2026-04-01T00:00:00", "Case": "Returns", "Balance ($)": 2029.020288231828}, {"Date": "2026-05-01T00:00:00", "Case": "Returns", "Balance ($)": 2218.920722968638}, {"Date": "2026-06-01T00:00:00", "Case": "Returns", "Balance ($)": 2409.747760988573}, {"Date": "2026-07-01T00:00:00", "Case": "Returns", "Balance ($)": 2601.5059235748286}, {"Date": "2026-08-01T00:00:00", "Case": "Returns", "Balance ($)": 2794.1997540718226}, {"Date": "2026-09-01T00:00:00", "Case": "Returns", "Balance ($)": 2987.8338179928423}, {"Date": "2026-10-01T00:00:00", "Case": "Returns", "Balance ($)": 3182.4127031282146}, {"Date": "2026-11-01T00:00:00", "Case": "Returns", "Balance ($)": 3377.9410196540057}, {"Date": "2026-12-01T00:00:00", "Case": "Returns", "Balance ($)": 3574.42340024125}, {"Date": "2027-01-01T00:00:00", "Case": "Returns", "Balance ($)": 3771.8645001657133}, {"Date": "2027-02-01T00:00:00", "Case": "Returns", "Balance ($)": 3970.268997418189}, {"Date": "2027-03-01T00:00:00", "Case": "Returns", "Balance ($)": 4169.6415928153365}, {"Date": "2027-04-01T00:00:00", "Case": "Returns", "Balance ($)": 4369.9870101110555}, {"Date": "2027-05-01T00:00:00", "Case": "Returns", "Balance ($)": 4571.309996108408}, {"Date": "2027-06-01T00:00:00", "Case": "Returns", "Balance ($)": 4773.6153207720845}, {"Date": "2027-07-01T00:00:00", "Case": "Returns", "Balance ($)": 4976.907777341419}, {"Date": "2027-08-01T00:00:00", "Case": "Returns", "Balance ($)": 5181.192182443957}, {"Date": "2027-09-01T00:00:00", "Case": "Returns", "Balance ($)": 5386.473376209573}, {"Date": "2027-10-01T00:00:00", "Case": "Returns", "Balance ($)": 5592.756222385152}, {"Date": "2027-11-01T00:00:00", "Case": "Returns", "Balance ($)": 5800.045608449825}, {"Date": "2027-12-01T00:00:00", "Case": "Returns", "Balance ($)": 6008.346445730766}, {"Date": "2028-01-01T00:00:00", "Case": "Returns", "Balance ($)": 6217.663669519563}, {"Date": "2028-02-01T00:00:00", "Case": "Returns", "Balance ($)": 6428.0022391891425}, {"Date": "2028-03-01T00:00:00", "Case": "Returns", "Balance ($)": 6639.367138311279}, {"Date": "2028-04-01T00:00:00", "Case": "Returns", "Balance ($)": 6851.763374774667}, {"Date": "2028-05-01T00:00:00", "Case": "Returns", "Balance ($)": 7065.195980903576}, {"Date": "2028-06-01T00:00:00", "Case": "Returns", "Balance ($)": 7279.670013577081}, {"Date": "2028-07-01T00:00:00", "Case": "Returns", "Balance ($)": 7495.190554348873}, {"Date": "2028-08-01T00:00:00", "Case": "Returns", "Balance ($)": 7711.762709567661}, {"Date": "2028-09-01T00:00:00", "Case": "Returns", "Balance ($)": 7929.391610498155}, {"Date": "2028-10-01T00:00:00", "Case": "Returns", "Balance ($)": 8148.082413442643}, {"Date": "2028-11-01T00:00:00", "Case": "Returns", "Balance ($)": 8367.840299863155}, {"Date": "2028-12-01T00:00:00", "Case": "Returns", "Balance ($)": 8588.670476504236}, {"Date": "2029-01-01T00:00:00", "Case": "Returns", "Balance ($)": 8810.578175516303}, {"Date": "2029-02-01T00:00:00", "Case": "Returns", "Balance ($)": 9033.568654579612}, {"Date": "2029-03-01T00:00:00", "Case": "Returns", "Balance ($)": 9257.647197028833}, {"Date": "2029-04-01T00:00:00", "Case": "Returns", "Balance ($)": 9482.819111978222}, {"Date": "2029-05-01T00:00:00", "Case": "Returns", "Balance ($)": 9709.089734447418}, {"Date": "2029-06-01T00:00:00", "Case": "Returns", "Balance ($)": 9936.464425487839}, {"Date": "2029-07-01T00:00:00", "Case": "Returns", "Balance ($)": 10164.948572309704}, {"Date": "2029-08-01T00:00:00", "Case": "Returns", "Balance ($)": 10394.547588409676}, {"Date": "2029-09-01T00:00:00", "Case": "Returns", "Balance ($)": 10625.26691369912}, {"Date": "2029-10-01T00:00:00", "Case": "Returns", "Balance ($)": 10857.112014632998}, {"Date": "2029-11-01T00:00:00", "Case": "Returns", "Balance ($)": 11090.088384339375}, {"Date": "2029-12-01T00:00:00", "Case": "Returns", "Balance ($)": 11324.201542749579}, {"Date": "2030-01-01T00:00:00", "Case": "Returns", "Balance ($)": 11559.457036728978}, {"Date": "2030-02-01T00:00:00", "Case": "Returns", "Balance ($)": 11795.86044020841}, {"Date": "2030-03-01T00:00:00", "Case": "Returns", "Balance ($)": 12033.417354316238}, {"Date": "2030-04-01T00:00:00", "Case": "Returns", "Balance ($)": 12272.133407511064}, {"Date": "2030-05-01T00:00:00", "Case": "Returns", "Balance ($)": 12512.014255715085}, {"Date": "2030-06-01T00:00:00", "Case": "Returns", "Balance ($)": 12753.065582448093}, {"Date": "2030-07-01T00:00:00", "Case": "Returns", "Balance ($)": 12995.29309896214}, {"Date": "2030-08-01T00:00:00", "Case": "Returns", "Balance ($)": 13238.702544376858}, {"Date": "2030-09-01T00:00:00", "Case": "Returns", "Balance ($)": 13483.29968581543}, {"Date": "2030-10-01T00:00:00", "Case": "Returns", "Balance ($)": 13729.090318541234}, {"Date": "2030-11-01T00:00:00", "Case": "Returns", "Balance ($)": 13976.080266095152}, {"Date": "2030-12-01T00:00:00", "Case": "Returns", "Balance ($)": 14224.275380433546}, {"Date": "2031-01-01T00:00:00", "Case": "Returns", "Balance ($)": 14473.68154206691}, {"Date": "2031-02-01T00:00:00", "Case": "Returns", "Balance ($)": 14724.304660199197}, {"Date": "2031-03-01T00:00:00", "Case": "Returns", "Balance ($)": 14976.150672867825}, {"Date": "2031-04-01T00:00:00", "Case": "Returns", "Balance ($)": 15229.22554708437}, {"Date": "2031-05-01T00:00:00", "Case": "Returns", "Balance ($)": 15483.535278975942}, {"Date": "2031-06-01T00:00:00", "Case": "Returns", "Balance ($)": 15739.08589392725}, {"Date": "2031-07-01T00:00:00", "Case": "Returns", "Balance ($)": 15995.883446723365}, {"Date": "2031-08-01T00:00:00", "Case": "Returns", "Balance ($)": 16253.934021693174}, {"Date": "2031-09-01T00:00:00", "Case": "Returns", "Balance ($)": 16513.243732853538}, {"Date": "2031-10-01T00:00:00", "Case": "Returns", "Balance ($)": 16773.818724054156}, {"Date": "2031-11-01T00:00:00", "Case": "Returns", "Balance ($)": 17035.66516912312}, {"Date": "2031-12-01T00:00:00", "Case": "Returns", "Balance ($)": 17298.789272013204}, {"Date": "2032-01-01T00:00:00", "Case": "Returns", "Balance ($)": 17563.19726694885}, {"Date": "2032-02-01T00:00:00", "Case": "Returns", "Balance ($)": 17828.895418573877}, {"Date": "2032-03-01T00:00:00", "Case": "Returns", "Balance ($)": 18095.890022099906}, {"Date": "2032-04-01T00:00:00", "Case": "Returns", "Balance ($)": 18364.187403455522}, {"Date": "2032-05-01T00:00:00", "Case": "Returns", "Balance ($)": 18633.793919436146}, {"Date": "2032-06-01T00:00:00", "Case": "Returns", "Balance ($)": 18904.715957854653}, {"Date": "2032-07-01T00:00:00", "Case": "Returns", "Balance ($)": 19176.95993769271}, {"Date": "2032-08-01T00:00:00", "Case": "Returns", "Balance ($)": 19450.532309252878}, {"Date": "2032-09-01T00:00:00", "Case": "Returns", "Balance ($)": 19725.43955431142}, {"Date": "2032-10-01T00:00:00", "Case": "Returns", "Balance ($)": 20001.688186271887}, {"Date": "2032-11-01T00:00:00", "Case": "Returns", "Balance ($)": 20279.284750319443}, {"Date": "2032-12-01T00:00:00", "Case": "Returns", "Balance ($)": 20558.235823575927}, {"Date": "2033-01-01T00:00:00", "Case": "Returns", "Balance ($)": 20838.5480152557}, {"Date": "2033-02-01T00:00:00", "Case": "Returns", "Balance ($)": 21120.22796682223}, {"Date": "2033-03-01T00:00:00", "Case": "Returns", "Balance ($)": 21403.28235214545}, {"Date": "2033-04-01T00:00:00", "Case": "Returns", "Balance ($)": 21687.717877659878}, {"Date": "2033-05-01T00:00:00", "Case": "Returns", "Balance ($)": 21973.54128252353}, {"Date": "2033-06-01T00:00:00", "Case": "Returns", "Balance ($)": 22260.759338777567}, {"Date": "2033-07-01T00:00:00", "Case": "Returns", "Balance ($)": 22549.378851506764}, {"Date": "2033-08-01T00:00:00", "Case": "Returns", "Balance ($)": 22839.40665900074}, {"Date": "2033-09-01T00:00:00", "Case": "Returns", "Balance ($)": 23130.84963291597}, {"Date": "2033-10-01T00:00:00", "Case": "Returns", "Balance ($)": 23423.714678438613}, {"Date": "2033-11-01T00:00:00", "Case": "Returns", "Balance ($)": 23718.008734448093}, {"Date": "2033-12-01T00:00:00", "Case": "Returns", "Balance ($)": 24013.738773681518}, {"Date": "2034-01-01T00:00:00", "Case": "Returns", "Balance ($)": 24310.911802898892}, {"Date": "2034-02-01T00:00:00", "Case": "Returns", "Balance ($)": 24609.534863049113}, {"Date": "2034-03-01T00:00:00", "Case": "Returns", "Balance ($)": 24909.615029436798}, {"Date": "2034-04-01T00:00:00", "Case": "Returns", "Balance ($)": 25211.159411889923}, {"Date": "2034-05-01T00:00:00", "Case": "Returns", "Balance ($)": 25514.175154928274}, {"Date": "2034-06-01T00:00:00", "Case": "Returns", "Balance ($)": 25818.669437932724}, {"Date": "2034-07-01T00:00:00", "Case": "Returns", "Balance ($)": 26124.649475315335}, {"Date": "2034-08-01T00:00:00", "Case": "Returns", "Balance ($)": 26432.122516690288}, {"Date": "2034-09-01T00:00:00", "Case": "Returns", "Balance ($)": 26741.09584704565}, {"Date": "2034-10-01T00:00:00", "Case": "Returns", "Balance ($)": 27051.57678691598}, {"Date": "2034-11-01T00:00:00", "Case": "Returns", "Balance ($)": 27363.572692555765}, {"Date": "2034-12-01T00:00:00", "Case": "Returns", "Balance ($)": 27677.09095611373}, {"Date": "2035-01-01T00:00:00", "Case": "Returns", "Balance ($)": 27992.13900580797}, {"Date": "2035-02-01T00:00:00", "Case": "Returns", "Balance ($)": 28308.724306101944}, {"Date": "2035-03-01T00:00:00", "Case": "Returns", "Balance ($)": 28626.854357881337}, {"Date": "2035-04-01T00:00:00", "Case": "Returns", "Balance ($)": 28946.536698631782}, {"Date": "2035-05-01T00:00:00", "Case": "Returns", "Balance ($)": 29267.77890261744}, {"Date": "2035-06-01T00:00:00", "Case": "Returns", "Balance ($)": 29590.588581060456}, {"Date": "2035-07-01T00:00:00", "Case": "Returns", "Balance ($)": 29914.973382321303}, {"Date": "2035-08-01T00:00:00", "Case": "Returns", "Balance ($)": 30240.940992079988}, {"Date": "2035-09-01T00:00:00", "Case": "Returns", "Balance ($)": 30568.499133518148}, {"Date": "2035-10-01T00:00:00", "Case": "Returns", "Balance ($)": 30897.65556750204}, {"Date": "2035-11-01T00:00:00", "Case": "Returns", "Balance ($)": 31228.418092766417}, {"Date": "2035-12-01T00:00:00", "Case": "Returns", "Balance ($)": 31560.794546099307}, {"Date": "2036-01-01T00:00:00", "Case": "Returns", "Balance ($)": 31894.792802527692}, {"Date": "2036-02-01T00:00:00", "Case": "Returns", "Balance ($)": 32230.420775504088}, {"Date": "2036-03-01T00:00:00", "Case": "Returns", "Balance ($)": 32567.686417094035}, {"Date": "2036-04-01T00:00:00", "Case": "Returns", "Balance ($)": 32906.59771816452}, {"Date": "2036-05-01T00:00:00", "Case": "Returns", "Balance ($)": 33247.16270857329}, {"Date": "2036-06-01T00:00:00", "Case": "Returns", "Balance ($)": 33589.38945735912}, {"Date": "2036-07-01T00:00:00", "Case": "Returns", "Balance ($)": 33933.28607293297}, {"Date": "2036-08-01T00:00:00", "Case": "Returns", "Balance ($)": 34278.860703270126}, {"Date": "2036-09-01T00:00:00", "Case": "Returns", "Balance ($)": 34626.12153610323}, {"Date": "2036-10-01T00:00:00", "Case": "Returns", "Balance ($)": 34975.07679911629}, {"Date": "2036-11-01T00:00:00", "Case": "Returns", "Balance ($)": 35325.73476013959}, {"Date": "2036-12-01T00:00:00", "Case": "Returns", "Balance ($)": 35678.103727345624}, {"Date": "2037-01-01T00:00:00", "Case": "Returns", "Balance ($)": 36032.19204944591}, {"Date": "2037-02-01T00:00:00", "Case": "Returns", "Balance ($)": 36388.0081158888}, {"Date": "2037-03-01T00:00:00", "Case": "Returns", "Balance ($)": 36745.56035705826}, {"Date": "2037-04-01T00:00:00", "Case": "Returns", "Balance ($)": 37104.85724447361}, {"Date": "2037-05-01T00:00:00", "Case": "Returns", "Balance ($)": 37465.90729099024}, {"Date": "2037-06-01T00:00:00", "Case": "Returns", "Balance ($)": 37828.7190510013}, {"Date": "2037-07-01T00:00:00", "Case": "Returns", "Balance ($)": 38193.301120640404}, {"Date": "2037-08-01T00:00:00", "Case": "Returns", "Balance ($)": 38559.66213798526}, {"Date": "2037-09-01T00:00:00", "Case": "Returns", "Balance ($)": 38927.81078326236}, {"Date": "2037-10-01T00:00:00", "Case": "Returns", "Balance ($)": 39297.755779052626}, {"Date": "2037-11-01T00:00:00", "Case": "Returns", "Balance ($)": 39669.50589049811}, {"Date": "2037-12-01T00:00:00", "Case": "Returns", "Balance ($)": 40043.069925509626}, {"Date": "2038-01-01T00:00:00", "Case": "Returns", "Balance ($)": 40418.456734975436}, {"Date": "2038-02-01T00:00:00", "Case": "Returns", "Balance ($)": 40795.675212971}, {"Date": "2038-03-01T00:00:00", "Case": "Returns", "Balance ($)": 41174.734296969655}, {"Date": "2038-04-01T00:00:00", "Case": "Returns", "Balance ($)": 41555.642968054395}, {"Date": "2038-05-01T00:00:00", "Case": "Returns", "Balance ($)": 41938.41025113066}, {"Date": "2038-06-01T00:00:00", "Case": "Returns", "Balance ($)": 42323.04521514017}, {"Date": "2038-07-01T00:00:00", "Case": "Returns", "Balance ($)": 42709.556973275765}, {"Date": "2038-08-01T00:00:00", "Case": "Returns", "Balance ($)": 43097.954683197364}, {"Date": "2038-09-01T00:00:00", "Case": "Returns", "Balance ($)": 43488.24754724892}, {"Date": "2038-10-01T00:00:00", "Case": "Returns", "Balance ($)": 43880.44481267645}, {"Date": "2038-11-01T00:00:00", "Case": "Returns", "Balance ($)": 44274.55577184713}, {"Date": "2038-12-01T00:00:00", "Case": "Returns", "Balance ($)": 44670.58976246948}, {"Date": "2039-01-01T00:00:00", "Case": "Returns", "Balance ($)": 45068.55616781456}, {"Date": "2039-02-01T00:00:00", "Case": "Returns", "Balance ($)": 45468.46441693835}, {"Date": "2039-03-01T00:00:00", "Case": "Returns", "Balance ($)": 45870.32398490508}, {"Date": "2039-04-01T00:00:00", "Case": "Returns", "Balance ($)": 46274.144393011804}, {"Date": "2039-05-01T00:00:00", "Case": "Returns", "Balance ($)": 46679.93520901393}, {"Date": "2039-06-01T00:00:00", "Case": "Returns", "Balance ($)": 47087.706047351916}, {"Date": "2039-07-01T00:00:00", "Case": "Returns", "Balance ($)": 47497.4665693791}, {"Date": "2039-08-01T00:00:00", "Case": "Returns", "Balance ($)": 47909.22648359057}, {"Date": "2039-09-01T00:00:00", "Case": "Returns", "Balance ($)": 48322.99554585321}, {"Date": "2039-10-01T00:00:00", "Case": "Returns", "Balance ($)": 48738.783559636846}, {"Date": "2039-11-01T00:00:00", "Case": "Returns", "Balance ($)": 49156.6003762465}, {"Date": "2039-12-01T00:00:00", "Case": "Returns", "Balance ($)": 49576.45589505581}, {"Date": "2040-01-01T00:00:00", "Case": "Returns", "Balance ($)": 49998.36006374161}, {"Date": "2040-02-01T00:00:00", "Case": "Returns", "Balance ($)": 50422.32287851955}, {"Date": "2040-03-01T00:00:00", "Case": "Returns", "Balance ($)": 50848.35438438102}, {"Date": "2040-04-01T00:00:00", "Case": "Returns", "Balance ($)": 51276.464675331066}, {"Date": "2040-05-01T00:00:00", "Case": "Returns", "Balance ($)": 51706.66389462761}, {"Date": "2040-06-01T00:00:00", "Case": "Returns", "Balance ($)": 52138.96223502175}, {"Date": "2040-07-01T00:00:00", "Case": "Returns", "Balance ($)": 52573.36993899925}, {"Date": "2040-08-01T00:00:00", "Case": "Returns", "Balance ($)": 53009.897299023236}, {"Date": "2040-09-01T00:00:00", "Case": "Returns", "Balance ($)": 53448.55465777805}, {"Date": "2040-10-01T00:00:00", "Case": "Returns", "Balance ($)": 53889.352408414285}, {"Date": "2040-11-01T00:00:00", "Case": "Returns", "Balance ($)": 54332.30099479505}, {"Date": "2040-12-01T00:00:00", "Case": "Returns", "Balance ($)": 54777.410911743405}, {"Date": "2041-01-01T00:00:00", "Case": "Returns", "Balance ($)": 55224.69270529103}, {"Date": "2041-02-01T00:00:00", "Case": "Returns", "Balance ($)": 55674.15697292809}, {"Date": "2041-03-01T00:00:00", "Case": "Returns", "Balance ($)": 56125.81436385429}, {"Date": "2041-04-01T00:00:00", "Case": "Returns", "Balance ($)": 56579.67557923123}, {"Date": "2041-05-01T00:00:00", "Case": "Returns", "Balance ($)": 57035.751372435945}, {"Date": "2041-06-01T00:00:00", "Case": "Returns", "Balance ($)": 57494.052549315646}, {"Date": "2041-07-01T00:00:00", "Case": "Returns", "Balance ($)": 57954.5899684438}, {"Date": "2041-08-01T00:00:00", "Case": "Returns", "Balance ($)": 58417.37454137735}, {"Date": "2041-09-01T00:00:00", "Case": "Returns", "Balance ($)": 58882.417232915286}, {"Date": "2041-10-01T00:00:00", "Case": "Returns", "Balance ($)": 59349.72906135841}, {"Date": "2041-11-01T00:00:00", "Case": "Returns", "Balance ($)": 59819.32109877041}, {"Date": "2041-12-01T00:00:00", "Case": "Returns", "Balance ($)": 60291.204471240155}, {"Date": "2042-01-01T00:00:00", "Case": "Returns", "Balance ($)": 60765.39035914537}, {"Date": "2042-02-01T00:00:00", "Case": "Returns", "Balance ($)": 61241.88999741747}, {"Date": "2042-03-01T00:00:00", "Case": "Returns", "Balance ($)": 61720.714675807794}, {"Date": "2042-04-01T00:00:00", "Case": "Returns", "Balance ($)": 62201.87573915507}, {"Date": "2042-05-01T00:00:00", "Case": "Returns", "Balance ($)": 62685.38458765422}, {"Date": "2042-06-01T00:00:00", "Case": "Returns", "Balance ($)": 63171.25267712647}, {"Date": "2042-07-01T00:00:00", "Case": "Returns", "Balance ($)": 63659.49151929075}, {"Date": "2042-08-01T00:00:00", "Case": "Returns", "Balance ($)": 64150.11268203647}, {"Date": "2042-09-01T00:00:00", "Case": "Returns", "Balance ($)": 64643.1277896976}, {"Date": "2042-10-01T00:00:00", "Case": "Returns", "Balance ($)": 65138.548523328056}, {"Date": "2042-11-01T00:00:00", "Case": "Returns", "Balance ($)": 65636.38662097849}, {"Date": "2042-12-01T00:00:00", "Case": "Returns", "Balance ($)": 66136.65387797439}, {"Date": "2043-01-01T00:00:00", "Case": "Returns", "Balance ($)": 66639.36214719553}, {"Date": "2043-02-01T00:00:00", "Case": "Returns", "Balance ($)": 67144.52333935683}, {"Date": "2043-03-01T00:00:00", "Case": "Returns", "Balance ($)": 67652.14942329058}, {"Date": "2043-04-01T00:00:00", "Case": "Returns", "Balance ($)": 68162.25242622994}, {"Date": "2043-05-01T00:00:00", "Case": "Returns", "Balance ($)": 68674.84443409396}]}}, {"mode": "vega-lite"});
+</script>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

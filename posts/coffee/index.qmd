@@ -1,0 +1,125 @@
+---
+title: How Much is a Coffee Worth to Me?
+subtitle: A masochistic exploration of personal finance
+author: "Nicholas Dorsch"
+date: today
+categories: [code, finance]
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import altair as alt
+from datetime import datetime
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 250
+```
+
+I moved to Melbourne last year, which, along with being a questionable career choice,
+turned an already troubling dependence on caffeine into a behavioural disorder. 
+
+I bought a Nespresso machine, telling myself I would save money on coffee. Now, with the
+help of my Nespresso machine I have more than doubled my coffee consumption. The coffee
+pod coffee doesn't count, you see. Yes I'll come down for a coffee, I haven't had mine
+yet.
+
+This leads me to wonder how much of my family's future I am eroding to bean-dust, every
+time I head downstairs for another *medium latte, thanks*---an absent droning sound I
+make every morning between the hours of 9 and 10 am. Each *milky-upper* is costing me
+$6. So assuming I work 250 days in a year... let's see now:
+
+```{python}
+COFFEE_COST = 6.0
+WORKING_DAYS = 250
+
+annual_cost = COFFEE_COST * WORKING_DAYS
+```
+
+It's $`{python} annual_cost`. You can check the code if you want to make sure I got
+that.
+
+I'm not *devastated* by that number---it's not a small amount, but neither is it enough
+to send my first born to school---and perhaps a less masochstic person would leave the
+matter there... but it does beg the question of what I might be doing with that $1500 a
+year if I wasn't spending it on *morning browns for morning frowns*.
+
+# Opportunity Cost, and Futures Lost...
+
+So I know what you're thinking, the obvious thing to do here is run a forecasted
+investment strategy using a geometric brownian motion stochastic model of returns based
+on the past 20 years of ASX market data. Instead of $6 a day for *cofvefe*, the model
+will invest into the Vanguard ETF instead. Then, after 20 years, we can see how Nick the
+*coffee dribbler* is doing, compared to Nick the *slightly more financially responsible*
+adult.
+
+Before we get all trigger happy with a stochastic model, let's have a look at how this
+strategy performs assuming a 6% annual return on the market.
+
+Because it's not far off from the truth, I'll just assume I buy one coffee a day for
+simplicity.
+
+```{python}
+def create_date_array(start_date: datetime, num_months: int):
+    start = np.datetime64(start_date.replace(day=1), 'M')
+    month_array = start + np.arange(num_months)
+    return month_array.astype("datetime64[D]")
+
+def annual_to_monthly_rate(annual_rate: float) -> float:
+    return (1 + annual_rate) ** (1 / 12) - 1
+
+YEARS = 18
+ANNUAL_RETURN = 0.06
+
+num_months = YEARS * 12
+months = np.arange(num_months)
+dates = create_date_array(datetime.today(), num_months=num_months)
+
+investing = np.full_like(dates, COFFEE_COST * 30).astype(float)
+spending = -1 * investing
+
+monthly_return = annual_to_monthly_rate(ANNUAL_RETURN)
+returns = investing * np.exp(monthly_return * months)
+
+df = pd.DataFrame({
+    "Date": dates,
+    "Spending": np.cumsum(spending),
+    "Investing": np.cumsum(investing),
+    "Returns": np.cumsum(returns)
+})
+flat_df = df.melt(
+    id_vars=["Date"], 
+    var_name="Case", 
+    value_name="Balance ($)"
+)
+```
+
+```{python}
+chart = (
+    alt.Chart(flat_df)
+    .mark_area(opacity=0.8)
+    .encode(
+        alt.X("Date:T"),
+        alt.Y("Balance ($):Q"),
+        alt.Color(
+            "Case:N",
+            legend=alt.Legend(orient="top-left")
+        ),
+    )
+    .properties(
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH
+    )
+)
+
+chart.show()
+```
+
+
+
+
+
+
+
