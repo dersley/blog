@@ -55,10 +55,10 @@ article is me thinking about that.
 
 The [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) can
 be used to model the probability of a set of discrete possibilities---depositional
-environments, in this context. The Dirichlet distribution can generates samples from a
-"unit simplex" (a vector of numbers that add to 1), which makes it well suited for
-modelling our uncertainty over interpretations, where we allocate some probability to
-each.
+environments, in this context. The Dirichlet distribution can be used to generate
+samples of a "unit simplex" (a vector of numbers that add to 1), which makes it well
+suited for modelling our uncertainty over interpretations, where we allocate some
+probability to each.
 
 It also has the convenient property of
 [conjugacy](https://en.wikipedia.org/wiki/Conjugate_prior), which essentially means it
@@ -454,7 +454,6 @@ alpha_obs = np.array(list(alpha_dict.values()))
 ```
 
 And then plot it:
-
 
 ```{python}
 df = create_marginal_dirichlet_pdf_df(alpha_obs, labels)

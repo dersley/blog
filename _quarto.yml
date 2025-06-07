@@ -20,7 +20,6 @@ format:
     fig-align: center
     code-fold: true
     code-line-numbers: false
-    title=block-banner: false
     
 
 
