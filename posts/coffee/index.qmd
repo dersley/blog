@@ -21,10 +21,10 @@ PLOT_HEIGHT = 250
 I moved to Melbourne last year, which, along with being a questionable career choice,
 turned an already troubling dependence on caffeine into a behavioural disorder.
 
-I bought a Nespresso machine, telling myself I would save money on coffee. Now, with the
-help of my Nespresso machine I have more than doubled my coffee consumption. The coffee
-pod coffee doesn't count, you see. Yes I'll come down for a coffee, I haven't had mine
-yet.
+I bought a Nespresso machine, telling myself I would save money on coffee. It has been a
+huge success. Now, with the help of my Nespresso machine I have more than doubled my
+coffee consumption. The coffee pod coffee doesn't count, you see. Yes I'll come down for
+a coffee, I haven't had mine yet.
 
 This leads me to wonder how much of my family's future I am eroding to bean-dust, every
 time I head downstairs for another *medium latte, thanks*---an absent droning sound I
@@ -51,12 +51,13 @@ year if I wasn't spending it on *morning browns for morning frowns*.
 So I know what you're thinking, the obvious thing to do here is run a forecasted
 investment strategy using a geometric brownian motion stochastic model of returns based
 on the past 20 years of ASX market data. Instead of $6 a day for *cofvefe*, the model
-will invest into the Vanguard ETF instead. Then, after 20 years, we can see how Nick the
-*coffee dribbler* is doing, compared to Nick the *slightly more financially responsible*
-adult.
+will invest into an index fund. Then, after 20 years, we'll see how Nick the *coffee
+dribbler* is doing, compared to Nick the *slightly more financially responsible* adult.
+
+## Basic Model
 
 Before we get all trigger happy with a stochastic model, let's have a look at how this
-strategy performs assuming a 6% annual return on the market.
+strategy performs assuming an 8% annual return on the market.
 
 Because it's not far off from the truth, I'll just assume I buy one coffee a day for
 simplicity.
@@ -82,7 +83,7 @@ def calculate_compound_returns(investments: np.ndarray, annual_rate: float) -> n
     return returns
 
 
-YEARS = 18
+YEARS = 21
 ANNUAL_RATE = 0.08
 
 num_months = YEARS * 12
@@ -91,7 +92,6 @@ dates = create_date_array(datetime.today(), num_months=num_months)
 
 investing = np.full_like(dates, COFFEE_COST * 30).astype(float)
 spending = -1 * investing
-
 returns = calculate_compound_returns(
     investments=investing,
     annual_rate=ANNUAL_RATE
@@ -99,34 +99,103 @@ returns = calculate_compound_returns(
 
 df = pd.DataFrame({
     "Date": dates,
-    "Spending": np.cumsum(spending),
+    "Coffee": np.cumsum(spending),
     "Investing": np.cumsum(investing),
-    "Returns": returns - np.cumsum(investing)
-})
+    "Returns": returns - np.cumsum(investing),
+}).round(2)
 flat_df = df.melt(
     id_vars=["Date"], 
     var_name="Case", 
     value_name="$"
 )
+
+df.tail()
 ```
 
 ```{python}
+def plot_balance_area_chart(df: pd.DataFrame, title: str):
+    return (
+        alt.Chart(df)
+        .mark_area(opacity=0.8)
+        .encode(
+            alt.X("Date:T", title=""),
+            alt.Y("$:Q"),
+            alt.Color(
+                "Case:N",
+                legend=alt.Legend(orient="top-left")
+            ),
+            tooltip=[
+                alt.Tooltip("Date:T", title=""),
+                alt.Tooltip("$:Q", title="$", format="$,.2f"),
+                alt.Tooltip("Case:N", title="")
+            ],
+            order=alt.Order("Case:N")
+        )
+        .properties(
+            title=title,
+            height=PLOT_HEIGHT,
+            width=PLOT_WIDTH
+        )
+    )
+
+chart = plot_balance_area_chart(
+    flat_df, title="Comparison of Investing vs Coffee Drinking"
+)
+chart.show()
+```
+
+```{python}
+total_gains = int(df.iloc[-1]["Investing"] + df.iloc[-1]["Returns"])
+total_losses = int(df.iloc[-1]["Coffee"])
+```
+
+Unless I've screwed up the maths here things are already looking very grim. Nick the
+dribbler is down $`{python} -total_losses` in `{python} YEARS` years, whereas Nick the
+adult is giving his kid a very nice $`{python} total_gains` graduation bonus.
+
+Ok, but what about inflation, and the time value of money, and smart things like that.
+Well the *time* value of money is a bit of a flawed concept when the *present* money is
+being spent on hot milk that will both cool down and expire in a matter of days, but
+here goes.
+
+Assuming 2.5% inflation annually, and a discount rate of 10%, which look like this:
+
+```{python}
+def create_exponential_curve(
+    months: np.ndarray, 
+    annual_rate: float
+) -> np.ndarray:
+    monthly_rate = annual_to_monthly_rate(annual_rate)
+    return np.exp(months * monthly_rate)
+
+DISCOUNT_RATE = -0.1
+INFLATION_RATE = 0.025
+
+discount_curve = create_exponential_curve(months, DISCOUNT_RATE)
+inflation_curve = create_exponential_curve(months, INFLATION_RATE)
+
 chart = (
-    alt.Chart(flat_df)
-    .mark_area(opacity=0.8)
+    alt.Chart(
+        pd.DataFrame({
+            "Date": dates,
+            "Inflation": inflation_curve,
+            "Discount": discount_curve,
+            "Net": inflation_curve * discount_curve
+        })
+        .melt(
+            id_vars=["Date"], 
+            var_name="Curve",
+            value_name="Factor"
+        )
+    )
+    .mark_line()
     .encode(
         alt.X("Date:T"),
-        alt.Y("$:Q"),
+        alt.Y("Factor:Q"),
         alt.Color(
-            "Case:N",
+            "Curve:N",
             legend=alt.Legend(orient="top-left")
-        ),
-        tooltip=[
-            alt.Tooltip("Date:T", title="Date"),
-            alt.Tooltip("Balance ($):Q", title="Amount", format="$,.2f"),
-            alt.Tooltip("Case:N", title="Case")
-        ],
-        order=alt.Order("Case:N")
+        )
     )
     .properties(
         height=PLOT_HEIGHT,
@@ -137,9 +206,26 @@ chart = (
 chart.show()
 ```
 
+... Nick's returns look like this:
 
+```{python}
+discount_df = pd.DataFrame({
+    "Date": dates,
+    "Coffee": np.cumsum(spending) * inflation_curve * discount_curve,
+    "Investing": np.cumsum(investing) * inflation_curve * discount_curve,
+    "Returns": (returns - np.cumsum(investing)) * inflation_curve * discount_curve,
+}).round(2)
 
+flat_discount_df = discount_df.melt(
+    id_vars=["Date"], 
+    var_name="Case", 
+    value_name="$"
+)
 
+chart = plot_balance_area_chart(
+    flat_discount_df, title="(Discounted): Comparison of Investing vs Coffee Drinking"
+)
+chart.show()
+```
 
-
-
+## Stochastic Model
