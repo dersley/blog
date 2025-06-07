@@ -266,7 +266,7 @@ window.Quarto = {
 </section>
 <section id="the-dirichlet-distribution" class="level1">
 <h1>The Dirichlet Distribution</h1>
-<p>The <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a> can be used to model the probability of a set of discrete possibilities—depositional environments, in this context. The Dirichlet distribution can generates samples from a “unit simplex” (a vector of numbers that add to 1), which makes it well suited for modelling our uncertainty over interpretations, where we allocate some probability to each.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Dirichlet_distribution">Dirichlet distribution</a> can be used to model the probability of a set of discrete possibilities—depositional environments, in this context. The Dirichlet distribution can be used to generate samples of a “unit simplex” (a vector of numbers that add to 1), which makes it well suited for modelling our uncertainty over interpretations, where we allocate some probability to each.</p>
 <p>It also has the convenient property of <a href="https://en.wikipedia.org/wiki/Conjugate_prior">conjugacy</a>, which essentially means it is very easy to mathematically update as new evidence comes in.</p>
 <section id="applied-to-a-simple-example" class="level2">
 <h2 class="anchored" data-anchor-id="applied-to-a-simple-example">Applied to a Simple Example</h2>
@@ -283,7 +283,7 @@ window.Quarto = {
 \]</span></p>
 <p>This equates to us saying that we think the Delta interpretation is most plausible, although the Turbidite interpretation is a possibility, while the Lake interpretation is implausible.</p>
 <p>That results in the following distribution:</p>
-<div id="b59aea9a" class="cell" data-execution_count="2">
+<div id="f255cc19" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_marginal_dirichlet_pdf_df(</span>
@@ -359,23 +359,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-eea4ac44444342c585b3387b3602f577.vega-embed {
+  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-eea4ac44444342c585b3387b3602f577.vega-embed details,
-  #altair-viz-eea4ac44444342c585b3387b3602f577.vega-embed details summary {
+  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed details,
+  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-eea4ac44444342c585b3387b3602f577"></div>
+<div id="altair-viz-f5e150214ae842d7b1f4fadcebf10b69"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-eea4ac44444342c585b3387b3602f577") {
-      outputDiv = document.getElementById("altair-viz-eea4ac44444342c585b3387b3602f577");
+    if (outputDiv.id !== "altair-viz-f5e150214ae842d7b1f4fadcebf10b69") {
+      outputDiv = document.getElementById("altair-viz-f5e150214ae842d7b1f4fadcebf10b69");
     }
 
     const paths = {
@@ -433,7 +433,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="incorporating-prior-information">Incorporating Prior Information</h2>
 <p>Let’s say despite our observations at this outcrop, we have strong indications nearby that we are standing in the middle of a lake deposit. Maybe the outcrop is an anomaly in an otherwise fairly confident interpretation.</p>
 <p>If we encode that prior as <span class="math inline">\(\alpha_{\text{prior}} = [1, 1, 50]\)</span>, it looks like this:</p>
-<div id="fb49fd31" class="cell" data-execution_count="3">
+<div id="2af7acd2" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>prior_alpha <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">50</span>])</span>
@@ -445,23 +445,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-13757f0092454e28ab68a65218464206.vega-embed {
+  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-13757f0092454e28ab68a65218464206.vega-embed details,
-  #altair-viz-13757f0092454e28ab68a65218464206.vega-embed details summary {
+  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed details,
+  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-13757f0092454e28ab68a65218464206"></div>
+<div id="altair-viz-e4f22f8202104b12ab5b3196b95a46a4"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-13757f0092454e28ab68a65218464206") {
-      outputDiv = document.getElementById("altair-viz-13757f0092454e28ab68a65218464206");
+    if (outputDiv.id !== "altair-viz-e4f22f8202104b12ab5b3196b95a46a4") {
+      outputDiv = document.getElementById("altair-viz-e4f22f8202104b12ab5b3196b95a46a4");
     }
 
     const paths = {
@@ -521,7 +521,7 @@ window.Quarto = {
 \alpha_{\text{posterior}} &amp;= [21, 11, 52]
 \end{align}
 \]</span></p>
-<div id="9442c7d2" class="cell" data-execution_count="4">
+<div id="91490a5a" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>posterior_alpha <span class="op">=</span> prior_alpha <span class="op">+</span> alpha</span>
@@ -534,23 +534,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-8674d153d9f74195a6e67ba9ebcf8960.vega-embed {
+  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-8674d153d9f74195a6e67ba9ebcf8960.vega-embed details,
-  #altair-viz-8674d153d9f74195a6e67ba9ebcf8960.vega-embed details summary {
+  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed details,
+  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-8674d153d9f74195a6e67ba9ebcf8960"></div>
+<div id="altair-viz-2cb12aa212c049b78217f16297e955ec"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-8674d153d9f74195a6e67ba9ebcf8960") {
-      outputDiv = document.getElementById("altair-viz-8674d153d9f74195a6e67ba9ebcf8960");
+    if (outputDiv.id !== "altair-viz-2cb12aa212c049b78217f16297e955ec") {
+      outputDiv = document.getElementById("altair-viz-2cb12aa212c049b78217f16297e955ec");
     }
 
     const paths = {
@@ -619,7 +619,7 @@ window.Quarto = {
 <p>I mean look at it! Don’t even argue! It’s so obvious!</p>
 <p>Other observations would be more ambiguous and open to argument—but that’s why we’re assigning probabilities, not certainties—to the possible observations on the table.</p>
 <p>To get started with scoring, I asked Claude for a list of observations and their associated <span class="math inline">\(\alpha\)</span> scores under the 3 interpretations:</p>
-<div id="38542631" class="cell" data-execution_count="5">
+<div id="16fbc250" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe of sedimentological observations with alpha values</span></span>
@@ -949,7 +949,7 @@ window.Quarto = {
 <section id="in-action" class="level2">
 <h2 class="anchored" data-anchor-id="in-action">In Action</h2>
 <p>I don’t have real examples to use, but let’s consider a diligent field geologist’s notes about an outcrop.</p>
-<p>Since Claude is already cooking, I’ve used it to dream up example:</p>
+<p>Since Claude is already cooking, I’ve used it to dream up an example:</p>
 <blockquote class="blockquote">
 <p>FIELD NOTES - Station 15, Muddy Creek Section Date: June 15, 2024 Weather: Overcast, good exposure Geologist: Dr.&nbsp;Sarah Mitchell</p>
 </blockquote>
@@ -967,7 +967,7 @@ window.Quarto = {
 </blockquote>
 <p>Claude is… quite good at this.</p>
 <p>Wrapping this up into data, we can calculate the posterior <span class="math inline">\(\alpha\)</span> values using the previous table.</p>
-<div id="19a01052" class="cell" data-execution_count="6">
+<div id="debb59af" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>field_observations <span class="op">=</span> {</span>
@@ -1004,7 +1004,7 @@ window.Quarto = {
 </details>
 </div>
 <p>And then plot it:</p>
-<div id="6f507f0a" class="cell" data-execution_count="7">
+<div id="3b579d1c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> create_marginal_dirichlet_pdf_df(alpha_obs, labels)</span>
@@ -1015,23 +1015,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-0995dea3680c4ecf9217b08322ee09b5.vega-embed {
+  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-0995dea3680c4ecf9217b08322ee09b5.vega-embed details,
-  #altair-viz-0995dea3680c4ecf9217b08322ee09b5.vega-embed details summary {
+  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed details,
+  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-0995dea3680c4ecf9217b08322ee09b5"></div>
+<div id="altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-0995dea3680c4ecf9217b08322ee09b5") {
-      outputDiv = document.getElementById("altair-viz-0995dea3680c4ecf9217b08322ee09b5");
+    if (outputDiv.id !== "altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6") {
+      outputDiv = document.getElementById("altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6");
     }
 
     const paths = {
@@ -1093,7 +1093,7 @@ window.Quarto = {
 \alpha_{\text{geophysics}} = [1, 200, 1]
 \end{align}
 \]</span></p>
-<div id="5326bdea" class="cell" data-execution_count="8">
+<div id="730dcfe1" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>new_alpha <span class="op">=</span> np.array(alpha_obs) <span class="op">+</span> np.array([<span class="dv">1</span>, <span class="dv">200</span>, <span class="dv">1</span>])</span>
@@ -1108,23 +1108,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-d54cc11b415d4708be01d0517e3ccd54.vega-embed {
+  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-d54cc11b415d4708be01d0517e3ccd54.vega-embed details,
-  #altair-viz-d54cc11b415d4708be01d0517e3ccd54.vega-embed details summary {
+  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed details,
+  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-d54cc11b415d4708be01d0517e3ccd54"></div>
+<div id="altair-viz-10f67756dcb74d9fb1e24b9bde64f830"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-d54cc11b415d4708be01d0517e3ccd54") {
-      outputDiv = document.getElementById("altair-viz-d54cc11b415d4708be01d0517e3ccd54");
+    if (outputDiv.id !== "altair-viz-10f67756dcb74d9fb1e24b9bde64f830") {
+      outputDiv = document.getElementById("altair-viz-10f67756dcb74d9fb1e24b9bde64f830");
     }
 
     const paths = {
