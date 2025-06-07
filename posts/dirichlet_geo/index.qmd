@@ -2,7 +2,7 @@
 title: Interpreting Depositional Environments with Bayes
 subtitle: Modelling interpretation uncertainty with the Dirichlet distribution
 author: "Nicholas Dorsch"
-date: today
+date: 2025-07-07
 categories: [code, statistics, geology]
 ---
 
@@ -18,44 +18,51 @@ PLOT_WIDTH = "container"
 PLOT_HEIGHT = 250
 ```
 
-![A well preserved Bouma sequence from Tabernas Basin, Spain. [reddit
-link](https://www.reddit.com/r/geology/comments/b2yv4w/thought_you_guys_would_appreciate_this_almost/)](media/bouma_sequence.jpg){height="600px"}
+![A well preserved Bouma sequence from Tabernas Basin, Spain.
+[link](https://www.reddit.com/r/geology/comments/b2yv4w/thought_you_guys_would_appreciate_this_almost/)](media/bouma_sequence.jpg){height="600px"}
 
 # Introduction
 
-The layered mud in the image above depicts a [Bouma
-sequence](https://en.wikipedia.org/wiki/Bouma_sequence), which to the untrained
-eye, is... whatever man, it's mud. To the trained eye however, it is a dead giveaway
-that the sediment was deposited by a series of dramatic submarine landslides, on the
-steep continental shelf of a convergent tectonic margin. 
+The image above depicts a [Bouma
+sequence](https://en.wikipedia.org/wiki/Bouma_sequence), which to the untrained eye,
+is... some tilted mud. To the trained eye however, it is a dead giveaway that the
+sediment was deposited by a series of dramatic submarine landslides, on the steep
+continental shelf of a convergent tectonic margin. 
 
 It is *not* a river, says the trained eye, it is *not* a delta, it is *not* a lake. It
 is a [turbidite](https://en.wikipedia.org/wiki/Turbidite).
 
-My favourite aspect of studying Geology was field work. I found it exciting that so much
+The photo above isn't mine, but I was lucky enough to go to this outcrop years ago
+during my studies, and the banner image for this blog is actually a deformed turbidite
+sequence in the same formation of the same basin, an outcrop called *el Gordo*.
+
+My favourite aspect of studying geology was field work. I found it exciting that so much
 information about a depositional system could be derived from outcrop and core scale
 observations. It is a peculiar thing to make such strong inferences about systems that
-existed millions of years in the past, that we can never verify, and its inevitable that
-arguments over particular interpretations will occur. 
+existed millions of years in the past, that we can never verify, and it's inevitable
+that arguments over the *true* interpretation will occur. 
 
-Bayesians don't argue about the truth though---they just agree to share it around to the
-best candidates.
+Bayesians don't argue about *the* truth, though---they just agree to share it around to
+the best candidates.
+
+So don't argue, allocate.
 
 Coming at this from a bayesian perspective then, it seems like there should be a
-framework for creating a distribution over geological interpretations. Speaking about
-sedimentary sequences specifically, I think there are tools on the table of bayesian
-statistics to use. 
+framework for reasoning about our uncertainty over geological interpretations. This
+article is me thinking about that.
 
-## The Dirichlet Distribution
+# The Dirichlet Distribution
 
-The [Dirichet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) can be
-used to model the probability of a set of discrete possibilities---depositional
-environments, in this context. The Dirichlet distribution samples from a simplex (a
-vector of numbers that add to 1), which makes it perfect for modelling our uncertainty
-over interpretations, where we assign some probability to each.
+The [Dirichlet distribution](https://en.wikipedia.org/wiki/Dirichlet_distribution) can
+be used to model the probability of a set of discrete possibilities---depositional
+environments, in this context. The Dirichlet distribution can generates samples from a
+"unit simplex" (a vector of numbers that add to 1), which makes it well suited for
+modelling our uncertainty over interpretations, where we allocate some probability to
+each.
 
-It also has the convenient property of conjugacy, which essentially means it is very
-easy to update with new evidence.
+It also has the convenient property of
+[conjugacy](https://en.wikipedia.org/wiki/Conjugate_prior), which essentially means it
+is very easy to mathematically update as new evidence comes in.
 
 ## Applied to a Simple Example
 
@@ -75,14 +82,13 @@ $$
 \alpha = [20, 10, 2]
 $$
 
-This equates to us saying that we think the Delta interpretation is most
-plausible, although the Turbidite interpretation is a possibility, while the Lake
-interpretation is implausible.
+This equates to us saying that we think the Delta interpretation is most plausible,
+although the Turbidite interpretation is a possibility, while the Lake interpretation is
+implausible.
 
 That results in the following distribution:
 
 ```{python}
-
 def create_marginal_dirichlet_pdf_df(
     alpha: list[int], 
     labels: list[str]
@@ -156,19 +162,20 @@ chart.show()
 
 This is the distribution over the probabilities of each of the interpretations. Maybe it
 seems weird to have a probability distribution over probabilities, but this is actually
-very common in bayesian statistics. I will write a post on that at some point, but see
-the **Aleatoric and epistemic** section of [this](https://en.wikipedia.org/wiki/Uncertainty_quantification) wiki page for a primer.
+very common in bayesian statistics. I'll probably write a post on that at some point,
+but see the **Aleatoric and epistemic** section of
+[this](https://en.wikipedia.org/wiki/Uncertainty_quantification) wiki page for a primer.
 
 ## Incorporating Prior Information
 
-Let's say despite our observations at this outcrop, we have *very strong* indications
-nearby that we are standing in the middle of a lake deposit. Maybe the outcrop is an
-anomaly in an otherwise fairly confident interpretation.
+Let's say despite our observations at this outcrop, we have strong indications nearby
+that we are standing in the middle of a lake deposit. Maybe the outcrop is an anomaly in
+an otherwise fairly confident interpretation.
 
-If we encode that prior as $\alpha_{\text{prior}} = [1, 1, 100]$, it looks like this:
+If we encode that prior as $\alpha_{\text{prior}} = [1, 1, 50]$, it looks like this:
 
 ```{python}
-prior_alpha = np.array([1, 1, 100])
+prior_alpha = np.array([1, 1, 50])
 df = create_marginal_dirichlet_pdf_df(prior_alpha, labels)
 
 chart = plot_dirichlet_pdf(df, title="Prior Interpretation Probabilities")
@@ -183,14 +190,13 @@ then the math checks out here.
 
 $$
 \begin{align}
-\alpha_{\text{prior}} &= [1, 1, 200] \\
+\alpha_{\text{prior}} &= [1, 1, 50] \\
 \alpha_{\text{posterior}} &= \alpha_{\text{prior}} + \alpha \\
-\alpha_{\text{posterior}} &= [51, 26, 201]
+\alpha_{\text{posterior}} &= [21, 11, 52]
 \end{align}
 $$
 
 ```{python}
-prior_alpha = np.array([1, 1, 200])
 posterior_alpha = prior_alpha + alpha
 
 df = create_marginal_dirichlet_pdf_df(posterior_alpha, labels)
@@ -228,14 +234,6 @@ I mean look at it! Don't even argue! It's so obvious!
 
 Other observations would be more ambiguous and open to argument---but that's why we're
 assigning probabilities, not certainties---to the possible observations on the table.
-
-The Bouma sequence example actually points to a big problem in this simple
-points-scoring approach---it misses the
-[*gestalt*](https://en.wikipedia.org/wiki/Gestalt_psychology) of combined observations.
-The Bouma sequence is strongly diagnostic because it is the *sequence of multiple
-ordered observations*, which on their own would not be nearly as powerful. I'll have to
-think about how to deal with this better, but for now will proceed with the simple point
-scoring method.
 
 To get started with scoring, I asked Claude for a list of observations and their
 associated $\alpha$ scores under the 3 interpretations:
@@ -372,12 +370,20 @@ It looks like a great list to me, but I'm not much of a geologist anymore. In th
 world these $\alpha$ scores would have to be calibrated somehow, whether its through
 expert option or with some kind of data model.
 
+One caveat, though. The Bouma sequence example points to a big problem in this simple
+points-scoring approach---it misses the
+[*gestalt*](https://en.wikipedia.org/wiki/Gestalt_psychology) of combined observations.
+The Bouma sequence is strongly diagnostic because it is the *sequence of multiple
+ordered observations*, which on their own would not be nearly as powerful. I'll have to
+think about how to deal with this better, but for now will proceed with the simple point
+scoring method.
+
 ## In Action
 
 I don't have real examples to use, but let's consider a diligent field geologist's notes
 about an outcrop.
 
-Since Claude is already cooking, I've used it to dream up the details:
+Since Claude is already cooking, I've used it to dream up example:
 
 >FIELD NOTES - Station 15, Muddy Creek Section
 Date: June 15, 2024
@@ -469,12 +475,12 @@ interpretation of seismic data nearby that connects to this outcrop stratigraphi
 
 $$
 \begin{align}
-\alpha_{\text{geophysics}} = [1, 250, 1]
+\alpha_{\text{geophysics}} = [1, 200, 1]
 \end{align}
 $$
 
 ```{python}
-new_alpha = np.array(alpha_obs) + np.array([1, 500, 1])
+new_alpha = np.array(alpha_obs) + np.array([1, 200, 1])
 df = create_marginal_dirichlet_pdf_df(new_alpha, labels)
 
 chart = plot_dirichlet_pdf(
@@ -484,17 +490,28 @@ chart = plot_dirichlet_pdf(
 chart.show()
 ```
 
-Again, it wouldn't be easy to calibrate these $\alpha$ values as they are encoding
-subjective beliefs about strength of evidence under different interpretations.
+Again, it wouldn't be easy to calibrate these $\alpha$ values, because they are encoding
+subjective beliefs about the strength of evidence under different interpretations. But
+at least we can say that we have considered the geophysicist's viewpoint and updated our
+beliefs accordingly.
 
 # Problems
 
 The biggest problems I see with this approach are:
 
 1. The subjectivity of the $\alpha$ parameter, in priors and point scoring
-2. The treating of observations in isolation, instead of considering how they interact
+2. The treating of observations in isolation, instead of considering their context and
+   how they interact
 3. The bloody huge table of depositional environments, observations and $\alpha$ scores
-   that would be required to actually use it.
+   that would be required to actually use it
+4. Depositional environments evolve---there should be a way of capturing a changing
+   interpretation through a sedimentary succession
+
+To point 4, I think taking a rolling sum over observational data could work here. If the
+field geologist tabulates observations and their depths, that data could be used to
+generate a rolling distribution of interpretations by summing the alphas associated with
+observations over the rolling window. This would turn the model into a kind of
+[Dirichlet process](https://en.wikipedia.org/wiki/Dirichlet_process).
 
 On point 3, it might be practical to generate these tables "ad hoc" based on a limited
 number of possibilities and observations, rather than have one terrifying master table
@@ -562,15 +579,39 @@ With something like this, the total $\alpha$ would be calculated using an algori
 takes into account both the observation node scores as well as the connection strength
 between them.
 
-So you see... it's a simple matter of setting all those alpha scores for every
-depositional environment, all the connections between observations, and all the edge
-weights of those connections! Why aren't people doing this already?
+A directed graph would also allow the ability to capture the sequencing of observations.
+A pattern matching algorithm could find subgraphs that belong to these kind of compound
+observations and incorporate them into the $\alpha$ scores. Anyway, this is all just
+words, I don't have the solution.
+
+So you see... it's a simple matter of setting all the alpha scores for every
+observation, for every depositional environment, all the connections between those
+observations, and all the edge weights of those connections! Why aren't people doing
+this already?
 
 # Conclusion
 
-Regardless of some big problems with implementing this approach, I think it shows enough
-promise that, if I was working on these sorts of problems in my day-to-day, I would try
-to flesh it out in more detail. 
+Regardless of some big challenges with implementation, I think this approach shows
+enough promise that if I was working on these sorts of problems in my day-to-day, I
+would flesh it out in more detail. 
 
+I think LLMs make things that might seem totally impractical now more feasible. Insofar
+as geological interpretation is an associative language game, LLMs are already far
+better at it than any human. Insofar as it isn't, and actually requires a causal model
+of the systems involved, LLMs probably aren't there yet, and hopefully never will be (so
+us humans have something to do in the future). Working together, an LLM agent that can
+reason about these observations and access the model to run the numbers could create a
+collaborative expert system for geologists to use that would have been science fiction
+just a few years ago.
 
+I should point out that this process is applicable outside of geology. It can be applied
+to any argument over discrete hypotheses---you just associate the points people make in
+support of the options with numbers and then update the distribution over them
+accordingly. It's essentially a pros and cons list for nerds. So, next time you're in an
+heated political argument at the dinner table, politely request an $\alpha$ vector from
+your conversation partners and allocate probabilities. I'm sure it will work out great.
+The future is so bright!
 
+I might follow this up with another post if some more ideas hit me.
+
+Thanks for reading.
