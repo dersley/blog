@@ -19,7 +19,7 @@ PLOT_HEIGHT = 250
 ```
 
 I moved to Melbourne last year, which, along with being a questionable career choice,
-turned an already troubling dependence on caffeine into a behavioural disorder. 
+turned an already troubling dependence on caffeine into a behavioural disorder.
 
 I bought a Nespresso machine, telling myself I would save money on coffee. Now, with the
 help of my Nespresso machine I have more than doubled my coffee consumption. The coffee
@@ -70,8 +70,20 @@ def create_date_array(start_date: datetime, num_months: int):
 def annual_to_monthly_rate(annual_rate: float) -> float:
     return (1 + annual_rate) ** (1 / 12) - 1
 
+def calculate_compound_returns(investments: np.ndarray, annual_rate: float) -> np.ndarray:
+    num_months = len(investments)
+    monthly_return = annual_to_monthly_rate(annual_rate)
+    returns = np.zeros(num_months)
+
+    for i in range(num_months):
+        months_invested = np.arange(num_months - i)
+        returns[i:] += investments[i] * (1 + monthly_return) ** months_invested
+
+    return returns
+
+
 YEARS = 18
-ANNUAL_RETURN = 0.06
+ANNUAL_RATE = 0.08
 
 num_months = YEARS * 12
 months = np.arange(num_months)
@@ -80,19 +92,21 @@ dates = create_date_array(datetime.today(), num_months=num_months)
 investing = np.full_like(dates, COFFEE_COST * 30).astype(float)
 spending = -1 * investing
 
-monthly_return = annual_to_monthly_rate(ANNUAL_RETURN)
-returns = investing * np.exp(monthly_return * months)
+returns = calculate_compound_returns(
+    investments=investing,
+    annual_rate=ANNUAL_RATE
+)
 
 df = pd.DataFrame({
     "Date": dates,
     "Spending": np.cumsum(spending),
     "Investing": np.cumsum(investing),
-    "Returns": np.cumsum(returns)
+    "Returns": returns - np.cumsum(investing)
 })
 flat_df = df.melt(
     id_vars=["Date"], 
     var_name="Case", 
-    value_name="Balance ($)"
+    value_name="$"
 )
 ```
 
@@ -102,11 +116,17 @@ chart = (
     .mark_area(opacity=0.8)
     .encode(
         alt.X("Date:T"),
-        alt.Y("Balance ($):Q"),
+        alt.Y("$:Q"),
         alt.Color(
             "Case:N",
             legend=alt.Legend(orient="top-left")
         ),
+        tooltip=[
+            alt.Tooltip("Date:T", title="Date"),
+            alt.Tooltip("Balance ($):Q", title="Amount", format="$,.2f"),
+            alt.Tooltip("Case:N", title="Case")
+        ],
+        order=alt.Order("Case:N")
     )
     .properties(
         height=PLOT_HEIGHT,
