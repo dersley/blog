@@ -3,7 +3,7 @@ title: How Much is a Coffee Worth to Me?
 subtitle: A masochistic exploration of personal finance
 author: "Nicholas Dorsch"
 date: today
-categories: [code, finance]
+categories: [stupid, finance, code]
 ---
 
 ```{python}
@@ -14,6 +14,7 @@ import altair as alt
 from datetime import datetime
 
 alt.theme.enable("dark")
+alt.data_transformers.disable_max_rows()
 PLOT_WIDTH = "container"
 PLOT_HEIGHT = 250
 ```
@@ -21,13 +22,13 @@ PLOT_HEIGHT = 250
 I moved to Melbourne last year, which, along with being a questionable career choice,
 turned an already troubling dependence on caffeine into a behavioural disorder.
 
-I bought a Nespresso machine, telling myself I would save money on coffee. It has been a
-huge success. Now, with the help of my Nespresso machine I have more than doubled my
-coffee consumption. The coffee pod coffee doesn't count, you see. Yes I'll come down for
-a coffee, I haven't had mine yet.
+I bought a Nespresso machine---telling myself I would save money on coffee---and it has
+been a huge success. Now, with the help of my Nespresso machine I have *more than
+doubled* my coffee consumption. The coffee pod coffee doesn't count, you see. Yes I'll
+come down for a coffee, I haven't had mine yet.
 
 This leads me to wonder how much of my family's future I am eroding to bean-dust, every
-time I head downstairs for another *medium latte, thanks*---an absent droning sound I
+time I head downstairs for another *medium latte, thanks*---the absent droning sound I
 make every morning between the hours of 9 and 10 am. Each *milky-upper* is costing me
 $6. So assuming I work 250 days in a year... let's see now:
 
@@ -42,25 +43,25 @@ It's $`{python} annual_cost`. You can check the code if you want to make sure I 
 that.
 
 I'm not *devastated* by that number---it's not a small amount, but neither is it enough
-to send my first born to school---and perhaps a less masochstic person would leave the
+to send my first born to school---and perhaps a less masochistic person would leave the
 matter there... but it does beg the question of what I might be doing with that $1500 a
 year if I wasn't spending it on *morning browns for morning frowns*.
 
 # Opportunity Cost, and Futures Lost...
 
-So I know what you're thinking, the obvious thing to do here is run a forecasted
-investment strategy using a geometric brownian motion stochastic model of returns based
-on the past 20 years of ASX market data. Instead of $6 a day for *cofvefe*, the model
-will invest into an index fund. Then, after 20 years, we'll see how Nick the *coffee
-dribbler* is doing, compared to Nick the *slightly more financially responsible* adult.
+To estimate at how much this behaviour is costing me, I'll put together a model that
+compares some different "strategies":
+
+1. Nick buys a coffee every day
+2. Nick invests the cost of a coffee every day into the market, instead
+
+After 20 years, we'll see how Nick the *coffee dribbler* is doing, compared to Nick the
+*slightly more financially responsible investor*.
 
 ## Basic Model
 
-Before we get all trigger happy with a stochastic model, let's have a look at how this
-strategy performs assuming an 8% annual return on the market.
-
-Because it's not far off from the truth, I'll just assume I buy one coffee a day for
-simplicity.
+Before things get more complicated, let's have a look at how these strategies perform
+assuming an 8% annual return on the market:
 
 ```{python}
 def create_date_array(start_date: datetime, num_months: int):
@@ -71,7 +72,10 @@ def create_date_array(start_date: datetime, num_months: int):
 def annual_to_monthly_rate(annual_rate: float) -> float:
     return (1 + annual_rate) ** (1 / 12) - 1
 
-def calculate_compound_returns(investments: np.ndarray, annual_rate: float) -> np.ndarray:
+def calculate_compound_returns(
+        investments: np.ndarray, 
+        annual_rate: float
+) -> np.ndarray:
     num_months = len(investments)
     monthly_return = annual_to_monthly_rate(annual_rate)
     returns = np.zeros(num_months)
@@ -108,15 +112,13 @@ flat_df = df.melt(
     var_name="Case", 
     value_name="$"
 )
-
-df.tail()
 ```
 
 ```{python}
 def plot_balance_area_chart(df: pd.DataFrame, title: str):
     return (
         alt.Chart(df)
-        .mark_area(opacity=0.8)
+        .mark_area(opacity=0.75)
         .encode(
             alt.X("Date:T", title=""),
             alt.Y("$:Q"),
@@ -149,16 +151,20 @@ total_gains = int(df.iloc[-1]["Investing"] + df.iloc[-1]["Returns"])
 total_losses = int(df.iloc[-1]["Coffee"])
 ```
 
-Unless I've screwed up the maths here things are already looking very grim. Nick the
+Unless I've screwed up the maths here, things are already looking very grim. Nick the
 dribbler is down $`{python} -total_losses` in `{python} YEARS` years, whereas Nick the
-adult is giving his kid a very nice $`{python} total_gains` graduation bonus.
+investor is giving his kid a very nice $`{python} total_gains` graduation bonus.
 
-Ok, but what about inflation, and the time value of money, and smart things like that.
+### Devaluing the Future
+
+*Ok, but what about inflation, and the time value of money, and all that finance stuff?*
+asks Nick the dribbler, pretending he isn't an idiot.
+
 Well the *time* value of money is a bit of a flawed concept when the *present* money is
-being spent on hot milk that will both cool down and expire in a matter of days, but
-here goes.
+being spent on hot milk that will cool down in minutes and expire in a matter of days,
+but let's see. 
 
-Assuming 2.5% inflation annually, and a discount rate of 10%, which look like this:
+Assuming 2.5% inflation annually, and a discount rate of 13.5%, which look like this:
 
 ```{python}
 def create_exponential_curve(
@@ -168,45 +174,53 @@ def create_exponential_curve(
     monthly_rate = annual_to_monthly_rate(annual_rate)
     return np.exp(months * monthly_rate)
 
-DISCOUNT_RATE = -0.1
+
+DISCOUNT_RATE = -0.135
 INFLATION_RATE = 0.025
 
 discount_curve = create_exponential_curve(months, DISCOUNT_RATE)
 inflation_curve = create_exponential_curve(months, INFLATION_RATE)
 
-chart = (
-    alt.Chart(
-        pd.DataFrame({
-            "Date": dates,
-            "Inflation": inflation_curve,
-            "Discount": discount_curve,
-            "Net": inflation_curve * discount_curve
-        })
-        .melt(
-            id_vars=["Date"], 
-            var_name="Curve",
-            value_name="Factor"
+def plot_factor_curves(discount_curve, inflation_curve) -> alt.Chart:
+    return (
+        alt.Chart(
+            pd.DataFrame({
+                "Date": dates,
+                "Inflation": inflation_curve,
+                "Discount": discount_curve,
+                "Net Adjustment": inflation_curve * discount_curve
+            })
+            .melt(
+                id_vars=["Date"], 
+                var_name="Curve",
+                value_name="Factor"
+            )
+        )
+        .mark_line()
+        .encode(
+            alt.X("Date:T"),
+            alt.Y("Factor:Q"),
+            alt.Color(
+                "Curve:N",
+                legend=alt.Legend(orient="top-left"),
+            ),
+            tooltip=[
+                alt.Tooltip("Date:T", title=""),
+                alt.Tooltip("Factor:Q", format=".3f"),
+                alt.Tooltip("Curve:N", title="")
+            ],
+        )
+        .properties(
+            height=PLOT_HEIGHT,
+            width=PLOT_WIDTH
         )
     )
-    .mark_line()
-    .encode(
-        alt.X("Date:T"),
-        alt.Y("Factor:Q"),
-        alt.Color(
-            "Curve:N",
-            legend=alt.Legend(orient="top-left")
-        )
-    )
-    .properties(
-        height=PLOT_HEIGHT,
-        width=PLOT_WIDTH
-    )
-)
 
+chart = plot_factor_curves(discount_curve, inflation_curve)
 chart.show()
 ```
 
-... Nick's returns look like this:
+... Investor Nick's returns look like this:
 
 ```{python}
 discount_df = pd.DataFrame({
@@ -223,9 +237,187 @@ flat_discount_df = discount_df.melt(
 )
 
 chart = plot_balance_area_chart(
-    flat_discount_df, title="(Discounted): Comparison of Investing vs Coffee Drinking"
+    flat_discount_df, 
+    title="(Real, Discounted at 13.5%): Comparison of Investing vs Coffee Drinking"
+)
+chart.show()
+```
+
+So, how is a well-adjusted human supposed to interpret this finance-bro gobbledeegook?
+
+If *present* me values future dollars at a discount rate of 13.5%, I am basically
+claiming that money on the table today can be converted into a 13.5% return in a year,
+through my... savvy investing. 
+
+That means that *future* dollars are worth less to me (not worthless, *worth less*). The
+sooner I have those dollars, the sooner I can put them to work to make me that return.
+
+And compounding this out to `{python} YEARS` years from now implies that a dollar then
+is worth about 5% of its value to me today.
+
+This applies to dollars spent as well as dollars invested---the cost to my future is
+smaller when it is discounted.
+
+So what discount rate could justify Nick the dribbler's behaviour? Well, he isn't
+investing that money, which means he must really, *really* value that 3 minute mouth
+experience, which would imply a very aggressive discount rate, probably in excess of
+100%.
+
+```{python}
+discount_curve = create_exponential_curve(months, annual_rate=-1)
+
+chart = plot_factor_curves(discount_curve, inflation_curve)
+chart.show()
+```
+
+```{python}
+discount_df = pd.DataFrame({
+    "Date": dates,
+    "Coffee": np.cumsum(spending) * inflation_curve * discount_curve,
+    "Investing": np.cumsum(investing) * inflation_curve * discount_curve,
+    "Returns": (returns - np.cumsum(investing)) * inflation_curve * discount_curve,
+}).round(2)
+
+flat_discount_df = discount_df.melt(
+    id_vars=["Date"], 
+    var_name="Case", 
+    value_name="$"
+)
+
+chart = plot_balance_area_chart(
+    flat_discount_df, 
+    title="(Real, Discounted at 100%): Comparison of Investing vs Coffee Drinking"
+)
+chart.show()
+```
+
+So, any money beyond a year time horizon is worth *jack shit* to Nick the dribbler. He
+lives by the froth, dies by the froth, neglects his financial future by the froth. 
+
+Clearly this isn't rational, and realistically speaking I would expect an individual to
+have a discount rate of a little over some risk-free return---like treasury bonds at
+around 4.5%---up to around 9%, depending on their risk tolerance. Here's 6%:
+
+```{python}
+discount_curve = create_exponential_curve(months, annual_rate=-0.06)
+discount_df = pd.DataFrame({
+    "Date": dates,
+    "Coffee": np.cumsum(spending) * inflation_curve * discount_curve,
+    "Investing": np.cumsum(investing) * inflation_curve * discount_curve,
+    "Returns": (returns - np.cumsum(investing)) * inflation_curve * discount_curve,
+}).round(2)
+
+flat_discount_df = discount_df.melt(
+    id_vars=["Date"], 
+    var_name="Case", 
+    value_name="$"
+)
+
+chart = plot_balance_area_chart(
+    flat_discount_df, 
+    title="(Real, Discounted at 6%): Comparison of Investing vs Coffee Drinking"
 )
 chart.show()
 ```
 
 ## Stochastic Model
+
+*But you can't just assume a `{python} 100 * ANNUAL_RATE`% year on year return like
+that! Market performance isn't guaranteed!* protests Nick the dribbler, milk froth and
+steam spilling from his maw as if *Smaug* the dragon had recently left the Lonely
+Mountain, put on some weight and taken up residence in South Melbourne.
+
+And fair enough! From a risk perspective, it's worth examining what range of outcomes
+someone is exposed to when thinking about saving for the future. It's also not as
+daunting a task as it might first appear, especially if we can settle for relatively
+simple to implement price models.
+
+### Geometric Brownian Motion
+
+It turns out that you can cook up a particular stochastic forecast called a [Geometric
+Brownian Motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion) (GBM) model
+with a `numpy` magic spell:
+
+```{python}
+sims = 100
+annual_return = 0.08
+annual_volatility = 0.1
+initial_balance = COFFEE_COST
+
+def simulate_monthly_gbm(
+    annual_return: float,
+    annual_volatility: float,
+    initial_balance: float,
+    num_months: int,
+    sims: int = 100
+) -> np.ndarray:
+    monthly_return = annual_return / 12
+    monthly_volatility = annual_volatility * np.sqrt(1/12)
+
+    return initial_balance * (
+        np.exp(
+            np.cumsum(
+                np.random.normal(
+                    loc=monthly_return,
+                    scale=monthly_volatility,
+                    size=(num_months, sims)
+                ),
+                axis=0
+            )
+        )
+    )
+
+balance = simulate_monthly_gbm(
+    annual_return,
+    annual_volatility,
+    initial_balance=COFFEE_COST,
+    num_months=num_months,
+    sims=sims
+)
+```
+
+In words this is the exponentiated cumulative sum of log returns---***excumsumlogret***
+in the *Arraymancy Arcana*. 
+
+!["EXCUMSUUUMMLOGREEEEET"](media/harry-potter.gif)
+
+```{python}
+df = (
+    pd.concat([
+        pd.DataFrame({
+            'Date': dates,
+            'Balance': balance[:, i],
+            'Simulation': i
+        })
+        for i in range(sims)
+    ], 
+    ignore_index=True)
+)
+
+chart = (
+    alt.Chart(df)
+    .mark_line(
+        strokeWidth=1,
+        opacity=0.75
+    )
+    .encode(
+        alt.X('Date:T', title=""),
+        alt.Y(
+            'Balance:Q', 
+            title='Coffee Value ($)'
+        ),
+        color=alt.Color('Simulation:N', legend=None),
+    )
+    .properties(
+        title='GBM - Coffee Simulations',
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH,
+    )
+)
+
+chart.show()
+```
+
+When you hold out your coffee cup and say the magic word, many universes spout forth, in
+which the $`{python} COFFEE_COST` purchase of that coffee is instead invested into the
+market.
