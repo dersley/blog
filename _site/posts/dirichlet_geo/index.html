@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.39">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nicholas Dorsch">
-<meta name="dcterms.date" content="2025-07-07">
+<meta name="dcterms.date" content="2025-06-07">
 
 <title>Interpreting Depositional Environments with Bayes – dorschblog</title>
 <style>
@@ -71,10 +71,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d166b450ba5a8e9f7a0ab969bf6592c1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b1979137b66e9a03b70ee7400940daeb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-8cd7fb5638ff5aef6f194cfb78a49ea2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -207,7 +207,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">July 7, 2025</p>
+        <p class="date">June 7, 2025</p>
       </div>
     </div>
     
@@ -281,7 +281,7 @@ window.Quarto = {
 \]</span></p>
 <p>This equates to us saying that we think the Delta interpretation is most plausible, although the Turbidite interpretation is a possibility, while the Lake interpretation is implausible.</p>
 <p>That results in the following distribution:</p>
-<div id="f255cc19" class="cell" data-execution_count="2">
+<div id="3707a47f" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_marginal_dirichlet_pdf_df(</span>
@@ -357,23 +357,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed {
+  #altair-viz-f6b6f9e0b4254a14bb430694645d5e83.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed details,
-  #altair-viz-f5e150214ae842d7b1f4fadcebf10b69.vega-embed details summary {
+  #altair-viz-f6b6f9e0b4254a14bb430694645d5e83.vega-embed details,
+  #altair-viz-f6b6f9e0b4254a14bb430694645d5e83.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-f5e150214ae842d7b1f4fadcebf10b69"></div>
+<div id="altair-viz-f6b6f9e0b4254a14bb430694645d5e83"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-f5e150214ae842d7b1f4fadcebf10b69") {
-      outputDiv = document.getElementById("altair-viz-f5e150214ae842d7b1f4fadcebf10b69");
+    if (outputDiv.id !== "altair-viz-f6b6f9e0b4254a14bb430694645d5e83") {
+      outputDiv = document.getElementById("altair-viz-f6b6f9e0b4254a14bb430694645d5e83");
     }
 
     const paths = {
@@ -431,7 +431,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="incorporating-prior-information">Incorporating Prior Information</h2>
 <p>Let’s say despite our observations at this outcrop, we have strong indications nearby that we are standing in the middle of a lake deposit. Maybe the outcrop is an anomaly in an otherwise fairly confident interpretation.</p>
 <p>If we encode that prior as <span class="math inline">\(\alpha_{\text{prior}} = [1, 1, 50]\)</span>, it looks like this:</p>
-<div id="2af7acd2" class="cell" data-execution_count="3">
+<div id="e597c5ad" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>prior_alpha <span class="op">=</span> np.array([<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">50</span>])</span>
@@ -443,23 +443,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed {
+  #altair-viz-002024e3f2874b209b9dfc364cdcbf91.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed details,
-  #altair-viz-e4f22f8202104b12ab5b3196b95a46a4.vega-embed details summary {
+  #altair-viz-002024e3f2874b209b9dfc364cdcbf91.vega-embed details,
+  #altair-viz-002024e3f2874b209b9dfc364cdcbf91.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-e4f22f8202104b12ab5b3196b95a46a4"></div>
+<div id="altair-viz-002024e3f2874b209b9dfc364cdcbf91"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-e4f22f8202104b12ab5b3196b95a46a4") {
-      outputDiv = document.getElementById("altair-viz-e4f22f8202104b12ab5b3196b95a46a4");
+    if (outputDiv.id !== "altair-viz-002024e3f2874b209b9dfc364cdcbf91") {
+      outputDiv = document.getElementById("altair-viz-002024e3f2874b209b9dfc364cdcbf91");
     }
 
     const paths = {
@@ -519,7 +519,7 @@ window.Quarto = {
 \alpha_{\text{posterior}} &amp;= [21, 11, 52]
 \end{align}
 \]</span></p>
-<div id="91490a5a" class="cell" data-execution_count="4">
+<div id="763cc294" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>posterior_alpha <span class="op">=</span> prior_alpha <span class="op">+</span> alpha</span>
@@ -532,23 +532,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed {
+  #altair-viz-52bc71cc3bf344dab9abc4896e3abd49.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed details,
-  #altair-viz-2cb12aa212c049b78217f16297e955ec.vega-embed details summary {
+  #altair-viz-52bc71cc3bf344dab9abc4896e3abd49.vega-embed details,
+  #altair-viz-52bc71cc3bf344dab9abc4896e3abd49.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-2cb12aa212c049b78217f16297e955ec"></div>
+<div id="altair-viz-52bc71cc3bf344dab9abc4896e3abd49"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-2cb12aa212c049b78217f16297e955ec") {
-      outputDiv = document.getElementById("altair-viz-2cb12aa212c049b78217f16297e955ec");
+    if (outputDiv.id !== "altair-viz-52bc71cc3bf344dab9abc4896e3abd49") {
+      outputDiv = document.getElementById("altair-viz-52bc71cc3bf344dab9abc4896e3abd49");
     }
 
     const paths = {
@@ -617,7 +617,7 @@ window.Quarto = {
 <p>I mean look at it! Don’t even argue! It’s so obvious!</p>
 <p>Other observations would be more ambiguous and open to argument—but that’s why we’re assigning probabilities, not certainties—to the possible observations on the table.</p>
 <p>To get started with scoring, I asked Claude for a list of observations and their associated <span class="math inline">\(\alpha\)</span> scores under the 3 interpretations:</p>
-<div id="16fbc250" class="cell" data-execution_count="5">
+<div id="cc6f34c5" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe of sedimentological observations with alpha values</span></span>
@@ -746,7 +746,7 @@ window.Quarto = {
 <span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>obs_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="13">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -965,7 +965,7 @@ window.Quarto = {
 </blockquote>
 <p>Claude is… quite good at this.</p>
 <p>Wrapping this up into data, we can calculate the posterior <span class="math inline">\(\alpha\)</span> values using the previous table.</p>
-<div id="debb59af" class="cell" data-execution_count="6">
+<div id="8d9e6e12" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>field_observations <span class="op">=</span> {</span>
@@ -1002,7 +1002,7 @@ window.Quarto = {
 </details>
 </div>
 <p>And then plot it:</p>
-<div id="3b579d1c" class="cell" data-execution_count="7">
+<div id="016e26f8" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> create_marginal_dirichlet_pdf_df(alpha_obs, labels)</span>
@@ -1013,23 +1013,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed {
+  #altair-viz-0c70f887449845ad83afc8ab9bab11ce.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed details,
-  #altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6.vega-embed details summary {
+  #altair-viz-0c70f887449845ad83afc8ab9bab11ce.vega-embed details,
+  #altair-viz-0c70f887449845ad83afc8ab9bab11ce.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6"></div>
+<div id="altair-viz-0c70f887449845ad83afc8ab9bab11ce"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6") {
-      outputDiv = document.getElementById("altair-viz-f86f6a1868a04bd1b0dc4f75d5519db6");
+    if (outputDiv.id !== "altair-viz-0c70f887449845ad83afc8ab9bab11ce") {
+      outputDiv = document.getElementById("altair-viz-0c70f887449845ad83afc8ab9bab11ce");
     }
 
     const paths = {
@@ -1091,7 +1091,7 @@ window.Quarto = {
 \alpha_{\text{geophysics}} = [1, 200, 1]
 \end{align}
 \]</span></p>
-<div id="730dcfe1" class="cell" data-execution_count="8">
+<div id="eb370f5c" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>new_alpha <span class="op">=</span> np.array(alpha_obs) <span class="op">+</span> np.array([<span class="dv">1</span>, <span class="dv">200</span>, <span class="dv">1</span>])</span>
@@ -1106,23 +1106,23 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 
 <style>
-  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed {
+  #altair-viz-071dc217dd0a460388a5cb6143f7f433.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed details,
-  #altair-viz-10f67756dcb74d9fb1e24b9bde64f830.vega-embed details summary {
+  #altair-viz-071dc217dd0a460388a5cb6143f7f433.vega-embed details,
+  #altair-viz-071dc217dd0a460388a5cb6143f7f433.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-10f67756dcb74d9fb1e24b9bde64f830"></div>
+<div id="altair-viz-071dc217dd0a460388a5cb6143f7f433"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-10f67756dcb74d9fb1e24b9bde64f830") {
-      outputDiv = document.getElementById("altair-viz-10f67756dcb74d9fb1e24b9bde64f830");
+    if (outputDiv.id !== "altair-viz-071dc217dd0a460388a5cb6143f7f433") {
+      outputDiv = document.getElementById("altair-viz-071dc217dd0a460388a5cb6143f7f433");
     }
 
     const paths = {

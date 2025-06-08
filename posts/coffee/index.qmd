@@ -4,6 +4,7 @@ subtitle: A masochistic exploration of personal finance
 author: "Nicholas Dorsch"
 date: today
 categories: [stupid, finance, code]
+image: thumbnail.png
 ---
 
 ```{python}
