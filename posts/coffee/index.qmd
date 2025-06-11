@@ -56,7 +56,7 @@ year if I wasn't spending it on *morning browns for morning frowns*.
 # Opportunity Cost, and Futures Lost...
 
 To estimate at how much this behaviour is costing me, I'll put together a model that
-compares some different "strategies":
+compares two strategies:
 
 1. Nick buys a coffee every day
 2. Nick invests the cost of a coffee every day into the market, instead
@@ -166,7 +166,7 @@ investor is giving his kid a very nice $`{python} total_gains` graduation bonus.
 *Ok, but what about inflation, and the time value of money, and all that finance stuff?*
 asks Nick the dribbler, pretending he isn't an idiot.
 
-Well the *time* value of money is a bit of a flawed concept when the *present* money is
+Well the *time* value of money is a bit of a flimsy concept when the *present* money is
 being spent on hot milk that will cool down in minutes and expire in a matter of days,
 but let's see. 
 
@@ -249,7 +249,7 @@ chart = plot_balance_area_chart(
 chart.show()
 ```
 
-So, how is a well-adjusted human supposed to interpret this finance-bro gobbledeegook?
+...So what does that mean?
 
 If *present* me values future dollars at a discount rate of 13.5%, I am basically
 claiming that money on the table today can be converted into a 13.5% return in a year,
@@ -261,8 +261,8 @@ sooner I have those dollars, the sooner I can put them to work to make me that r
 And compounding this out to `{python} YEARS` years from now implies that a dollar then
 is worth about 5% of its value to me today.
 
-This applies to dollars spent as well as dollars invested---the cost to my future is
-smaller when it is discounted.
+This applies to dollars spent as well as dollars invested---future expenses are smaller
+when discounted too.
 
 So what discount rate could justify Nick the dribbler's behaviour? Well, he isn't
 investing that money, which means he must really, *really* value that 3 minute mouth
@@ -335,8 +335,8 @@ Mountain, put on some weight and taken up residence in South Melbourne.
 
 And fair enough! From a risk perspective it's worth examining what range of outcomes
 someone is exposed to when thinking about saving for the future. It's also not as
-daunting a task as it might first appear, especially if we settle for a relatively simple
-to implement price model.
+daunting a task as it might first appear, especially if we settle for a relatively
+simple to implement price model.
 
 First, we need data.
 
@@ -485,7 +485,7 @@ was seen in reality. Overall I give the model a:
 Now that we have a distribution, we can simulate forecasts from it.
 
 First, since the distribution is fitted to daily returns and our forecast will be
-monthly, a small adjustment is needed. 
+monthly, an adjustment is needed:
 
 ```{python}
 def convert_t_dist_to_monthly(t_dist, days_per_month=21):
@@ -536,7 +536,8 @@ balance = simulate_monthly_gbm(
 )
 ```
 
-In words this is the exponentiated cumulative sum of log returns, or ***excumsumlogret***.
+In words this is the exponentiated cumulative sum of log returns, or
+***excumsumlogret***.
 
 !["EXCUMSUUUMMLOGREEEEET"](media/harry-potter.gif)
 
@@ -576,7 +577,7 @@ chart = (
         )
     )
     .properties(
-        title='GBM - Final Coffee Value',
+        title='Final Coffee Value',
         height=PLOT_HEIGHT,
         width=PLOT_WIDTH,
     )
@@ -707,10 +708,13 @@ chart.show()
 
 percentiles = [1, 10, 50, 90, 99]
 
-df = pd.DataFrame({
-   "Nominal Returns": np.percentile(portfolio[-1, :], q=percentiles),
-   "Discounted Returns": np.percentile(discounted_portfolio[-1, :], q=percentiles)
-}, index=[f"P{100 - p}" for p in percentiles]).round()
+df = pd.DataFrame(
+    {
+       "Nominal Returns": np.percentile(portfolio[-1, :], q=percentiles),
+       "Discounted Returns": np.percentile(discounted_portfolio[-1, :], q=percentiles)
+    }, 
+    index=[f"P{100 - p}" for p in percentiles]
+).round()
 
 df.T
 ```
@@ -718,4 +722,37 @@ df.T
 So we don't know for sure how the market will perform over the next `{python} YEARS`
 years, but it looks like a good bet to drink less coffee and invest a bit more. 
 
+That feels like a very underwhelming conclusion, after all that effort.
 
+# Exposing Exposure
+
+Even though all models are wrong and every prediction is contingent on a set of
+assumptions and all that... I think the power of doing this is to stoke the imagination
+about what might be possible beyond the typical point estimate of *20.54% return over 10
+years*, especially when it comes to thinking about exposure---to risks as well as
+opportunities.
+
+Having a single prediction doesn't help you to think about the range of things that
+might happen, but a stochastic model like the simple forecast above does. Now you can
+think about how likely it is you'll lose all your money, or how likely it is that
+curbing your coffee habit will make you a millionaire, or anything in between. 
+
+And what about the consequences of that range of outcomes? The lower tail predictions of
+the model might have extremely dire consequences that lead you not to act, for fear of
+the repercussions. The upper tail might be so attractive that it becomes obvious that
+the exposure is worth the entry price, even if the "expectation" doesn't look that
+great. This kind of reasoning isn't possible without uncertainty quantification.
+
+The robustness of the model is always going to be a concern, but it seems to me a lot
+less flimsy than a single prediction. I'm not sure quantitative predictions about the
+future make much sense at all unless they quantify uncertainty somehow. Why draw a
+particular scenario out of a hat when there are an infinite set of others to choose
+from?
+
+This also makes stochastic models more dangerous in a sense---having a distribution as
+output might lead you or your colleagues to believe you've actually captured the
+possibilities objectively. You haven't. What you have is the formalized consequences of
+your chosen assumptions---in this case a basic representation of past behaviour of the
+market propagated into the future---and that can still be useful, but it's not the same
+as knowing what will actually happen. Point estimates don't carry that pretense, they're
+dumb but they're honest.
