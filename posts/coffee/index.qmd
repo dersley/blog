@@ -12,12 +12,17 @@ image: thumbnail.png
 import numpy as np
 import pandas as pd
 import altair as alt
+import scipy.stats as stats
 from datetime import datetime
+
+from src.plotting import stat_plots, finance_plots
 
 alt.theme.enable("dark")
 alt.data_transformers.disable_max_rows()
 PLOT_WIDTH = "container"
 PLOT_HEIGHT = 250
+
+np.random.seed(42)
 ```
 
 I moved to Melbourne last year, which, along with being a questionable career choice,
@@ -74,8 +79,8 @@ def annual_to_monthly_rate(annual_rate: float) -> float:
     return (1 + annual_rate) ** (1 / 12) - 1
 
 def calculate_compound_returns(
-        investments: np.ndarray, 
-        annual_rate: float
+    investments: np.ndarray, 
+    annual_rate: float
 ) -> np.ndarray:
     num_months = len(investments)
     monthly_return = annual_to_monthly_rate(annual_rate)
@@ -88,7 +93,7 @@ def calculate_compound_returns(
     return returns
 
 
-YEARS = 21
+YEARS = 20
 ANNUAL_RATE = 0.08
 
 num_months = YEARS * 12
@@ -248,7 +253,7 @@ So, how is a well-adjusted human supposed to interpret this finance-bro gobblede
 
 If *present* me values future dollars at a discount rate of 13.5%, I am basically
 claiming that money on the table today can be converted into a 13.5% return in a year,
-through my... savvy investing. 
+through my... savvy investing strategy. 
 
 That means that *future* dollars are worth less to me (not worthless, *worth less*). The
 sooner I have those dollars, the sooner I can put them to work to make me that return.
@@ -328,89 +333,35 @@ that! Market performance isn't guaranteed!* protests Nick the dribbler, milk fro
 steam spilling from his maw as if *Smaug* the dragon had recently left the Lonely
 Mountain, put on some weight and taken up residence in South Melbourne.
 
-And fair enough! From a risk perspective, it's worth examining what range of outcomes
+And fair enough! From a risk perspective it's worth examining what range of outcomes
 someone is exposed to when thinking about saving for the future. It's also not as
-daunting a task as it might first appear, especially if we can settle for relatively
-simple to implement price models.
+daunting a task as it might first appear, especially if we settle for a relatively simple
+to implement price model.
 
-### Geometric Brownian Motion
+First, we need data.
 
-It turns out that you can cook up a particular stochastic forecast called a [Geometric
-Brownian Motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion) (GBM) model
-with a `numpy` magic spell:
+### Historical Returns
 
-```{python}
-sims = 100
-annual_return = 0.08
-annual_volatility = 0.1
-initial_balance = COFFEE_COST
-
-def simulate_monthly_gbm(
-    annual_return: float,
-    annual_volatility: float,
-    initial_balance: float,
-    num_months: int,
-    sims: int = 100
-) -> np.ndarray:
-    monthly_return = annual_return / 12
-    monthly_volatility = annual_volatility * np.sqrt(1/12)
-
-    return initial_balance * (
-        np.exp(
-            np.cumsum(
-                np.random.normal(
-                    loc=monthly_return,
-                    scale=monthly_volatility,
-                    size=(num_months, sims)
-                ),
-                axis=0
-            )
-        )
-    )
-
-balance = simulate_monthly_gbm(
-    annual_return,
-    annual_volatility,
-    initial_balance=COFFEE_COST,
-    num_months=num_months,
-    sims=sims
-)
-```
-
-In words this is the exponentiated cumulative sum of log returns---***excumsumlogret***
-in the *Arraymancy Arcana*. 
-
-!["EXCUMSUUUMMLOGREEEEET"](media/harry-potter.gif)
+Here is the last 15 years of ASX200 market data:
 
 ```{python}
-df = (
-    pd.concat([
-        pd.DataFrame({
-            'Date': dates,
-            'Balance': balance[:, i],
-            'Simulation': i
-        })
-        for i in range(sims)
-    ], 
-    ignore_index=True)
+import yfinance as yf
+
+price_df = (
+    yf.Ticker("^AXJO")
+    .history(period="15y")
+    .reset_index()
 )
 
 chart = (
-    alt.Chart(df)
-    .mark_line(
-        strokeWidth=1,
-        opacity=0.75
-    )
+    alt.Chart(price_df)
+    .mark_line(color="red", strokeWidth=1)
     .encode(
-        alt.X('Date:T', title=""),
-        alt.Y(
-            'Balance:Q', 
-            title='Coffee Value ($)'
-        ),
-        color=alt.Color('Simulation:N', legend=None),
+        alt.X("Date:T"),
+        alt.Y("Close:Q")
     )
     .properties(
-        title='GBM - Coffee Simulations',
+        title='ASX 200 History',
         height=PLOT_HEIGHT,
         width=PLOT_WIDTH,
     )
@@ -419,6 +370,352 @@ chart = (
 chart.show()
 ```
 
+For our forecast, we'll need to transform this data into something a bit more
+convenient, the log returns, defined as:
+
+$$
+\begin{align}
+\ln R_t = \ln \frac{P_t}{P_{t-1}}
+\end{align}
+$$
+
+```{python}
+price_df["Returns"] = (
+    np.log(
+        price_df["Close"] / price_df["Close"].shift(1)
+    )
+)
+
+returns_chart = (
+    alt.Chart(price_df)
+    .mark_line(color="limegreen", strokeWidth=1)
+    .encode(
+        alt.X("Date:T"),
+        alt.Y("Returns:Q")
+    )
+    .properties(
+        title='ASX 200 Log Returns',
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH,
+    )
+)
+
+returns_chart.show()
+```
+
+Because we are more or less taking the derivative of price---the degree to which prices
+change day to day---we end up with a nice, relatively stationary signal of the market.
+Removing the time axis gives us a dataset that I can fit a distribution to:
+
+```{python}
+params = stats.norm.fit(price_df["Returns"].dropna())
+dist = stats.norm(*params)
+x_range = np.linspace(
+    price_df["Returns"].min(), 
+    price_df["Returns"].max(),
+    250
+)
+
+chart = stat_plots.hist_dist_plot(
+    price_df,
+    col="Returns",
+    scipy_dist=dist,
+    title="Normal Distribution Fitted to Returns",
+    hist_color="limegreen"
+)
+
+chart.show()
+```
+
+But the normal distribution used above is doing a pretty poor job of capturing the data. A
+Student's T distribution will better capture the tails:
+
+```{python}
+params = stats.t.fit(price_df["Returns"].dropna())
+dist = stats.t(*params)
+x_range = np.linspace(
+    price_df["Returns"].min(), 
+    price_df["Returns"].max(),
+    250
+)
+
+chart = stat_plots.hist_dist_plot(
+    price_df,
+    col="Returns",
+    scipy_dist=dist,
+    title="Student's T Distribution Fitted to Returns",
+    hist_color="limegreen"
+)
+
+chart.show()
+```
+
+At this point it looks like we have a good-enough fit, but it is worth plotting samples
+back on a time-axis so we can directly compare what our model produces to actual historical
+returns:
+
+```{python}
+sample_df = pd.DataFrame({
+    "Date": price_df["Date"],
+    "Simulated Returns": dist.rvs(size=len(price_df["Date"]))
+})
+
+sample_chart = (
+    alt.Chart(sample_df)
+    .mark_line(color="orange", strokeWidth=1)
+    .encode(
+        alt.X("Date:T"),
+        alt.Y("Simulated Returns:Q")
+    )
+)
+
+combined_chart = (sample_chart + returns_chart).resolve_axis(x="shared", y="shared")
+combined_chart.show()
+```
+
+... and it does *okay*. The elephant in the room is COVID-19. Independent samples from a
+distribution can't capture clustered periods of volatility like that. The samples are
+also a bit fuzzier in general---there is more volatility in the simulated market than
+was seen in reality. Overall I give the model a:
+
+![This could be my career catch phrase.](media/chernobyl-not-great.gif)
+
+### Geometric Brownian Motion
+
+Now that we have a distribution, we can simulate forecasts from it.
+
+First, since the distribution is fitted to daily returns and our forecast will be
+monthly, a small adjustment is needed. 
+
+```{python}
+def convert_t_dist_to_monthly(t_dist, days_per_month=21):
+    df, mu, sigma = t_dist.args[0], t_dist.args[1], t_dist.args[2]
+
+    # Monthly transformation
+    mu_monthly = days_per_month * mu
+    sigma_monthly = sigma * np.sqrt(days_per_month)
+
+    return stats.t(df=df, loc=mu_monthly, scale=sigma_monthly)
+
+monthly_dist = convert_t_dist_to_monthly(dist)
+```
+
+Right, now the fun stuff.
+
+It turns out that you can cook up a particular stochastic forecast called a [Geometric
+Brownian Motion](https://en.wikipedia.org/wiki/Geometric_Brownian_motion) (GBM) model
+quite easily with a `numpy` magic spell:
+
+```{python}
+sims = 1000
+initial_balance = COFFEE_COST
+
+def simulate_monthly_gbm(
+    monthly_returns_dist,
+    initial_balance: float,
+    num_months: int,
+    sims: int = 100
+) -> np.ndarray:
+
+    return initial_balance * (
+        np.exp(
+            np.cumsum(
+                monthly_returns_dist.rvs(
+                    size=(num_months, sims)
+                ),
+                axis=0
+            )
+        )
+    )
+
+balance = simulate_monthly_gbm(
+    monthly_dist,
+    initial_balance=COFFEE_COST,
+    num_months=num_months,
+    sims=sims
+)
+```
+
+In words this is the exponentiated cumulative sum of log returns, or ***excumsumlogret***.
+
+!["EXCUMSUUUMMLOGREEEEET"](media/harry-potter.gif)
+
+```{python}
+chart = finance_plots.simulated_portfolio_plot(
+    simulated_balance=balance,
+    dates=dates,
+    title="Coffee Simulations",
+    sims=100
+)
+
+chart.show()
+```
+
 When you hold out your coffee cup and say the magic word, many universes spout forth, in
 which the $`{python} COFFEE_COST` purchase of that coffee is instead invested into the
 market.
+
+Looking at the end point of all those universes `{python} YEARS` years from now, we get
+a distribution of that coffee's final value:
+
+```{python}
+df = pd.DataFrame({
+    "Sim": np.arange(sims),
+    "$": balance[-1, :]
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_bar()
+    .encode(
+        alt.X("$:Q", bin=alt.Bin(maxbins=250)),
+        alt.Y(
+            "count()",
+            title="",
+            axis=alt.Axis(labels=False, ticks=False, title=None),
+        )
+    )
+    .properties(
+        title='GBM - Final Coffee Value',
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH,
+    )
+)
+
+chart.show()
+```
+
+### Simulated Investments
+
+Now that we have a way of simulating forecasts, I can run the investing strategy
+(putting the price of a cup of coffee into the market each day) through the model to
+see how the portfolio might perform over the `{python} YEARS` year period.
+
+```{python}
+def simulate_compounded_returns(
+    investments: np.ndarray,
+    monthly_returns_dist,
+    num_months: int,
+) -> np.ndarray:
+
+    returns = np.exp(
+        monthly_returns_dist.rvs(size=(num_months, sims))
+    )
+
+    portfolio_values = np.zeros_like(returns)
+    for i in range(num_months):
+        # Initial investment
+        if i == 0:
+            portfolio_values[i] = investments[i] * returns[i]
+
+        # New investment + previously invested
+        else:
+            portfolio_values[i] = (
+                (portfolio_values[i-1] + investments[i]) * returns[i]
+            )
+
+    return portfolio_values
+
+portfolio = simulate_compounded_returns(
+    investments=investing,
+    monthly_returns_dist=monthly_dist,
+    num_months=num_months
+)
+
+```
+
+```{python}
+chart = finance_plots.simulated_portfolio_plot(
+    portfolio,
+    dates,
+    title="Simulated Investment Portfolio",
+    sims=100
+)
+
+chart.show()
+```
+
+```{python}
+df = pd.DataFrame({
+    "Sim": np.arange(sims),
+    "$": portfolio[-1, :]
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_bar()
+    .encode(
+        alt.X("$:Q", bin=alt.Bin(maxbins=250)),
+        alt.Y(
+            "count()",
+            title="",
+            axis=alt.Axis(labels=False, ticks=False, title=None),
+        )
+    )
+    .properties(
+        title='Final Portfolio Value',
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH,
+    )
+)
+
+chart.show()
+```
+
+And if we discount at the conservative rate of 6%:
+
+```{python}
+discounted_portfolio = portfolio * discount_curve[:, np.newaxis]
+
+chart = finance_plots.simulated_portfolio_plot(
+    discounted_portfolio,
+    dates,
+    title="(Discounted) Simulated Investment Portfolio",
+    sims=100
+)
+chart.show()
+```
+
+```{python}
+df = pd.DataFrame({
+    "Sim": np.arange(sims),
+    "$": discounted_portfolio[-1, :]
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_bar()
+    .encode(
+        alt.X("$:Q", bin=alt.Bin(maxbins=250)),
+        alt.Y(
+            "count()",
+            title="",
+            axis=alt.Axis(labels=False, ticks=False, title=None),
+        )
+    )
+    .properties(
+        title='(Discounted) Final Portfolio Value',
+        height=PLOT_HEIGHT,
+        width=PLOT_WIDTH,
+    )
+)
+
+chart.show()
+```
+
+```{python}
+
+percentiles = [1, 10, 50, 90, 99]
+
+df = pd.DataFrame({
+   "Nominal Returns": np.percentile(portfolio[-1, :], q=percentiles),
+   "Discounted Returns": np.percentile(discounted_portfolio[-1, :], q=percentiles)
+}, index=[f"P{100 - p}" for p in percentiles]).round()
+
+df.T
+```
+
+So we don't know for sure how the market will perform over the next `{python} YEARS`
+years, but it looks like a good bet to drink less coffee and invest a bit more. 
+
+
