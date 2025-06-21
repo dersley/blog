@@ -2,8 +2,8 @@
 title: Interpreting Depositional Environments with Bayes
 subtitle: Modelling interpretation uncertainty with the Dirichlet distribution
 author: "Nicholas Dorsch"
-date: 2025-07-07
-categories: [code, statistics, geology]
+date: 2025-06-07
+categories: [coding, statistics, geology]
 ---
 
 ```{python}

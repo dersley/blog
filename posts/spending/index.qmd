@@ -3,7 +3,7 @@ title: "Amy, Brett and the Cost of Living Crisis"
 subtitle: "A Zero-Inflated Model of Household Spending"
 author: "Nicholas Dorsch"
 date: "2025-06-02"
-categories: [code, statistics]
+categories: [coding, statistics]
 image: thumbnail.png
 ---
 

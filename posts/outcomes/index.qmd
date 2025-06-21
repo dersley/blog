@@ -2,7 +2,7 @@
 title: "Correlated Outcomes"
 author: "Nicholas Dorsch"
 date: 2025-06-01
-categories: [code, statistics]
+categories: [coding, statistics]
 image: thumbnail.png
 ---
 
