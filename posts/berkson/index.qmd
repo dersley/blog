@@ -1,0 +1,315 @@
+---
+title: Berkson's Bomb
+subtitle: How hidden selection effects might be shattering our shared world model
+author: "Nicholas Dorsch"
+date: today
+categories: [opinion]
+image: thumbnail.png
+---
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import altair as alt
+from scipy.special import expit as invlogit
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 350
+```
+
+I first learned about [Berkson's
+paradox](https://en.wikipedia.org/wiki/Berkson%27s_paradox) in Richard McElreath's
+fantastic Statistical Rethinking [series](https://www.youtube.com/watch?v=mBEA7PKDmiY),
+and it must have really lodged itself into my brainstem, because I still think about it
+all the time. 
+
+Broadly speaking the paradox is that spurious (ie non causal) associations can be
+induced by biased sampling. The effect is highly unintuitive, but I think the following
+example (flawed as it may be) is useful:
+
+## Nice Guys and Hot Jerks
+
+This example is quite reductive and even mean-spirited, but for me it's intuitive enough
+that the paradox becomes clear, so I often use it anyway.
+
+Imagine you are dating a lot, and notice that attractive dates seem less friendly,
+whereas the friendliest dates tend to be the least attractive. This may be a very real
+negative association in your dating pool. If we imagined that we had good metrics of
+attractiveness and friendliness, analyzing them might yield the following pattern:
+
+```{python}
+n = 1000
+
+x = np.random.normal(size=n)
+y = np.random.normal(size=n)
+z = x + y
+
+lower = -1
+upper = 1
+
+conditions = [
+    z < lower,
+    (z >= lower) & (z < upper),
+    z >= upper
+]
+choices = [
+    "Below your standards",
+    "Dating you",
+    "Out of your league"
+]
+
+group = np.select(conditions, choices, default="")
+
+attractiveness = invlogit(x)
+friendliness = invlogit(y)
+
+filtered_df = pd.DataFrame({
+    "Attractiveness": attractiveness[group == "Dating you"],
+    "Friendliness": friendliness[group == "Dating you"],
+})
+
+chart = (
+    alt.Chart(filtered_df)
+    .mark_point()
+    .encode(
+        alt.X("Attractiveness:Q"),
+        alt.Y("Friendliness:Q"),
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+So your instincts were correct! There's a strong negative association between the dates'
+friendliness and attractiveness. We can theorize why---maybe attractive people learn
+that they don't need to be nice to get what they want, whereas unattractive people are
+always overcompensating... Intuitive! Real! Causal!
+
+But it's *not* real. It isn't possible to see the full sampling distribution in real
+life, but luckily this isn't real life and you aren't going on thousands of dates, I'm
+just simulating them with code:
+
+
+```{python}
+df = pd.DataFrame({
+    "Attractiveness": attractiveness,
+    "Friendliness": friendliness,
+    "Group": group
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("Attractiveness:Q"),
+        alt.Y("Friendliness:Q"),
+        alt.Color(
+            "Group:N",
+            legend=alt.Legend(orient="top-right")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+In reality there's no connection between friendliness and attractiveness, the
+association is caused by *you*. You are selecting, and are being selected for. You
+aren't dating all the unattractive, unfriendly people, and the super attractive, super
+friendly people aren't dating you! So the band in the middle that you date are the
+attractive jerks and the ugly legends. But it's not causal! It's a sampling artefact.
+It's not real!
+
+$$
+\begin{align}
+A &\not\rightarrow F \\
+A \rightarrow &\text{YOU} \leftarrow F
+\end{align}
+$$
+
+And what's worse is, the more dates you go on, the *more convinced* you would be of this
+association. More information is *bad*, it solidifies an incorrect causal model of the
+world. Without knowledge of the paradox, you would become more and more convinced that
+your dating experience is just how the world is. 
+
+But it's not. You haven't gained an insight on people that you pass on the street---in
+fact you've gained a counterinsight---your worldview is warped by the information
+exposed to you by dating.
+
+In my view this is by far the most intuitive example of the effect---most are way harder
+to spot.
+
+And make no mistake, this effect is everywhere. It plagues science and politics, and I
+think the modern internet is making it worse.
+
+## In Everyday Life 
+
+In my view the effect is especially pernicious because:
+
+1. It is common
+2. It is usually invisible to us
+3. It reinforces a false causal model of the world
+
+If it still seems isolated to contrived examples, maybe it is helpful to zoom out a bit. 
+
+The key here is *selection*---the effect is induced by the process of information
+collection. Any information that you consider in your day-to-day, that you use to make
+sense of the world, is subject to selection by you, your media, your government, and
+more recently AI algorithms that are tuned to your patterns of consumption.
+
+That means the news you see, the images and videos that show up on your feed, the
+opinions you hear, have all passed through a filter. You're seeing your dating pool of
+the world's information---you're sampling your narrow band and forming associations from
+it.
+
+## Is it Newsworthy?
+
+Imagine you have a god's eye view of the world and you're tracking claims made by people
+in terms of how "engaging", and how "factual" they are. Let's be generous and assume
+there is no relationship between the two.
+
+These claims can be anything---assassination attempts... dreams I had last night... what
+your neighbour's dog ate for breakfast three weeks ago... wars breaking out. They may be
+ridiculous, plausible, exciting or boring.
+
+Given some selection from the algorithm, optimized for an individual's engagement, we
+can imagine it is more likely a person will be exposed to claims if they are some
+combination of engaging and factual. Let's say the probability an individual will see it
+is some function of both.
+
+```{python}
+n = 5000
+
+x = np.random.normal(size=n)
+y = np.random.normal(size=n)
+p = invlogit(10*(2*x + y) - 15)
+
+on_feed = np.where(
+    np.random.binomial(n=1, p=p, size=n),
+    True, False
+)
+
+df = pd.DataFrame({
+    "Engaging": x,
+    "Factual": y,
+    "On Feed": on_feed
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("Engaging:Q"),
+        alt.Y("Factual:Q"),
+        alt.Color(
+            "On Feed:N",
+            legend=alt.Legend(orient="top-right")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+This individual might have the impression that there is a negative association between
+factfulness and engagement. Outrageous claims on the news are associated with bullshit,
+whereas the boring stuff is probably true...
+
+It gets more interesting if we consider that different people---liberals and
+conservatives, for example---are engaged by different things.
+
+Here's how the feeds of liberals and conservatives look, assuming their engagement is
+negatively correlated.
+
+```{python}
+corr_matrix = np.array([
+    [1.0, -1.0],
+    [-1.0, 1.0]
+])
+engagement = np.random.multivariate_normal(
+    mean=[0, 0], 
+    cov=corr_matrix, 
+    size=n
+)
+
+libs = engagement[:, 0]
+cons = engagement[:, 1]
+
+p_libs = invlogit(10*(2*libs + y) - 15)
+p_cons = invlogit(10*(2*cons + y) - 15)
+
+libs_feed = np.where(
+    np.random.binomial(n=1, p=p_libs, size=n),
+    True, False
+)
+cons_feed = np.where(
+    np.random.binomial(n=1, p=p_cons, size=n),
+    True, False
+)
+
+conditions = [
+    libs_feed & cons_feed,    # Both feeds
+    libs_feed & ~cons_feed,   # Liberal feed only  
+    ~libs_feed & cons_feed,   # Conservative feed only
+]
+choices = ["Both", "Libs Only", "Cons Only"]
+feeds = np.select(conditions, choices, default="Neither")
+
+df = pd.DataFrame({
+    "Engaging": cons,
+    "Factual": y,
+    "Feed": feeds
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("Engaging:Q"),
+        alt.Y("Factual:Q"),
+        alt.Color(
+            "Feed:N",
+            legend=alt.Legend(orient="top-right")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+The liberals and conservatives live in the same universe, so their factual axes are
+shared, but the engagement axes are mirrored. The left wing of the x axis appeals to the
+liberal brain, and the right wing the conservative brain.
+
+There is a sliver of sanity in the middle of the distribution where conservatives and
+liberals are engaging with the same information, probably about budgets and laws and
+boring stuff like that. But there is a lot of information being lost across the
+political divide.
+
+And the perception from someone about the other side might be that they are all nuts...
+I mean look at all the crazy stuff they are talking about! You'd never come across these
+things unless you peaked across the divide to see what was happening. And when you do,
+you're shocked at the wrongness of it all, your suspicions about the other side are all
+confirmed. We're being served different diets and you haven't been weaned onto theirs. 
+
+
+
+
