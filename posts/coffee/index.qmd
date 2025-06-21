@@ -828,6 +828,6 @@ how I want to live my life, *not* a quantitative, value maximizing rational one.
 So modelling things is useful, but decision making is a lot more nuanced and human than
 numerical modelling and decision theory would like to make it.
 
-... I should probably cut down, though.
+... I probably should cut down, though.
 
 Thanks for reading.
