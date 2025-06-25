@@ -33,7 +33,7 @@ You hear a cough, some paper shuffling over the intercom.
 > *"Sorry, let's start again... Explain this data."*
 
 You sit up, waiting for your eyes to adjust to the light. You rub them and look to the
-far wall, there's a projector screen hanging from it, showing some data points:
+far wall, there's a projector screen hanging from it showing some data points:
 
 ```{python}
 #| echo: false
@@ -244,8 +244,8 @@ the following example does:
 This example is reductive and maybe a bit mean-spirited, but for me it's salient enough
 that the paradox becomes clear, so I often use it anyway.
 
-Imagine you are dating a lot and you notice that attractive dates seem less friendly,
-while friendlier dates are less attractive. This may be a real pattern in your dating
+Imagine you are dating a lot and you notice that attractive people seem less friendly,
+while friendlier people are less attractive. This may be a real pattern in your dating
 pool. If we imagined that we had good metrics of attractiveness and friendliness,
 analyzing them might yield something like this:
 
@@ -342,7 +342,7 @@ there, but it's not causal. It's a sampling artifact. It's not real!
 
 $$
 \begin{align}
-A &\not\rightarrow F \\
+A \not\rightarrow F \quad &and \quad A \not\leftarrow F \\
 A \rightarrow &\text{YOU} \leftarrow F
 \end{align}
 $$
@@ -420,16 +420,16 @@ This is nonsense, but I think the Berkson paradox reinforces the illusion.
 In many environments we grow up in, we are unwitting participants in a selection
 process. Some combination of socioeconomic factors will get you into a certain school.
 To enter a certain university degree maybe you need a combination of decent grades and
-extra curriculars. To get a job you have to meet whatever requirements the employer is
-looking for, and interview well. We're always jumping over hurdles to make progress in
-life, and the higher those hurdles are, the stronger the Berkson effect will be. 
+extra curriculars. To get a job you need to meet the employers' requirements, and
+interview well. We're constantly jumping over hurdles to make progress in life, and the
+higher those hurdles are, the stronger the Berkson effect will be. 
 
 All of these filters induce negative associations. Hot jerks, short free-throw
 specialists, smoking babies... maybe I'm not remembering that one right... But that's
 the pattern.
 
-The poor kid in an expensive school? Smart, on a scholarship, maybe. The dumbass sitting
-behind him copying his answers? Dad owns the school. 
+The kid with poor parents in an expensive school? Smart, on a scholarship, maybe. The
+dumbass sitting behind him copying his answers? Dad owns the school. 
 
 The friendly doctor? Nailed all the bed-manner stuff in medschool, but scraped by on
 grades, and now you're feeling unsure about the flu shot this season. Meanwhile the
@@ -452,14 +452,20 @@ causation, just selection.
 ![Are these Key Performance Indicators indicating performance to you? Huh!? Show me
 the fuckin' quarterlies.](media/joe-pesci.gif)
 
+This effect might create the illusion of frontiers in all these attributes, like we're
+fitting into niches in an ecosystem and evolution has granted us some limited number of
+points to solve for the environment and survive. Much more often we're seeing a
+filtering effect, not an efficient frontier. The patterns might be intuitive to us, but
+we misattribute them.
+
 ## Intuitions
 
 This leads me to another point. In abstract examples, Berkson's paradox is notoriously
 unintuitive to us. But I think if you place it into familiar, social contexts---where
 our brains have evolved to track many complex interactions in a social network---there's
-some intuition there. If all those examples above felt kind of... easy to parse, I think
-it's because of that latent intuition we have about how human hierarchies work, whereas
-the smoking mommy-babies example is totally baffling to us.
+intuition there. If all those examples above felt kind of... easy to parse, I think it's
+because of that latent intuition we have about how human hierarchies work, whereas the
+smoking mommy-babies example is totally baffling to us.
 
 Test your intuitions: You wake up tied to a chair in a warehouse. You owe a lot of
 money to the most ruthless gang in town. These two walk in:
@@ -467,7 +473,7 @@ money to the most ruthless gang in town. These two walk in:
 ![I mean come on.](media/gary-v-tony-robbins.jpeg){width=350px}
 
 Are you seriously going to tell me that Tony Robbins is the scary one, here? The giant
-who has never had to do more than yawn conspicuously to command a room? 
+who has never had to do more than yawn conspicuously to command the room? 
 
 No. 
 
@@ -498,9 +504,9 @@ It might seem weird that I'm saying all these patterns are statistical mirages, 
 still treating them as real (well maybe not all of them, some are just jokes). Doesn't
 that mean I'm making the mistake I'm writing about?
 
-That's the thing... making predictions doesn't require a causal model. You could look
-out your window and think *the trees look angry today, I bet they're pushing the air
-around again...* and your prediction would be correct. You're an idiot, but it *is*
+But that's the thing... making predictions doesn't require a causal model. You could
+look out your window and think *the trees look angry today, I bet they're pushing the
+air around again...* and your prediction would be correct. You're an idiot, but it *is*
 windy outside.
 
 ![What's got them all worked up, this time? Someone calm the palms before they do some
@@ -523,13 +529,13 @@ The ladder has three rungs:
 2. Interventions - *What will happen when I do this?*
 3. Counterfactuals - *What would have happened if...*
 
-**Associations** say nothing about causation. *Correlation does not imply causation* as
-people often recite like the children of the corn. Plotting some points and seeing a
-relationship doesn't say anything about *why* it is there. The causes are not in the
-data.
+**Associations** are the weakest of the three, and say nothing about causation.
+*Correlation does not imply causation* as educated people often recite like the children
+of the corn. Plotting some points and seeing a relationship doesn't say anything about
+*why* it is there. The causes are not in the data.
 
-Berkson's paradox is an example of why you have to very careful with associations, but
-there are [many reasons](https://en.wikipedia.org/wiki/Confounding).
+Berkson's paradox is an example of why you you should be very careful with associations,
+but there are [many reasons](https://en.wikipedia.org/wiki/Confounding).
 
 Regardless of the hazards, you can still make predictions with them. If drownings and
 ice cream sales are correlated (because on hot days, people swim at the beach and eat ice
@@ -550,9 +556,9 @@ wind is not causal. *Something else is going on...*
 ![The next suspect...](media/tree-secrets.jpeg)
 
 This is taking an action, and anticipating a reaction. The light is on when the switch
-is up. The light is off when the switch is down. You smash the light, now it's dark, but
-the lightswitch stays up. You conclude that the light is not causing the lightswitch.
-Well done, you scienced.
+is up. The light is off when the switch is down. You smash the lightbulb, now it's dark,
+but the lightswitch doesn't move. You conclude that the precense of light is not causing
+the lightswitch to flick. Well done, you scienced.
 
 The Berkson examples fall apart here. If you give the scholarship kid's parents a
 billion dollars, the kid will still be smart. If you spike the short CEO's drink with
@@ -563,21 +569,19 @@ something, so don't.
 
 **Counterfactuals** are the most complex and require the highest level of causal
 understanding. Questions like: *what would have happened if this reagent was used
-instead?*, or *how would the war have looked without Pearl Harbor?*, or *would this
-patient have recovered if given a different treatment?* These questions demand that we
-not only understand the causal structure of the world, but also imagine how that
-structure would have unfolded under different conditions.
+instead?*, or *would this patient have recovered if given a different treatment?*, or
+*how would the war have progressed without Pearl Harbor?*
 
 This is a level above intervention because unlike simply asking *what happens next?*,
-counterfactuals require rewriting the history of what has already happened, under the
-conditions of things being different. Difficult!
+counterfactuals require rewriting the history of what has already happened, under new
+conditions. Difficult!
 
 Causal modelling is what allows you to unwind apparent paradoxes like the Berkson
 effect, and to allow for good inference in spite of them. Statistics is a bit... feeble
 without it. We don't want to swim in a sea of causeless associations, we want to figure
 out what the hell is going on.
 
-![The spirit of discovery.](media/magnets.gif)
+![He gets it.](media/magnets.gif)
 
 # Berkson In Everyday Life 
 
@@ -587,10 +591,10 @@ The Berkson paradox is especially tricky because:
 2. It's usually invisible to us
 3. It reinforces a false causal model of the world
 
-I think we're exposed to Berksons all the time in the modern information landscape. Any
-information that you consider in your day-to-day, that you use to make sense of the
-world, is subject to selection by your media, your government, and AI algorithms that
-are tuned to your patterns of engagement.
+I think we're exposed to Berksons all the time in modern life. Any information that you
+consider in your day-to-day, that you use to make sense of the world, is subject to
+selection by your media, your government, and AI algorithms that are tuned to your
+patterns of engagement.
 
 That means the news you see, the images and videos that show up on your feed, the
 opinions you hear, have all passed through a filter. You're seeing your dating pool of
@@ -600,8 +604,9 @@ brain while you scroll.
 
 So be cautious about your world model, don't let it calcify, and listen to statisticians
 who have done the work to unwind the causal shitstorm that plagues our
-information---*especially* if they are shit at explaining themselves and boring to
-listen to. Because if someone like that is getting airtime? That's a Berkson.
+information---*especially* if they are boring to listen to and terrible at explaining
+themselves... Because if someone like that is still engaging an audience? That's a
+Berkson.
 
 Thanks for reading.
 
