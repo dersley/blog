@@ -180,7 +180,7 @@ causing Y or the other way around!
 
 $X \rightarrow Y \quad or \quad X \leftarrow Y$
 
-Maybe that's his problem? You're pointing out an association, but you haven't explained
+Maybe that's his problem? You're pointing out a relationship, but you haven't explained
 what's causing it. Right!
 
 "I can't specify the causal relationship between X and Y because I lack any background
@@ -226,26 +226,27 @@ You hear a *click*.
 I first learned about [Berkson's
 paradox](https://en.wikipedia.org/wiki/Berkson%27s_paradox) in Richard McElreath's
 fantastic [Statistical Rethinking](https://www.youtube.com/watch?v=mBEA7PKDmiY) series,
-and it must have really lodged itself into my brainstem, because I'm still thinking
-about it.
+and it must have really lodged itself into my brainstem because I'm still thinking about
+it.
 
-Broadly speaking the "paradox" is that spurious, non-causal associations can be induced by
-biased sampling.
+Broadly speaking the paradox is that spurious, non-causal associations can be induced
+by biased sampling. That's a boring way of describing a very interesting thing---the
+important take away at a glance is that it's a source of fake patterns in data.
 
 The effect is so unintuitive to us that it's labelled a "paradox" when it really isn't
 one. It's the logical consequence of conditioning data on a
 [collider](https://en.wikipedia.org/wiki/Collider_(statistics))---something that is
-affected by multiple variables being examined. I know that doesn't help, so the
-following example is useful:
+affected by multiple variables being examined. I know that doesn't help, so hopefully
+the following example does:
 
-## Ugly Sweethearts, Hot Jerks
+## Hot Jerks, Plain Janes
 
 This example is reductive and maybe a bit mean-spirited, but for me it's salient enough
 that the paradox becomes clear, so I often use it anyway.
 
 Imagine you are dating a lot and you notice that attractive dates seem less friendly,
-whereas the friendliest dates are less attractive. This may be a real pattern in your
-dating pool. If we imagined that we had good metrics of attractiveness and friendliness,
+while friendlier dates are less attractive. This may be a real pattern in your dating
+pool. If we imagined that we had good metrics of attractiveness and friendliness,
 analyzing them might yield something like this:
 
 ```{python}
@@ -335,10 +336,9 @@ chart.show()
 In reality there's no connection between friendliness and attractiveness. That
 association is caused by *you*. You are selecting, and are being selected for. You
 aren't dating all the unattractive, unfriendly people, and the super attractive, super
-friendly people aren't dating you! So the band in the middle that you date are the hot
-jerks and the ugly sweethearts, and all combinations within that sad envelope of
-mediocrity. The pattern is there, but it's not causal! It's a sampling artifact. It's
-not real!
+friendly people aren't dating you! You're dating the Hot Jerks, the Plain Janes and all
+the combinations in the middle of that sad asteroid belt of mediocrity. The pattern is
+there, but it's not causal. It's a sampling artifact. It's not real!
 
 $$
 \begin{align}
@@ -354,13 +354,16 @@ your dating experience is just how the world is.
 
 But it's not. You haven't gained any insight on people you pass on the street---in fact
 you've gained the opposite---your worldview is warped by the information exposed to you
-by dating. Your information gathering has made you worse at understanding the world
+by dating. Your information gathering has made you *worse* at understanding the world
 around you. 
 
 After all those crappy dates! What a ripoff.
 
-In my view this is by far the most intuitive example of the effect---most are way harder
-to think about. For instance...
+If you've heard the saying *"the plural of anecdote is not data"* this is a great
+example.[^1] 
+
+This is the most intuitive example of the effect I've come across---most are way harder
+to think about...
 
 ## Smoking and Infant Mortality
 
@@ -389,7 +392,7 @@ graph TD
 So if you just look at low birth-weight kids (conditioning on the collider), you induce
 a totally spurious negative correlation between smoking and infant mortality.
 
-![Good luck understanding that on your first try.](media/wtf.gif)
+![Good luck getting that on your first try.](media/wtf.gif)
 
 And this effect is everywhere. Some other examples:
 
@@ -415,23 +418,24 @@ reinforces this all the time:
 This is nonsense, but I think the Berkson paradox reinforces the illusion. 
 
 In many environments we grow up in, we are unwitting participants in a selection
-process. Some combination of factors will get you into a nice school. To get into a
-university maybe you need a combination of decent grades and extra curriculars. To get a
-job you have to meet whatever requirements the employer is looking for, and interview
-well. We're always jumping over hurdles to make progress in life, and the higher those
-hurdles are, the stronger the Berkson effect will be. 
+process. Some combination of socioeconomic factors will get you into a certain school.
+To enter a certain university degree maybe you need a combination of decent grades and
+extra curriculars. To get a job you have to meet whatever requirements the employer is
+looking for, and interview well. We're always jumping over hurdles to make progress in
+life, and the higher those hurdles are, the stronger the Berkson effect will be. 
 
 All of these filters induce negative associations. Hot jerks, short free-throw
 specialists, smoking babies... maybe I'm not remembering that one right... But that's
 the pattern.
 
-The poor kid in an expensive school? Smart, probably on a scholarship. The dumbass
-sitting behind him copying his answers? Dad owns the school. 
+The poor kid in an expensive school? Smart, on a scholarship, maybe. The dumbass sitting
+behind him copying his answers? Dad owns the school. 
 
 The friendly doctor? Nailed all the bed-manner stuff in medschool, but scraped by on
-grades, and you're feeling unsure about the flu shot this season. Meanwhile the slender
-surgeon with cold, dead eyes exudes enough competence that you fade into unconsciousness
-with the image of him holding a scalpel over your exposed flesh and you *feel safe*.
+grades, and now you're feeling unsure about the flu shot this season. Meanwhile the
+slender surgeon with cold, dead eyes exudes enough competence that you fade into
+unconsciousness with the image of him holding a scalpel over your exposed belly and you
+*feel safe*.
 
 The smiling CTO who knows everybody's name and is super excited about the digital
 transformation? Doesn't remember much from his uni days... But the timid engineer in
@@ -445,7 +449,7 @@ short, regular folks settle in middle-management... gentle-giants can climb the 
 without piling up too many skulls... but if the boss is 5'6? Ruthless. Again, no
 causation, just selection.
 
-![Are these Key Performance Indicators indicating key performance to you? Huh!? Show me
+![Are these Key Performance Indicators indicating performance to you? Huh!? Show me
 the fuckin' quarterlies.](media/joe-pesci.gif)
 
 ## Intuitions
@@ -468,8 +472,9 @@ who has never had to do more than yawn conspicuously to command a room?
 No. 
 
 What has *Gary Vee*---5 ft tall and about as dangerous looking as a legless
-Pomeranian---been doing to become an enforcer for this operation? One of these two
-enjoys salsa dancing and the other has an ear collection. You know which is which.
+Pomeranian---been doing to become an enforcer for a violent crime syndicate? One of
+these two enjoys salsa dancing and the other has an ear collection. You know which is
+which.
 
 ![ChatGPT refused to add the ears. Don't hate me for using the tools at my
 disposal.](media/pomeranian.png){width=300px}
@@ -479,24 +484,24 @@ corner, and:
 
 ![P(Regular young girls survive | House is haunted) = Low enough that you run away.](media/creepy-twins.jpeg)
 
-What have those two been up to while the axe murderer has been chasing you around? It's
-not tea parties, it's demonic, evil shit. We know this.
+What have those two been up to while an axe murderer is on the loose in the halls? It's
+not tea parties, it's demonic, evil shit. We feel this in our bones.
 
-The dating example works so well for this reason. Its social and it kind of *feels*
+The dating example works so well for this reason. It's social and it kind of *feels*
 right. It hooks into some evolved machinery in our heads.
 
 So our intuitions are well tuned to the paradox, in the right context.
 
 ## Prediction
 
-It might seem weird that I'm saying all these patterns are statistical mirages induced
-be filtering, but I'm still treating them as real (well maybe not all of them, some are
-just jokes). Doesn't that mean I'm making the mistake I'm writing about? Making
-predictions with them?
+It might seem weird that I'm saying all these patterns are statistical mirages, but I'm
+still treating them as real (well maybe not all of them, some are just jokes). Doesn't
+that mean I'm making the mistake I'm writing about?
 
-And that's the thing, prediction doesn't require a causal model. You could look out your
-window and think *the trees look angry today, I bet they're pushing the air around
-again...* and your prediction would be correct. You're an idiot, but it *is* windy outside.
+That's the thing... making predictions doesn't require a causal model. You could look
+out your window and think *the trees look angry today, I bet they're pushing the air
+around again...* and your prediction would be correct. You're an idiot, but it *is*
+windy outside.
 
 ![What's got them all worked up, this time? Someone calm the palms before they do some
 harm!](media/trees.jpeg)
@@ -507,165 +512,103 @@ predictive, just not causal.
 
 So what's the difference?
 
-## Counterfactuals and Intervention
+## Interventions and What-ifs
 
+In [The Book of Why](https://en.wikipedia.org/wiki/The_Book_of_Why) Judea
+Pearl lays out what he calls the "ladder of causation".
 
-## In Everyday Life 
+The ladder has three rungs:
 
-In my view the Berkson paradox is especially pernicious because:
+1. Associations - *How are these things related?*
+2. Interventions - *What will happen when I do this?*
+3. Counterfactuals - *What would have happened if...*
 
-1. It is common
-2. It is usually invisible to us
+**Associations** say nothing about causation. *Correlation does not imply causation* as
+people often recite like the children of the corn. Plotting some points and seeing a
+relationship doesn't say anything about *why* it is there. The causes are not in the
+data.
+
+Berkson's paradox is an example of why you have to very careful with associations, but
+there are [many reasons](https://en.wikipedia.org/wiki/Confounding).
+
+Regardless of the hazards, you can still make predictions with them. If drownings and
+ice cream sales are correlated (because on hot days, people swim at the beach and eat ice
+cream), you *could* predict more drownings on days you see lots of people lining up at
+the gelati stand, and be right.
+
+![She clearly isn't understanding the gravity of the
+situation.](media/icecream.jpeg){width=300px}
+
+All the Berkson examples above are instances of this---predictions made based on
+non-causal associations.
+
+**Interventions** deal in what happens to the variables when you change something. You
+predicted the windy day earlier, but what would happen if you went outside and tried to
+reason with the trees? You'd quickly find out that your predictive model of trees and
+wind is not causal. *Something else is going on...*
+
+![The next suspect...](media/tree-secrets.jpeg)
+
+This is taking an action, and anticipating a reaction. The light is on when the switch
+is up. The light is off when the switch is down. You smash the light, now it's dark, but
+the lightswitch stays up. You conclude that the light is not causing the lightswitch.
+Well done, you scienced.
+
+The Berkson examples fall apart here. If you give the scholarship kid's parents a
+billion dollars, the kid will still be smart. If you spike the short CEO's drink with
+growth serum, they won't suddenly become chill, they might take over the government or
+something, so don't.
+
+![I said don't!!!](media/mongol-empire.gif){width=400px}
+
+**Counterfactuals** are the most complex and require the highest level of causal
+understanding. Questions like: *what would have happened if this reagent was used
+instead?*, or *how would the war have looked without Pearl Harbor?*, or *would this
+patient have recovered if given a different treatment?* These questions demand that we
+not only understand the causal structure of the world, but also imagine how that
+structure would have unfolded under different conditions.
+
+This is a level above intervention because unlike simply asking *what happens next?*,
+counterfactuals require rewriting the history of what has already happened, under the
+conditions of things being different. Difficult!
+
+Causal modelling is what allows you to unwind apparent paradoxes like the Berkson
+effect, and to allow for good inference in spite of them. Statistics is a bit... feeble
+without it. We don't want to swim in a sea of causeless associations, we want to figure
+out what the hell is going on.
+
+![The spirit of discovery.](media/magnets.gif)
+
+# Berkson In Everyday Life 
+
+The Berkson paradox is especially tricky because:
+
+1. It's common
+2. It's usually invisible to us
 3. It reinforces a false causal model of the world
 
-If it still seems isolated to contrived examples, maybe it is helpful to zoom out a bit. 
-
-The key here is *selection*---the effect is induced by the process of information
-collection. Any information that you consider in your day-to-day, that you use to make
-sense of the world, is subject to selection by your media, your government, and more
-recently AI algorithms that are tuned to your patterns of engagement.
+I think we're exposed to Berksons all the time in the modern information landscape. Any
+information that you consider in your day-to-day, that you use to make sense of the
+world, is subject to selection by your media, your government, and AI algorithms that
+are tuned to your patterns of engagement.
 
 That means the news you see, the images and videos that show up on your feed, the
 opinions you hear, have all passed through a filter. You're seeing your dating pool of
 the world's information---you're sampling your narrow band and forming associations from
-it.
+it. It's inevitable that a bunch of faulty causal models are getting reinforced in your
+brain while you scroll.
 
-## Is it Newsworthy?
+So be cautious about your world model, don't let it calcify, and listen to statisticians
+who have done the work to unwind the causal shitstorm that plagues our
+information---*especially* if they are shit at explaining themselves and boring to
+listen to. Because if someone like that is getting airtime? That's a Berkson.
 
-Imagine you have a god's eye view of the world and you're tracking claims made by people
-in terms of how "engaging", and how "factual" they are. Let's be generous and assume
-there is no relationship between the two.
+Thanks for reading.
 
-These claims can be anything---assassination attempts... dreams I had last night... wars
-breaking out... what your neighbour's dog ate for breakfast three weeks ago...---they
-could be ridiculous, plausible, exciting, boring or anything in between.
-
-Given some selection from the algorithm, optimized for an individual's engagement, we
-can imagine it is more likely a person will be exposed to claims if they are some
-combination of engaging and factual. Let's say the probability an individual will see it
-is some function of both.
-
-```{python}
-n = 5000
-
-x = np.random.normal(size=n)
-y = np.random.normal(size=n)
-p = invlogit(10*(x + y) - 15)
-
-on_feed = np.where(
-    np.random.binomial(n=1, p=p, size=n),
-    True, False
-)
-
-df = pd.DataFrame({
-    "Engaging": x,
-    "Factual": y,
-    "On Feed": on_feed
-})
-
-chart = (
-    alt.Chart(df)
-    .mark_point()
-    .encode(
-        alt.X("Engaging:Q", axis=alt.Axis(grid=False)),
-        alt.Y("Factual:Q", axis=alt.Axis(grid=False)),
-        alt.Color(
-            "On Feed:N",
-            legend=alt.Legend(orient="top-right")
-        )
-    )
-    .properties(
-        width=PLOT_WIDTH,
-        height=PLOT_HEIGHT
-    )
-)
-
-chart.show()
-```
-
-This individual might have the impression that there is a negative association between
-factfulness and engagement. Outrageous claims on the news are associated with bullshit,
-whereas the boring stuff is probably true... A false, troubling association.
-
-It gets more interesting if we consider that different people---liberals and
-conservatives, for example---are engaged by different things.
-
-Here's how the feeds of liberals and conservatives look, assuming their engagement is
-negatively correlated.
-
-```{python}
-corr_matrix = np.array([
-    [1.0, -1.0],
-    [-1.0, 1.0]
-])
-engagement = np.random.multivariate_normal(
-    mean=[0, 0], 
-    cov=corr_matrix, 
-    size=n
-)
-
-libs = engagement[:, 0]
-cons = engagement[:, 1]
-
-p_libs = invlogit(10*(libs + y) - 15)
-p_cons = invlogit(10*(cons + y) - 15)
-
-libs_feed = np.where(
-    np.random.binomial(n=1, p=p_libs, size=n),
-    True, False
-)
-cons_feed = np.where(
-    np.random.binomial(n=1, p=p_cons, size=n),
-    True, False
-)
-
-conditions = [
-    libs_feed & cons_feed,    # Both feeds
-    libs_feed & ~cons_feed,   # Liberal feed only  
-    ~libs_feed & cons_feed,   # Conservative feed only
-]
-choices = ["Both", "Libs Only", "Cons Only"]
-feeds = np.select(conditions, choices, default="Neither")
-
-df = pd.DataFrame({
-    "Engaging": cons,
-    "Factual": y,
-    "Feed": feeds
-})
-
-chart = (
-    alt.Chart(df)
-    .mark_point()
-    .encode(
-        alt.X("Engaging:Q", axis=alt.Axis(grid=False)),
-        alt.Y("Factual:Q", axis=alt.Axis(grid=False)),
-        alt.Color(
-            "Feed:N",
-            legend=alt.Legend(orient="top-right")
-        )
-    )
-    .properties(
-        width=PLOT_WIDTH,
-        height=PLOT_HEIGHT
-    )
-)
-
-chart.show()
-```
-
-The liberals and conservatives live in the same universe, so their factual axes are
-shared, but the engagement axes are mirrored. The left wing of the x axis appeals to the
-liberal brain, and the right wing the conservative brain.
-
-There is a sliver of sanity in the middle of the distribution where conservatives and
-liberals are engaging with the same information, probably about budgets and laws and
-boring stuff like that. But there is a lot of information being lost across the
-political divide.
-
-And the perception from someone about the other side might be that they are all nuts...
-I mean look at all the crazy stuff they are talking about! You'd never come across these
-things unless you peeked across the divide to see what was happening. And when you look,
-you're shocked at the wrongness of it all, your suspicions about the other side are all
-confirmed. We're being served different diets and you haven't been weaned onto theirs. 
-
-
+[^1]: Funnily enough, this is a
+[misquote](http://blog.danwin.com/don-t-forget-the-plural-of-anecdote-is-data/). The
+source, Raymond Wolfinger actually said the plural of anecdote *is* data, and was making
+a more subtle point. The quote seems to have mutated into a lesson about being skeptical
+of anecdotes---in contrast to systematically gathered, "trustworthy" data---but the
+political scientist's point was that no data arrives to us unscathed. Data is always
+subject to preconditioning in some sampling process, whether intentional or emergent.
