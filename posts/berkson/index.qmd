@@ -229,9 +229,10 @@ fantastic [Statistical Rethinking](https://www.youtube.com/watch?v=mBEA7PKDmiY) 
 and it must have really lodged itself into my brainstem because I'm still thinking about
 it.
 
-Broadly speaking the paradox is that spurious, non-causal associations can be induced
-by biased sampling. That's a boring way of describing a very interesting thing---the
-important take away at a glance is that it's a source of fake patterns in data.
+Broadly speaking the paradox is that spurious, non-causal associations can be induced by
+biased sampling. That's a boring way of describing a very interesting thing---the
+important take away at a glance is that it's a source of fake patterns in data caused by
+the way we collect it.
 
 The effect is so unintuitive to us that it's labelled a "paradox" when it really isn't
 one. It's the logical consequence of conditioning data on a
@@ -241,8 +242,8 @@ the following example does:
 
 ## Hot Jerks, Plain Janes
 
-This example is reductive and maybe a bit mean-spirited, but for me it's salient enough
-that the paradox becomes clear, so I often use it anyway.
+This example is reductive and maybe a bit mean-spirited, but it helped me build an
+intuition for the paradox more than other examples I've found, so I often use it anyway.
 
 Imagine you are dating a lot and you notice that attractive people seem less friendly,
 while friendlier people are less attractive. This may be a real pattern in your dating
@@ -342,7 +343,7 @@ there, but it's not causal. It's a sampling artifact. It's not real!
 
 $$
 \begin{align}
-A \not\rightarrow F \quad &and \quad A \not\leftarrow F \\
+A \not\rightarrow F \quad &and \quad F \not\rightarrow A \\
 A \rightarrow &\text{YOU} \leftarrow F
 \end{align}
 $$
@@ -359,8 +360,8 @@ around you.
 
 After all those crappy dates! What a ripoff.
 
-If you've heard the saying *"the plural of anecdote is not data"* this is a great
-example.[^1] 
+If you've heard the saying *"the plural of anecdote is not data"* this is a good
+example of its motivation.[^1] 
 
 This is the most intuitive example of the effect I've come across---most are way harder
 to think about...
@@ -456,15 +457,15 @@ This effect might create the illusion of frontiers in all these attributes, like
 fitting into niches in an ecosystem and evolution has granted us some limited number of
 points to solve for the environment and survive. Much more often we're seeing a
 filtering effect, not an efficient frontier. The patterns might be intuitive to us, but
-we misattribute them.
+we misinterpret their cause.
 
 ## Intuitions
 
 This leads me to another point. In abstract examples, Berkson's paradox is notoriously
-unintuitive to us. But I think if you place it into familiar, social contexts---where
+unintuitive to us, but I think if you place it into familiar, social contexts---where
 our brains have evolved to track many complex interactions in a social network---there's
 intuition there. If all those examples above felt kind of... easy to parse, I think it's
-because of that latent intuition we have about how human hierarchies work, whereas the
+because of the latent intuition we have about how human hierarchies work, whereas the
 smoking mommy-babies example is totally baffling to us.
 
 Test your intuitions: You wake up tied to a chair in a warehouse. You owe a lot of
@@ -500,17 +501,16 @@ So our intuitions are well tuned to the paradox, in the right context.
 
 ## Prediction
 
-It might seem weird that I'm saying all these patterns are statistical mirages, but I'm
-still treating them as real (well maybe not all of them, some are just jokes). Doesn't
-that mean I'm making the mistake I'm writing about?
+It might seem strange that I'm claiming all these patterns are statistical mirages, but
+I'm still treating them as real (well maybe not all of them, some are just dumb jokes).
+Doesn't that mean I'm making the mistake I'm writing about?
 
 But that's the thing... making predictions doesn't require a causal model. You could
 look out your window and think *the trees look angry today, I bet they're pushing the
 air around again...* and your prediction would be correct. You're an idiot, but it *is*
 windy outside.
 
-![What's got them all worked up, this time? Someone calm the palms before they do some
-harm!](media/trees.jpeg)
+![Someone calm the palms before they do more harm!](media/trees.jpeg)
 
 The exception to this is a genuine sampling fluke---your first 10 observations happen to
 line up, or whatever. But for a larger sample size the association is probably real, and
@@ -538,8 +538,8 @@ Berkson's paradox is an example of why you you should be very careful with assoc
 but there are [many reasons](https://en.wikipedia.org/wiki/Confounding).
 
 Regardless of the hazards, you can still make predictions with them. If drownings and
-ice cream sales are correlated (because on hot days, people swim at the beach and eat ice
-cream), you *could* predict more drownings on days you see lots of people lining up at
+ice cream sales are correlated---because on hot days, people swim at the beach and eat ice
+cream---you *could* predict more drownings on days you see lots of people lining up at
 the gelati stand, and be right.
 
 ![She clearly isn't understanding the gravity of the
@@ -557,12 +557,12 @@ wind is not causal. *Something else is going on...*
 
 This is taking an action, and anticipating a reaction. The light is on when the switch
 is up. The light is off when the switch is down. You smash the lightbulb, now it's dark,
-but the lightswitch doesn't move. You conclude that the precense of light is not causing
+but the lightswitch doesn't move. You conclude that the presense of light is not causing
 the lightswitch to flick. Well done, you scienced.
 
 The Berkson examples fall apart here. If you give the scholarship kid's parents a
 billion dollars, the kid will still be smart. If you spike the short CEO's drink with
-growth serum, they won't suddenly become chill, they might take over the government or
+growth serum, they won't suddenly become chill, he might take over the government or
 something, so don't.
 
 ![I said don't!!!](media/mongol-empire.gif){width=400px}
@@ -610,10 +610,11 @@ Berkson.
 
 Thanks for reading.
 
-[^1]: Funnily enough, this is a
+[^1]: I discovered while writing this post that this is actually a
 [misquote](http://blog.danwin.com/don-t-forget-the-plural-of-anecdote-is-data/). The
 source, Raymond Wolfinger actually said the plural of anecdote *is* data, and was making
 a more subtle point. The quote seems to have mutated into a lesson about being skeptical
 of anecdotes---in contrast to systematically gathered, "trustworthy" data---but the
 political scientist's point was that no data arrives to us unscathed. Data is always
-subject to preconditioning in some sampling process, whether intentional or emergent.
+subject to preconditioning in some sampling process, whether intentional or emergent
+from our limitations in gathering it.
