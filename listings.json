@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/berkson/index.html",
       "/posts/coffee/index.html",
       "/posts/dirichlet_geo/index.html",
       "/posts/spending/index.html",

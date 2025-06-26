@@ -7,9 +7,22 @@ body {
   font-family: "Source Sans Pro", "Times New Roman", serif;
 }
 
-/* Optional: override other elements for better visibility */
+/* Override other elements for better visibility */
 a {
   color: #add8e6; /* light blue links */
+}
+
+/* Mermaid diagram font color */
+:root {
+  --mermaid-label-fg-color: #ffffff;
+}
+
+.mermaid .edgePath path {
+  stroke: #ffffff !important;
+}
+
+.mermaid .marker {
+  fill: #ffffff !important;
 }
 
 .navbar {
@@ -26,7 +39,18 @@ a {
   z-index: 0;
 }
 
-/* Change Mermaid diagram font color */
-.mermaid text {
-  fill: #ffffff !important;
+/* Footnote background and color */
+.footnotes {
+  background-color: #333333;
+  color: #ffffff;
+  border-top: 1px solid #555555;
+  padding-top: 1em;
+}
+
+#quarto-appendix.default {
+  background-color: #333333; /* match page background */
+  color: #ffffff;            /* match text color */
+  padding-top: 1.5em;
+  margin-top: 2em;
+  z-index: 998;
 }

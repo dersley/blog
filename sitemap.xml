@@ -2,34 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://dersley.github.io/blog/posts/copulas/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.572Z</lastmod>
+    <lastmod>2025-06-26T08:42:25.003Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/welcome/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.581Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/posts/spending/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.579Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.557Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/about.html</loc>
-    <lastmod>2025-06-21T00:51:01.557Z</lastmod>
-  </url>
-  <url>
-    <loc>https://dersley.github.io/blog/posts/dirichlet_geo/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.573Z</lastmod>
+    <lastmod>2025-06-26T08:42:25.011Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/outcomes/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.578Z</lastmod>
+    <lastmod>2025-06-26T08:42:25.009Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/posts/dirichlet_geo/index.html</loc>
+    <lastmod>2025-06-26T08:42:25.003Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/about.html</loc>
+    <lastmod>2025-06-26T08:42:24.954Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/index.html</loc>
+    <lastmod>2025-06-26T08:42:24.954Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/posts/spending/index.html</loc>
+    <lastmod>2025-06-26T08:42:25.009Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dersley.github.io/blog/posts/berkson/index.html</loc>
+    <lastmod>2025-06-26T08:42:24.960Z</lastmod>
   </url>
   <url>
     <loc>https://dersley.github.io/blog/posts/coffee/index.html</loc>
-    <lastmod>2025-06-21T00:51:01.563Z</lastmod>
+    <lastmod>2025-06-26T08:42:24.994Z</lastmod>
   </url>
 </urlset>
