@@ -10,32 +10,24 @@ def simulated_portfolio_plot(
     dates,
     sims: int,
     title: str | None = None,
-    ) -> alt.Chart:
-
+) -> alt.Chart:
     sims = min(sims, simulated_balance.shape[-1])
 
-    df = (
-        pd.concat([
-            pd.DataFrame({
-                'Date': dates,
-                '$': simulated_balance[:, i],
-                'Simulation': i
-            })
+    df = pd.concat(
+        [
+            pd.DataFrame({"Date": dates, "$": simulated_balance[:, i], "Simulation": i})
             for i in range(sims)
-        ], 
-        ignore_index=True)
+        ],
+        ignore_index=True,
     )
 
     chart = (
         alt.Chart(df)
-        .mark_line(
-            strokeWidth=1,
-            opacity=0.75
-        )
+        .mark_line(strokeWidth=1, opacity=0.75)
         .encode(
-            alt.X('Date:T', title=""),
-            alt.Y('$:Q'),
-            color=alt.Color('Simulation:N', legend=None),
+            alt.X("Date:T", title=""),
+            alt.Y("$:Q"),
+            color=alt.Color("Simulation:N", legend=None),
         )
         .properties(
             title=title,

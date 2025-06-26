@@ -1,0 +1,620 @@
+---
+title: Berkson's Boardroom
+subtitle: $X \rightarrow \text{YOU} \leftarrow Y$
+author: "Nicholas Dorsch"
+date: today
+categories: [opinion, statistics]
+image: thumbnail.png
+---
+
+```{python}
+#| echo: false
+
+import numpy as np
+import pandas as pd
+import altair as alt
+from scipy.special import expit as invlogit
+
+alt.theme.enable("dark")
+PLOT_WIDTH = "container"
+PLOT_HEIGHT = 500
+```
+
+![](thumbnail.png)
+
+# The Boardroom
+
+You wake up, face down on a boardroom table. There's an intercom by your face.
+
+> *"Who are y---"*
+
+You hear a cough, some paper shuffling over the intercom.
+
+> *"Sorry, let's start again... Explain this data."*
+
+You sit up, waiting for your eyes to adjust to the light. You rub them and look to the
+far wall, there's a projector screen hanging from it showing some data points:
+
+```{python}
+#| echo: false
+
+n = 5000
+x = np.random.normal(size=n)
+y = np.random.normal(size=n)
+p = invlogit(5 * (x + y) - 5)
+filter = np.random.binomial(n=1, p=p, size=n).astype(bool)
+
+df = pd.DataFrame({
+    "X": x[filter],
+    "Y": y[filter]
+})
+
+chart = (
+    alt.Chart(df.head(5))
+    .mark_point()
+    .encode(
+        alt.X("X:Q", axis=alt.Axis(grid=False)),
+        alt.Y("Y:Q", axis=alt.Axis(grid=False)),
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+"... What are X and Y?"
+
+> *"It doesn't matter. Just tell us what you think about them."*
+
+"Well I have no idea. What is that, like five points? I can't say much about five data
+points."
+
+> *"Good... What about now?"*
+
+```{python}
+#| echo: false
+
+chart = (
+    alt.Chart(df.head(50))
+    .mark_point()
+    .encode(
+        alt.X("X:Q", axis=alt.Axis(grid=False)),
+        alt.Y("Y:Q", axis=alt.Axis(grid=False)),
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+"Ok well... It looks like X and Y might be negatively associated... One goes up, the
+other goes down."
+
+> *"Are you sure?"*
+
+"Well no... But I could settle it if you showed me more data."
+
+> *"We can show you all of the data collected for this room, if you like?"*
+
+All of it! You sit up, satisfied that you'll know for sure in a moment. The data
+flicker onto the screen:
+
+```{python}
+#| echo: false
+
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("X:Q", axis=alt.Axis(grid=False)),
+        alt.Y("Y:Q", axis=alt.Axis(grid=False)),
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+You were right.
+
+"Well now I'm sure. X and Y are negatively correlated. I'd bet my life on it."
+
+> *"Please don't. They are not."*
+
+... What? You're looking at the data, it's as plain as anything. Who is this asshole?
+
+"They *are*! It would be silly to deny it. The data I'm looking at show a negative
+correlation."
+
+> *"That is correct."*
+
+"So X and Y are negatively correlated!"
+
+> *"Incorrect."*
+
+Your head swings to face the intercom, back to the projector, then back again.
+
+"It's an empiricial bloody fact that they are! You're showing me all of the data!"
+
+> *"I'm showing you all the data collected for this room."*
+
+"What is that supposed to mean? You're hiding something?"
+
+> *"Is that unreasonable?"*
+
+You're standing now. You can feel the anger rising in your chest.
+
+"This is ridiculous. Show me the rest of it! What is the point of this?"
+
+> *"There is more data outside."*
+
+You walk briskly to the only door in the room and grab the handle. Locked.
+
+You breathe out slowly, trying to stay calm.
+
+> *"The door will unlock when you explain the data."*
+
+"I did that already. The data are negatively correlated."
+
+You hear the faint sound of a pencil scraping against paper through the intercom. More
+paper shuffling.
+
+> *"The door is still locked. If we let you out now, you'll just get more confused.
+> You've pointed out a real pattern. Explain it."*
+
+Another deep breath.
+
+You sit and think. X and Y are linked somehow, you have no doubt about it. 
+
+Then again... you don't know anything about X or Y, so you can't say whether X is
+causing Y or the other way around!
+
+$X \rightarrow Y \quad or \quad X \leftarrow Y$
+
+Maybe that's his problem? You're pointing out a relationship, but you haven't explained
+what's causing it. Right!
+
+"I can't specify the causal relationship between X and Y because I lack any background
+information about them. All I can say with confidence is that one is influencing the
+other somehow."
+
+A long pause, then finally:
+
+> *"Incorrect."*
+
+The anger is building again.
+
+"So you're telling me that X and Y have *nothing* to do with eachother?"
+
+You hear some muffled arguing through the intercom.
+
+> *"... in this case, that is correct."*
+
+Your head hurts. You're looking at it. The data is clear, there's an obvious
+relationship! You're had enough of this. 
+
+"... So what? Am I hallucinating? Am I crazy? Am I the fucking problem here?"
+
+More arguing, this time it goes a lot longer. You're pacing up and down the room,
+waiting.
+
+You make out the words
+
+> *"...it's a start, isn't it?"*
+
+The data disappears. Symbols take its place:
+
+$X \rightarrow \text{YOU} \leftarrow Y$
+
+You hear a *click*.
+
+> *"The door is unlocked. Go through."*
+
+![... It's another room.](media/door.png){width=350px}
+
+# Berkson's Paradox
+
+I first learned about [Berkson's
+paradox](https://en.wikipedia.org/wiki/Berkson%27s_paradox) in Richard McElreath's
+fantastic [Statistical Rethinking](https://www.youtube.com/watch?v=mBEA7PKDmiY) series,
+and it must have really lodged itself into my brainstem because I'm still thinking about
+it.
+
+Broadly speaking the paradox is that spurious, non-causal associations can be induced by
+biased sampling. That's a boring way of describing a very interesting thing---the
+important take away at a glance is that it's a source of fake patterns in data caused by
+the way we collect it.
+
+The effect is so unintuitive to us that it's labelled a "paradox" when it really isn't
+one. It's the logical consequence of conditioning data on a
+[collider](https://en.wikipedia.org/wiki/Collider_(statistics))---something that is
+affected by multiple variables being examined. I know that doesn't help, so hopefully
+the following example does:
+
+## Hot Jerks, Plain Janes
+
+This example is reductive and maybe a bit mean-spirited, but it helped me build an
+intuition for the paradox more than other examples I've found, so I often use it anyway.
+
+Imagine you are dating a lot and you notice that attractive people seem less friendly,
+while friendlier people are less attractive. This may be a real pattern in your dating
+pool. If we imagined that we had good metrics of attractiveness and friendliness,
+analyzing them might yield something like this:
+
+```{python}
+n = 1000
+
+x = np.random.normal(size=n)
+y = np.random.normal(size=n)
+z = x + y
+
+lower = -1
+upper = 1
+
+conditions = [
+    z < lower,
+    (z >= lower) & (z < upper),
+    z >= upper
+]
+choices = [
+    "Below your standards",
+    "Dating you",
+    "Out of your league"
+]
+
+group = np.select(conditions, choices, default="")
+
+attractiveness = invlogit(x)
+friendliness = invlogit(y)
+
+filtered_df = pd.DataFrame({
+    "Attractiveness": attractiveness[group == "Dating you"],
+    "Friendliness": friendliness[group == "Dating you"],
+})
+
+chart = (
+    alt.Chart(filtered_df)
+    .mark_point()
+    .encode(
+        alt.X("Attractiveness:Q", axis=alt.Axis(grid=False)),
+        alt.Y("Friendliness:Q", axis=alt.Axis(grid=False)),
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+So your instincts were right! There's a strong negative association between the dates'
+friendliness and attractiveness. We can theorize why---maybe attractive people learn
+that they don't need to be nice to get what they want, whereas unattractive people are
+always overcompensating... Good story! Intuitive! Real! Causal!
+
+But it's *not* real. It isn't possible to see the full sampling distribution in real
+life, but luckily this isn't real life and you aren't going on thousands of dates, I'm
+just simulating them with code:
+
+
+```{python}
+df = pd.DataFrame({
+    "Attractiveness": attractiveness,
+    "Friendliness": friendliness,
+    "Group": group
+})
+
+chart = (
+    alt.Chart(df)
+    .mark_point()
+    .encode(
+        alt.X("Attractiveness:Q", axis=alt.Axis(grid=False)),
+        alt.Y("Friendliness:Q", axis=alt.Axis(grid=False)),
+        alt.Color(
+            "Group:N",
+            legend=alt.Legend(orient="top-right")
+        )
+    )
+    .properties(
+        width=PLOT_WIDTH,
+        height=PLOT_HEIGHT
+    )
+)
+
+chart.show()
+```
+
+In reality there's no connection between friendliness and attractiveness. That
+association is caused by *you*. You are selecting, and are being selected for. You
+aren't dating all the unattractive, unfriendly people, and the super attractive, super
+friendly people aren't dating you! You're dating the Hot Jerks, the Plain Janes and all
+the combinations in the middle of that sad asteroid belt of mediocrity. The pattern is
+there, but it's not causal. It's a sampling artifact. It's not real!
+
+$$
+\begin{align}
+A \not\rightarrow F \quad &and \quad F \not\rightarrow A \\
+A \rightarrow &\text{YOU} \leftarrow F
+\end{align}
+$$
+
+And what's worse is, the more dates you go on, the *more convinced* you would be of the
+pattern. More information is *bad*, it solidifies an incorrect causal model of the
+world. Without knowledge of the paradox, you would become more and more convinced that
+your dating experience is just how the world is. 
+
+But it's not. You haven't gained any insight on people you pass on the street---in fact
+you've gained the opposite---your worldview is warped by the information exposed to you
+by dating. Your information gathering has made you *worse* at understanding the world
+around you. 
+
+After all those crappy dates! What a ripoff.
+
+If you've heard the saying *"the plural of anecdote is not data"* this is a good
+example of its motivation.[^1] 
+
+This is the most intuitive example of the effect I've come across---most are way harder
+to think about...
+
+## Smoking and Infant Mortality
+
+Low birth-weight children born to mothers who smoke have a
+[*lower*](https://en.wikipedia.org/wiki/Low_birth-weight_paradox) infant mortality rate
+than those born to non-smoking mothers.
+
+So smoking saves skinny babies? 
+
+No. Smoking is a *cause* of low birth-weight in infants. Many other risk factors,
+independent of smoking, also *cause* low birth-weight. Low birth-weight is in turn
+associated with increased infant mortality:
+
+```{mermaid}
+graph TD
+    S[Smoking]
+    O[Other Risk Factors]
+    L[Low Birth Weight]
+    M[Infant Mortality]
+
+    S --> L
+    O --> L
+    L --> M
+```
+
+So if you just look at low birth-weight kids (conditioning on the collider), you induce
+a totally spurious negative correlation between smoking and infant mortality.
+
+![Good luck getting that on your first try.](media/wtf.gif)
+
+And this effect is everywhere. Some other examples:
+
+- [Medical research](https://pmc.ncbi.nlm.nih.gov/articles/PMC10016947/)
+- [Criminology](https://pmc.ncbi.nlm.nih.gov/articles/PMC10061360/)
+- [Economics](http://eprints.lse.ac.uk/106578/1/Schneider_Collider_Bias_in_Economic_History_Research_2020_v4.pdf)
+- [Basketball](https://dylan-sivori.github.io/2021-02-05-nba-ft-percent/)
+
+I think it shows up in day to day life, too... 
+
+## False Frontiers
+
+We (my generation and younger) have been conditioned by video games to think about
+attribute allocation as an intuitive part of reality. You roll your character when
+you're born, and you get some combination of Strength, Agility, Intelligence, Charisma
+and so forth. Allocation implies trade-offs---you can't be super strong, super
+intelligent, and super charismatic---not enough points. The athletic jock and the kid
+with glasses are sitting on an efficient frontier of personality. Popular culture
+reinforces this all the time:
+
+![Pictured: Current popular culture](media/jocks-vs-nerd.jpeg)
+
+This is nonsense, but I think the Berkson paradox reinforces the illusion. 
+
+In many environments we grow up in, we are unwitting participants in a selection
+process. Some combination of socioeconomic factors will get you into a certain school.
+To enter a certain university degree maybe you need a combination of decent grades and
+extra curriculars. To get a job you need to meet the employers' requirements, and
+interview well. We're constantly jumping over hurdles to make progress in life, and the
+higher those hurdles are, the stronger the Berkson effect will be. 
+
+All of these filters induce negative associations. Hot jerks, short free-throw
+specialists, smoking babies... maybe I'm not remembering that one right... But that's
+the pattern.
+
+The kid with poor parents in an expensive school? Smart, on a scholarship, maybe. The
+dumbass sitting behind him copying his answers? Dad owns the school. 
+
+The friendly doctor? Nailed all the bed-manner stuff in medschool, but scraped by on
+grades, and now you're feeling unsure about the flu shot this season. Meanwhile the
+slender surgeon with cold, dead eyes exudes enough competence that you fade into
+unconsciousness with the image of him holding a scalpel over your exposed belly and you
+*feel safe*.
+
+The smiling CTO who knows everybody's name and is super excited about the digital
+transformation? Doesn't remember much from his uni days... But the timid engineer in
+upper management who avoids eye contact? Wizard.
+
+You get the idea. Not causal. Filtering.
+
+One of my pet theories is that there is a strong Berkson in CEO height and brutality.
+The shorter the CEO, the more of a menace they must be to have reached the top. The
+short, regular folks settle in middle-management... gentle-giants can climb the ladder
+without piling up too many skulls... but if the boss is 5'6? Ruthless. Again, no
+causation, just selection.
+
+![Are these Key Performance Indicators indicating performance to you? Huh!? Show me
+the fuckin' quarterlies.](media/joe-pesci.gif)
+
+This effect might create the illusion of frontiers in all these attributes, like we're
+fitting into niches in an ecosystem and evolution has granted us some limited number of
+points to solve for the environment and survive. Much more often we're seeing a
+filtering effect, not an efficient frontier. The patterns might be intuitive to us, but
+we misinterpret their cause.
+
+## Intuitions
+
+This leads me to another point. In abstract examples, Berkson's paradox is notoriously
+unintuitive to us, but I think if you place it into familiar, social contexts---where
+our brains have evolved to track many complex interactions in a social network---there's
+intuition there. If all those examples above felt kind of... easy to parse, I think it's
+because of the latent intuition we have about how human hierarchies work, whereas the
+smoking mommy-babies example is totally baffling to us.
+
+Test your intuitions: You wake up tied to a chair in a warehouse. You owe a lot of
+money to the most ruthless gang in town. These two walk in:
+
+![I mean come on.](media/gary-v-tony-robbins.jpeg){width=350px}
+
+Are you seriously going to tell me that Tony Robbins is the scary one, here? The giant
+who has never had to do more than yawn conspicuously to command the room? 
+
+No. 
+
+What has *Gary Vee*---5 ft tall and about as dangerous looking as a legless
+Pomeranian---been doing to become an enforcer for a violent crime syndicate? One of
+these two enjoys salsa dancing and the other has an ear collection. You know which is
+which.
+
+![ChatGPT refused to add the ears. Don't hate me for using the tools at my
+disposal.](media/pomeranian.png){width=300px}
+
+Next example: You're in an abandoned hotel in rural Colorado, it's 3 am, you turn a
+corner, and:
+
+![P(Regular young girls survive | House is haunted) = Low enough that you run away.](media/creepy-twins.jpeg)
+
+What have those two been up to while an axe murderer is on the loose in the halls? It's
+not tea parties, it's demonic, evil shit. We feel this in our bones.
+
+The dating example works so well for this reason. It's social and it kind of *feels*
+right. It hooks into some evolved machinery in our heads.
+
+So our intuitions are well tuned to the paradox, in the right context.
+
+## Prediction
+
+It might seem strange that I'm claiming all these patterns are statistical mirages, but
+I'm still treating them as real (well maybe not all of them, some are just dumb jokes).
+Doesn't that mean I'm making the mistake I'm writing about?
+
+But that's the thing... making predictions doesn't require a causal model. You could
+look out your window and think *the trees look angry today, I bet they're pushing the
+air around again...* and your prediction would be correct. You're an idiot, but it *is*
+windy outside.
+
+![Someone calm the palms before they do more harm!](media/trees.jpeg)
+
+The exception to this is a genuine sampling fluke---your first 10 observations happen to
+line up, or whatever. But for a larger sample size the association is probably real, and
+predictive, just not causal. 
+
+So what's the difference?
+
+## Interventions and What-ifs
+
+In [The Book of Why](https://en.wikipedia.org/wiki/The_Book_of_Why) Judea
+Pearl lays out what he calls the "ladder of causation".
+
+The ladder has three rungs:
+
+1. Associations - *How are these things related?*
+2. Interventions - *What will happen when I do this?*
+3. Counterfactuals - *What would have happened if...*
+
+**Associations** are the weakest of the three, and say nothing about causation.
+*Correlation does not imply causation* as educated people often recite like the children
+of the corn. Plotting some points and seeing a relationship doesn't say anything about
+*why* it is there. The causes are not in the data.
+
+Berkson's paradox is an example of why you you should be very careful with associations,
+but there are [many reasons](https://en.wikipedia.org/wiki/Confounding).
+
+Regardless of the hazards, you can still make predictions with them. If drownings and
+ice cream sales are correlated---because on hot days, people swim at the beach and eat ice
+cream---you *could* predict more drownings on days you see lots of people lining up at
+the gelati stand, and be right.
+
+![She clearly isn't understanding the gravity of the
+situation.](media/icecream.jpeg){width=300px}
+
+All the Berkson examples above are instances of this---predictions made based on
+non-causal associations.
+
+**Interventions** deal in what happens to the variables when you change something. You
+predicted the windy day earlier, but what would happen if you went outside and tried to
+reason with the trees? You'd quickly find out that your predictive model of trees and
+wind is not causal. *Something else is going on...*
+
+![The next suspect...](media/tree-secrets.jpeg)
+
+This is taking an action, and anticipating a reaction. The light is on when the switch
+is up. The light is off when the switch is down. You smash the lightbulb, now it's dark,
+but the lightswitch doesn't move. You conclude that the presense of light is not causing
+the lightswitch to flick. Well done, you scienced.
+
+The Berkson examples fall apart here. If you give the scholarship kid's parents a
+billion dollars, the kid will still be smart. If you spike the short CEO's drink with
+growth serum, they won't suddenly become chill, he might take over the government or
+something, so don't.
+
+![I said don't!!!](media/mongol-empire.gif){width=400px}
+
+**Counterfactuals** are the most complex and require the highest level of causal
+understanding. Questions like: *what would have happened if this reagent was used
+instead?*, or *would this patient have recovered if given a different treatment?*, or
+*how would the war have progressed without Pearl Harbor?*
+
+This is a level above intervention because unlike simply asking *what happens next?*,
+counterfactuals require rewriting the history of what has already happened, under new
+conditions. Difficult!
+
+Causal modelling is what allows you to unwind apparent paradoxes like the Berkson
+effect, and to allow for good inference in spite of them. Statistics is a bit... feeble
+without it. We don't want to swim in a sea of causeless associations, we want to figure
+out what the hell is going on.
+
+![He gets it.](media/magnets.gif)
+
+# Berkson In Everyday Life 
+
+The Berkson paradox is especially tricky because:
+
+1. It's common
+2. It's usually invisible to us
+3. It reinforces a false causal model of the world
+
+I think we're exposed to Berksons all the time in modern life. Any information that you
+consider in your day-to-day, that you use to make sense of the world, is subject to
+selection by your media, your government, and AI algorithms that are tuned to your
+patterns of engagement.
+
+That means the news you see, the images and videos that show up on your feed, the
+opinions you hear, have all passed through a filter. You're seeing your dating pool of
+the world's information---you're sampling your narrow band and forming associations from
+it. It's inevitable that a bunch of faulty causal models are getting reinforced in your
+brain while you scroll.
+
+So be cautious about your world model, don't let it calcify, and listen to statisticians
+who have done the work to unwind the causal shitstorm that plagues our
+information---*especially* if they are boring to listen to and terrible at explaining
+themselves... Because if someone like that is still engaging an audience? That's a
+Berkson.
+
+Thanks for reading.
+
+[^1]: I discovered while writing this post that this is actually a
+[misquote](http://blog.danwin.com/don-t-forget-the-plural-of-anecdote-is-data/). The
+source, Raymond Wolfinger actually said the plural of anecdote *is* data, and was making
+a more subtle point. The quote seems to have mutated into a lesson about being skeptical
+of anecdotes---in contrast to systematically gathered, "trustworthy" data---but the
+political scientist's point was that no data arrives to us unscathed. Data is always
+subject to preconditioning in some sampling process, whether intentional or emergent
+from our limitations in gathering it.
